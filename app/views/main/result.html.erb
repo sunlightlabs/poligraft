@@ -7,6 +7,9 @@
   <% else -%>
   <%= formatted_content(@result) %>
   <% end -%>
+  <% unless @result.source_url.blank? -%>
+  <p><%= link_to "View Original", @result.source_url %></p>
+  <% end -%>
 </div>
 <div id="sidebar">
   <h3>Copy Link</h3>  
