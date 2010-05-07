@@ -1,0 +1,10 @@
+.bundle
+db/*.sqlite3
+config/*.yml
+log/
+tmp/
+bin/
+cache/
+gems/
+vendor/
+specifications/

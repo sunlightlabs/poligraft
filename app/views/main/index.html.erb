@@ -1,0 +1,11 @@
+<% content_for :title, "Maximize Truthiness" %>
+
+<p>Feed in a news article, blog post, or press release, and Truthify will present you with an enhanced view of the people, organizations, and relationships described in the piece.</p> 
+
+<% form_tag "/truthify" do -%>
+  <%= label_tag "url", "Enter the URL:" %>
+  <%= text_field_tag "url", nil, :size => "60" %>
+  <%= label_tag "text", "Or, paste in the text:" %>
+  <%= text_area_tag "text", nil, :rows => 15, :cols => 60 %>
+  <%= submit_tag "Truthify!" %>
+<% end -%>

@@ -1,0 +1,25 @@
+<% content_for :title, "Results" %>
+
+<div id="truthified">
+  <h3>Content</h3>
+  <% if @result.source_format == 'plain_text' -%>
+  <%= simple_format @result.source_content.html_safe %>
+  <% else -%>
+  <%= @result.source_content.html_safe %>
+  <% end -%>
+</div>
+<div id="sidebar">
+  <h3>Entities Extracted</h3>
+  <table>
+    <tr>
+      <th>Type</th>
+      <th>Name</th>
+    </tr>
+    <% @result.entities.each do |entity| -%>
+    <tr>
+      <td><%= entity.entity_type %></td>
+      <td><%= entity.name %></td>
+    </tr>
+    <% end -%>
+  </table>
+</div>
