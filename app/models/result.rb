@@ -46,8 +46,9 @@ class Result
                                     :license_id => KEYS["calais"] )
     json = JSON.parse(json_string)
     entities = []
+    desired_types = %w{Person Organization Company}
     json.each do |k,v|
-      if v["_typeGroup"] == "entities" 
+      if v["_typeGroup"] == "entities" && desired_types.include?(v["_type"])
         self.entities << Entity.new(:entity_type => v["_type"],
                                     :name => v["name"],
                                     :relevance => v["relevance"])
