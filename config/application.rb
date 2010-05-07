@@ -13,8 +13,3 @@ module Truthify
     config.filter_parameters += [:password]
   end
 end
-
-MongoMapper.database = "truthify-#{Rails.env}"
-require 'digest/md5'
-require 'open-uri'
-KEYS = YAML.load_file("#{Rails.root}/config/keys.yml")
