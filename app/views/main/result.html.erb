@@ -9,6 +9,8 @@
   <% end -%>
 </div>
 <div id="sidebar">
+  <h3>Copy Link</h3>  
+  <%= text_field_tag 'url', result_url(@result.slug), :id => 'share_url', :readonly => 'readonly', :size => 30 %>
   <h3>Entities Extracted</h3>
   <table>
     <tr>
