@@ -2,10 +2,15 @@
 
 <p>Feed in a news article, blog post, or press release, and Truthify will present you with an enhanced view of the people, organizations, and relationships described in the piece.</p> 
 
-<% form_tag "/truthify" do -%>
+<% form_tag truthify_path do -%>
   <%= label_tag "url", "Enter the URL:" %>
   <%= text_field_tag "url", nil, :size => "60" %>
   <%= label_tag "text", "Or, paste in the text:" %>
   <%= text_area_tag "text", nil, :rows => 15, :cols => 60 %>
   <%= submit_tag "Truthify!" %>
 <% end -%>
+
+<h3>Use the Bookmarklet</h3>
+<p>If you're really hip, you should drag and drop the bookmarklet below to your bookmarks bar:</p>
+<p><a class="bookmarklet" href="javascript:location.href='<%= truthify_url %>?url='+encodeURIComponent(location.href)">truthify.me</a></p>
+<p>Then, click it whenever you want to truthify the page you're on.</p>

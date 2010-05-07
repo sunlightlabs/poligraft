@@ -24,6 +24,9 @@ input, select, textarea {
   border: 1px solid #999;
   background: #fff;
   padding: 3px 2px 3px 2px;
+  -moz-border-radius: 4px; 
+  -webkit-border-radius: 4px; 
+  border-radius: 4px;     
 }
 input[type="hidden"] {
   display: none;
@@ -65,7 +68,7 @@ tr,th,td {
   background-color: #FFF;
   padding: 20px 40px;
   border: solid 1px black;
-  margin-top: 20px;
+  margin-top: 20px; 
 }
 
 #flash_notice, #flash_error {
@@ -140,6 +143,17 @@ ul#navigation li {
   display: inline;
 }
 
+a.bookmarklet {
+  color: #111;
+  background-color: #ddd;
+  text-decoration: none;
+  padding: 5px 8px 5px 8px;
+  border: 1px solid #999;
+  -moz-border-radius: 8px; 
+  -webkit-border-radius: 8px; 
+  border-radius: 8px;   
+}
+
 div#truthified {
   padding: 10px 10px 10px 10px;
   border: 1px solid #999;
@@ -155,7 +169,6 @@ span.highlight {
 div#sidebar {
   border: 1px solid #999;
   padding: 10px 10px 10px 10px;
-  
   width: 33%;
   float: right;
 }
