@@ -24,7 +24,10 @@ class Result
   protected
   
   def set_slug
-    self.slug = ('a'..'z').sort_by {rand}[0,3].join
+    chars = ('a'..'z').to_a + ('A'..'Z').to_a + (1..9).to_a
+    begin
+      self.slug = chars.sort_by {rand}[0,4].join
+    end while (Result.first(:slug => self.slug))
   end
 
   def ensure_source_text
@@ -39,7 +42,6 @@ class Result
   end
 
   def process_entities
-    
     json_string = Calais.enlighten( :content => self.source_content,
                                     :content_type => (self.source_url.blank? ? :raw : :html),
                                     :output_format => :json,
