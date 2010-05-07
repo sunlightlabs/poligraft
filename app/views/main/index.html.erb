@@ -9,7 +9,7 @@
   <%= text_area_tag "text", nil, :rows => 15, :cols => 60 %>
   <%= submit_tag "Truthify!" %>
 <% end -%>
-
+<hr />
 <h3>Use the Bookmarklet</h3>
 <p>If you're really hip, you should drag and drop the bookmarklet below to your bookmarks bar:</p>
 <p><a class="bookmarklet" href="javascript:location.href='<%= truthify_url %>?url='+encodeURIComponent(location.href)">truthify.me</a></p>

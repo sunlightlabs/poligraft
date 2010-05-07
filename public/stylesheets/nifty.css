@@ -56,6 +56,11 @@ tr,th,td {
   padding: 5px 15px 5px 5px;
 }
 
+hr {
+  height: 1px;
+  color: #999;
+}
+
 .clear {
   clear: both;
   height: 0;
