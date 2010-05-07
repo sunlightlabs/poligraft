@@ -3,9 +3,9 @@
 <div id="truthified">
   <h3>Content</h3>
   <% if @result.source_format == 'plain_text' -%>
-  <%= simple_format @result.source_content.html_safe %>
+  <%= simple_format formatted_content(@result) %>
   <% else -%>
-  <%= @result.source_content.html_safe %>
+  <%= formatted_content(@result) %>
   <% end -%>
 </div>
 <div id="sidebar">
