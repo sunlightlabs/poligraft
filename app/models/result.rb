@@ -84,12 +84,12 @@ class Result
     # get the parent node with the highest point total
     winner = parents.sort{ |a,b| a[1] <=> b[1] }.last[0]
 
-  # return the plucked HTML content
-  winner_paragraphs = ""
-  winner.search('./p').each do |n| 
-    winner_paragraphs = winner_paragraphs + "<p>#{n.inner_html}</p>"
-  end
-  "<h4>" + doc.search('title').inner_html + "</h4>" + winner_paragraphs
+    # return the plucked HTML content
+    winner_paragraphs = ""
+    winner.search('./p').each do |n| 
+      winner_paragraphs = winner_paragraphs + "<p>#{n.inner_html}</p>"
+    end
+    "<h4>" + doc.search('title').inner_html + "</h4>" + winner_paragraphs
   end
 
 
@@ -105,14 +105,14 @@ class Result
                       (paragraph.parent.get_attribute('id') || '')
 
     # deduct severely and return if clearly not content
-    if classes_and_ids =~ /comment|meta|footer|footnote/
-      points -= 3000
+    if classes_and_ids =~ /comment*|meta|footer|footnote/
+      points -= 5000
       return points
     end
 
     # reward if probably content
-    if classes_and_ids =~ /post|hentry|entry|article/
-      points += 50
+    if classes_and_ids =~ /post|hentry|entry|article|story.*/
+      points += 500
     end
 
     # look at the actual text of the paragraph
