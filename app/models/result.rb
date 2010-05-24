@@ -12,17 +12,16 @@ class Result
 
   validates_presence_of :source_text
   validates_presence_of :slug
+  validates_presence_of :source_hash
   validates_uniqueness_of :slug
   
-  before_validation :set_slug, :ensure_source_text
+  before_validation :set_slug, :ensure_source_text, :set_hash
   before_save :process_entities
 
   def source_content
     self.source_text.to_s
   end
 
-  protected
-  
   def set_slug
     chars = ('a'..'z').to_a + ('A'..'Z').to_a + (1..9).to_a
     begin
@@ -33,14 +32,18 @@ class Result
   def ensure_source_text
     self.source_format = 'plain_text'
     if self.source_content.blank?
+      raise "Must set source_url or source_content" if self.source_url.blank?
       self.source_text = pluck_article(self.source_url)
       self.source_format = 'html'
     end
-    unless self.source_text.blank?
-       self.source_hash = Digest::MD5.hexdigest(self.source_content)
-    end
   end
 
+  def set_hash
+    unless self.source_content.blank?
+      self.source_hash = Digest::MD5.hexdigest(self.source_content)
+    end    
+  end
+  
   def process_entities
     json_string = Calais.enlighten( :content => self.source_content,
                                     :content_type => (self.source_url.blank? ? :raw : :html),
