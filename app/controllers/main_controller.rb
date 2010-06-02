@@ -16,6 +16,11 @@ class MainController < ApplicationController
   
   def result
     @result = Result.first(:slug => params[:slug])
+    respond_to do |format|
+      format.html
+      format.json { render :json => @result.to_json(:methods  => [:source_content],
+                                                    :except   => [:source_text]) }
+    end
   end
   
 end
