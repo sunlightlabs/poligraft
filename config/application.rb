@@ -5,6 +5,7 @@ require "action_mailer/railtie"
 require "rails/test_unit/railtie"
 
 Bundler.require(:default, Rails.env) if defined?(Bundler)
+MongoMapper.database = "truthify-#{Rails.env}"
 
 module Truthify
   class Application < Rails::Application
