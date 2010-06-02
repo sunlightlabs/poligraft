@@ -15,14 +15,17 @@ class Result
   validates_presence_of :source_hash
   validates_uniqueness_of :slug
   
-  before_validation :set_slug, :ensure_source_text, :set_hash
-  before_save :process_entities
+  before_validation :ensure_slug, :ensure_source_text, :ensure_hash
 
   def source_content
     self.source_text.to_s
   end
 
-  def set_slug
+  def ensure_slug
+    puts "in ensure_slug"
+    
+    return unless self.slug.blank?
+    puts "in ensure_slug"
     chars = ('a'..'z').to_a + ('A'..'Z').to_a + (1..9).to_a
     begin
       self.slug = chars.sort_by {rand}[0,4].join
@@ -30,6 +33,7 @@ class Result
   end
 
   def ensure_source_text
+    return unless self.source_format.blank?
     self.source_format = 'plain_text'
     if self.source_content.blank?
       raise "Must set source_url or source_content" if self.source_url.blank?
@@ -38,29 +42,13 @@ class Result
     end
   end
 
-  def set_hash
+  def ensure_hash
+    return unless self.source_hash.blank?
     unless self.source_content.blank?
       self.source_hash = Digest::MD5.hexdigest(self.source_content)
-    end    
-  end
-  
-  def process_entities
-    json_string = Calais.enlighten( :content => self.source_content,
-                                    :content_type => (self.source_url.blank? ? :raw : :html),
-                                    :output_format => :json,
-                                    :license_id => KEYS["calais"] )
-    json = JSON.parse(json_string)
-    entities = []
-    desired_types = %w{Person Organization Company}
-    json.each do |k,v|
-      if v["_typeGroup"] == "entities" && desired_types.include?(v["_type"])
-        self.entities << Entity.new(:entity_type => v["_type"],
-                                    :name => v["name"],
-                                    :relevance => v["relevance"])
-      end
     end
   end
-
+  
   def pluck_article(url)
 
     # get the raw HTML
@@ -143,5 +131,25 @@ class Result
     points
 
   end
+
+  def process_entities
+    json_string = Calais.enlighten( :content => self.source_content,
+                                    :content_type => (self.source_url.blank? ? :raw : :html),
+                                    :output_format => :json,
+                                    :license_id => KEYS["calais"] )
+    json = JSON.parse(json_string)
+    entities = []
+    desired_types = %w{Person Organization Company}
+    json.each do |k,v|
+      if v["_typeGroup"] == "entities" && desired_types.include?(v["_type"])
+        self.entities << Entity.new(:entity_type => v["_type"],
+                                    :name => v["name"],
+                                    :relevance => v["relevance"])
+      end
+    end
+    self.save
+  end
+
+  handle_asynchronously :process_entities
 
 end
