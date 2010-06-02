@@ -36,6 +36,7 @@ input.inline, label.inline {
 }
 input[type="submit"], input[type="button"] {
   font-size: 14px;
+  padding: 5px 5px 5px 5px;
 }
 
 input#user_openid_identifier, input#user_session_openid_identifier {
