@@ -1,6 +1,6 @@
 <% content_for :title, "Results" %>
 
-<div id="truthified">
+<div id="source_content">
   <h3>Content</h3>
   <% if @result.source_format == 'plain_text' -%>
   <%= simple_format formatted_content(@result) %>
@@ -12,19 +12,30 @@
   <% end -%>
 </div>
 <div id="sidebar">
-  <h3>Copy Link</h3>  
-  <%= text_field_tag 'url', result_url(@result.slug), :id => 'share_url', :readonly => 'readonly', :size => 30 %>
-  <h3>Entities Extracted</h3>
-  <table>
-    <tr>
-      <th>Type</th>
-      <th>Name</th>
-    </tr>
-    <% @result.entities.each do |entity| -%>
-    <tr>
-      <td><%= entity.entity_type %></td>
-      <td><%= entity.name %></td>
-    </tr>
-    <% end -%>
-  </table>
+
+  <div id="copy_link">
+    <h3>Copy Link</h3>
+    <%= text_field_tag 'url', result_url(@result.slug), :id => 'share_url', :readonly => 'readonly', :size => 30 %>
+  </div>
+  
+  <div id="extracted_entities">
+    <h3>Extracted Entities</h3>
+    <table>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+      </tr>
+      <% @result.entities.each do |entity| -%>
+      <tr>
+        <td><%= entity.entity_type %></td>
+        <td><%= entity.name %></td>
+      </tr>
+      <% end -%>
+    </table>
+  </div>
 </div>
+
+<script type="text/javascript" charset="utf-8">
+  var slug = '<%= @result.slug %>';
+  var entityCount = <%= @result.entities.length %>;
+</script>

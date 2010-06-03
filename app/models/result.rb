@@ -7,6 +7,7 @@ class Result
   key :source_format, String
   key :source_hash, String
   key :slug, String
+  key :status, String
 
   many :entities
 
@@ -16,14 +17,13 @@ class Result
   validates_uniqueness_of :slug
   
   before_validation :ensure_slug, :ensure_source_text, :ensure_hash
-
+  before_create :set_status
+  
   def source_content
     self.source_text.to_s
   end
 
-  def ensure_slug
-    puts "in ensure_slug"
-    
+  def ensure_slug    
     return unless self.slug.blank?
     puts "in ensure_slug"
     chars = ('a'..'z').to_a + ('A'..'Z').to_a + (1..9).to_a
@@ -49,16 +49,21 @@ class Result
     end
   end
   
+  def set_status
+    self.status = "Text Plucked"
+  end  
+  
   def pluck_article(url)
 
     # get the raw HTML
     doc = Nokogiri::HTML.parse(open(url), url, "UTF-8")
 
-    # delete stuff
+    # remove undesirable tags
     doc.search('img').remove
     doc.search('script').remove
+    doc.search('style').remove
+    doc.search('a').each { |n| n.swap(n.inner_text) }
 
-    # get the paragraphs
     paragraphs = doc.search('p')
 
     # assign points to the parent nodes for each paragraph
@@ -147,6 +152,7 @@ class Result
                                     :relevance => v["relevance"])
       end
     end
+    self.status = "Entities Extracted"
     self.save
   end
 
