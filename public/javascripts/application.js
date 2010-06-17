@@ -7,23 +7,25 @@ $(function() {
     if (entityCount == 0) {
       $("div#extracted_entities").hide();
     }
-
-    var intervalId = setInterval(function() { 
-      $.getJSON(slug + '.json',
-      function(result) {
-
-        $("div#status p em").text(result.status);
-        
-        // break the loop if done
-        if (result.status == "Entities Extracted") {
-          clearInterval(intervalId);
-        }
-        
-        entitiesExtracted(result);
-
-      })
-    }, 2000);
-
+    
+    var doneStatus = "Entities Extracted";
+    
+    if (resultStatus != doneStatus) {
+      var intervalId = setInterval(function() { 
+        $.getJSON(slug + '.json', function(result) {
+          
+          $("div#status p em").text(result.status);
+          
+          // break the loop if done
+          if (result.status == doneStatus) {
+            clearInterval(intervalId);
+          }
+          
+          entitiesExtracted(result);
+          
+        })
+      }, 2000);
+    }
   }
   
 });
