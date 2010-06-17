@@ -18,6 +18,11 @@
     <%= text_field_tag 'url', result_url(@result.slug), :id => 'share_url', :readonly => 'readonly', :size => 30 %>
   </div>
   
+  <div id="status">
+    <h3>Status</h3>
+    <p><em><%= @result.status %></em></p>
+  </div>
+  
   <div id="extracted_entities">
     <h3>Extracted Entities</h3>
     <table>

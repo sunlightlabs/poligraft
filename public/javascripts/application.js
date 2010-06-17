@@ -11,6 +11,8 @@ $(function() {
     var intervalId = setInterval(function() { 
       $.getJSON(slug + '.json',
       function(result) {
+
+        $("div#status p em").text(result.status);
         
         // break the loop if done
         if (result.status == "Entities Extracted") {
