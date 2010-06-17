@@ -23,7 +23,11 @@
     <p><em><%= @result.status %></em></p>
   </div>
   
-  <div id="extracted_entities">
+  <% if @result.entities.nil? || @result.entities.empty? -%>
+  <div id="extracted_entities" style="display:none;">
+  <% else -%>
+  <div id="extracted_entities">  
+  <% end -%>
     <h3>Extracted Entities</h3>
     <table>
       <tr>
