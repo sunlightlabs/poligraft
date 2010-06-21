@@ -7,7 +7,7 @@ describe Result do
     let(:result) { Result.new }
   
     it "sets a four character slug" do
-      result.set_slug
+      result.ensure_slug
       result.slug.should match /[a-zA-z0-9]{4}/
     end
     
@@ -19,7 +19,7 @@ describe Result do
   
     it "generates an MD5 hash based on source_text" do
       result.source_text = "Lorem ipsum dolor sit amet"
-      result.set_hash
+      result.ensure_hash
       result.source_hash.should == Digest::MD5.hexdigest(result.source_content)
     end
   end

@@ -25,7 +25,6 @@ class Result
 
   def ensure_slug    
     return unless self.slug.blank?
-    puts "in ensure_slug"
     chars = ('a'..'z').to_a + ('A'..'Z').to_a + (1..9).to_a
     begin
       self.slug = chars.sort_by {rand}[0,4].join
