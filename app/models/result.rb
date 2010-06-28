@@ -8,6 +8,7 @@ class Result
   key :source_hash, String
   key :slug, String
   key :status, String
+  key :contribution_count, Integer, :default => 0
 
   many :entities
 
@@ -133,6 +134,7 @@ class Result
                                                         :tdata_id => contributor.tdata_id,
                                                         :tdata_type => contributor.tdata_type,
                                                         :tdata_slug => contributor.tdata_slug)
+              self.contribution_count += 1
             end
           end
         end # if self.entities.each do |contributor|
@@ -140,10 +142,10 @@ class Result
       end # if recipient.tdata_type
     end # self.entities.each do |recipient|
     hydra.run
-    self.status = "Finished Processing"
+    self.status = "Contributors Identified"
     self.save
   end
 
-  #handle_asynchronously :process_entities
+  handle_asynchronously :process_entities
 
 end

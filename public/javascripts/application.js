@@ -8,9 +8,10 @@ $(function() {
       $("div#extracted_entities").hide();
     }
     
-    var doneStatus = "Finished Processing";
+    var doneStatus = "Contributors Identified";
     var ranEntitiesExtracted = false;
     var ranEntitiesLinked = false;
+    var ranContributorsIdentified = false;
     
     if (resultStatus != doneStatus) {
       var intervalId = setInterval(function() { 
@@ -30,6 +31,10 @@ $(function() {
           if (ranEntitiesLinked == false) {
             ranEntitiesLinked = entitiesLinked(result);
           }
+
+          if (ranContributorsIdentified == false) {
+            ranContributorsIdentified = contributorsIdentified(result);
+          }
         })
       }, 2000);
     }
@@ -38,6 +43,7 @@ $(function() {
 });
 
 var entitiesExtracted = function(result, processedStatus) {
+  var showTable = false
   if (result.status == "Entities Extracted" && !_(result.entities).isEmpty()) {
     
     // highlight the source text
@@ -48,8 +54,11 @@ var entitiesExtracted = function(result, processedStatus) {
     _(result.entities).each(function(e) {
       $("div#extracted_entities table").append('<tr><td>' + e.name  + '</td><td>'
                                             + e.entity_type + '</td></tr>');
+      showTable = true;
     });
-    $("div#extracted_entities").show();
+    if (showTable) {
+      $("div#extracted_entities").show();
+    }
     return true;
   } else {
     return false;
@@ -63,13 +72,52 @@ var entitiesLinked = function(result, processedStatus) {
     _(result.entities).each(function(e) {
       
       if (e.tdata_id) {
-        $("td:contains('" + e.name  + "')").replaceWith('<td><a href="' +
-        'http://brisket.transparencydata.com/' + e.tdata_type + '/' + e.tdata_slug +
-        '/' + e.tdata_id + '">' + e.name +'</a></td>');
+        $("td:contains('" + e.name  + "')").replaceWith('<td>' + influence_explorer_url(e) + '</td>');
       }
     });
     return true;
   } else {
     return false;
   }
+}
+
+var contributorsIdentified = function(result, processedStatus) {
+  var showReport = false;
+  if (result.status == "Contributors Identified" && !_(result.entities).isEmpty()) {
+    
+    // list all contributor/recipient relationships
+    _(result.entities).each(function(e) {
+      if (e.contributors) {
+        _(e.contributors).each(function(contributor) {
+          $("div#contribution_report ul").append('<li>' + influence_explorer_url(contributor) + 
+                                                 ' has donated $' +  commafy(contributor.amount) +
+                                                 ' to ' + influence_explorer_url(e) + '</li>');
+          showReport = true;
+        });
+      }
+    });
+    if (showReport) {
+      $("div#contribution_report").show();
+    }
+    return true;
+  } else {
+    return false;
+  }
+}
+
+var influence_explorer_url = function(entity) {
+  return '<a href="http://brisket.transparencydata.com/' + entity.tdata_type + 
+         '/' + entity.tdata_slug + '/' + entity.tdata_id + '">' + entity.name +'</a>'
+}
+
+var commafy = function(amount) {
+  amount += '';
+  arr = amount.split('.');
+  dollars = arr[0];
+  cents = arr.length > 1 ? '.' + arr[1] : '';
+  var rgx = /(\d+)(\d{3})/;
+  while (rgx.test(dollars)) {
+    dollars = dollars.replace(rgx, '$1' + ',' + '$2');
+  }
+  return dollars + cents;
 }

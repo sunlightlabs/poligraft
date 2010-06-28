@@ -23,7 +23,7 @@
     <p><em><%= @result.status %></em></p>
   </div>
   
-  <% if @result.entities.nil? || @result.entities.empty? -%>
+  <% if @result.entities.nil? || @result.entities.empty? || @result.contribution_count == 0 -%>
   <div id="contribution_report" style="display:none;">
   <% else -%>
   <div id="contribution_report">
