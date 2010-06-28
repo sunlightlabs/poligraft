@@ -24,6 +24,23 @@
   </div>
   
   <% if @result.entities.nil? || @result.entities.empty? -%>
+  <div id="contribution_report" style="display:none;">
+  <% else -%>
+  <div id="contribution_report">
+  <% end -%>
+    <h3>Contribution Report</h3>
+    <ul>
+    <% @result.entities.each do |recipient| -%>
+      <% if recipient.contributors -%>
+      <% recipient.contributors.each do |contributor| -%>
+      <li><%= link_to contributor.name, influence_explorer_url(contributor) %> has donated $<%= number_with_delimiter contributor.amount %> to <%= link_to recipient.name, influence_explorer_url(recipient) %></li>
+      <% end -%>
+      <% end -%>
+    <% end -%>
+    </ul>
+  </div>
+  
+  <% if @result.entities.nil? || @result.entities.empty? -%>
   <div id="extracted_entities" style="display:none;">
   <% else -%>
   <div id="extracted_entities">  
@@ -37,7 +54,11 @@
       <% @result.entities.each do |entity| -%>
       <tr>
         <td><%= entity.entity_type %></td>
+        <% if entity.tdata_id.blank? -%>
         <td><%= entity.name %></td>
+        <% else -%>
+        <td><%= link_to entity.name, influence_explorer_url(entity) %></td>
+        <% end -%>
       </tr>
       <% end -%>
     </table>

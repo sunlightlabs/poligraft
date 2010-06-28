@@ -23,7 +23,7 @@ class Result
     self.source_text.to_s
   end
 
-  def ensure_slug    
+  def ensure_slug
     return unless self.slug.blank?
     chars = ('a'..'z').to_a + ('A'..'Z').to_a + (1..9).to_a
     begin
@@ -36,7 +36,7 @@ class Result
     self.source_format = 'plain_text'
     if self.source_content.blank?
       raise "Must set source_url or source_content" if self.source_url.blank?
-      self.source_text = pluck_article(self.source_url)
+      self.source_text = ContentPlucker.pluck_from(self.source_url)
       self.source_format = 'html'
     end
   end
@@ -82,7 +82,68 @@ class Result
     self.status = "Entities Extracted"
     self.save
   end
+  
+  def link_entities
+    hydra = Typhoeus::Hydra.new
+    tdata = TransparencyData::Client.new(hydra)
+    self.entities.each do |entity|
+      tdata.entities(:search => entity.name) do |results, error|
+        if error
+          Rails.logger.info "Error in link_entities: #{error}"
+        else
+          results.each do |result|
+            if (result['type'] == "politician" && entity.entity_type == "Person") ||
+               (result['type'] == "individual" && entity.entity_type == "Person") ||
+               (result['type'] == "organization" && entity.entity_type == "Company") ||
+               (result['type'] == "organization" && entity.entity_type == "Organization")
+              
+              if entity.tdata_count.nil? || 
+                 entity.tdata_count < (result.count_given + result.count_received)
+              
+                entity.tdata_type = result['type']
+                entity.tdata_id = result.id
+                entity.tdata_slug = result.name.parameterize
+                entity.tdata_count = result.count_given + result.count_received
+              
+              end
+            
+            end
+          end # results.each
+        end # if error
+      end # self.entities.each
+      entity.save
+    end
+    hydra.run
+    self.status = "Entities Linked"
+    self.save
+  end
 
-  handle_asynchronously :process_entities
+  def find_contributors
+    hydra = Typhoeus::Hydra.new
+    tdata = TransparencyData::Client.new(hydra)
+    self.entities.each do |recipient|
+      if recipient.tdata_type == 'politician'
+        self.entities.each do |contributor|
+          tdata.recipient_contributor_summary(recipient.tdata_id, contributor.tdata_id) do |summary, error|
+            if error
+              Rails.logger.info "Error in find_contributors: #{error}"
+            else
+              recipient.contributors << Contributor.new(:name => summary.contributor_name,
+                                                        :amount => summary.amount,
+                                                        :tdata_id => contributor.tdata_id,
+                                                        :tdata_type => contributor.tdata_type,
+                                                        :tdata_slug => contributor.tdata_slug)
+            end
+          end
+        end # if self.entities.each do |contributor|
+        recipient.save
+      end # if recipient.tdata_type
+    end # self.entities.each do |recipient|
+    hydra.run
+    self.status = "Finished Processing"
+    self.save
+  end
+
+  #handle_asynchronously :process_entities
 
 end
