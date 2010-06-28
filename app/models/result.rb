@@ -51,101 +51,29 @@ class Result
   def set_status
     self.status = "Text Plucked"
   end  
-  
-  def pluck_article(url)
-
-    # get the raw HTML
-    doc = Nokogiri::HTML.parse(open(url), url, "UTF-8")
-
-    # remove undesirable tags
-    doc.search('img').remove
-    doc.search('script').remove
-    doc.search('style').remove
-    doc.search('a').each { |n| n.swap(n.inner_text) }
-
-    paragraphs = doc.search('p')
-
-    # assign points to the parent nodes for each paragraph
-    parents = {}
-    paragraphs.each do |paragraph|
-      points = calculate_points(paragraph)
-      if parents.has_key?(paragraph.parent)
-        parents[paragraph.parent] += points
-      else
-        parents[paragraph.parent] = points
-      end
-    end
-
-    # get the parent node with the highest point total
-    winner = parents.sort{ |a,b| a[1] <=> b[1] }.last[0]
-
-    # return the plucked HTML content
-    winner_paragraphs = ""
-    winner.search('./p').each do |n| 
-      winner_paragraphs = winner_paragraphs + "<p>#{n.inner_html}</p>"
-    end
-    "<h4>" + doc.search('title').inner_html + "</h4>" + winner_paragraphs
-  end
-
-
-  def calculate_points(paragraph, starting_points = 0)
-
-    # reward for being a new paragraph
-    points = starting_points + 20
-
-    # look at the id and class of paragraph and parent
-    classes_and_ids = (paragraph.get_attribute('class') || '') + ' ' +
-                      (paragraph.get_attribute('id') || '') + ' ' +
-                      (paragraph.parent.get_attribute('class') || '') + ' ' +
-                      (paragraph.parent.get_attribute('id') || '')
-
-    # deduct severely and return if clearly not content
-    if classes_and_ids =~ /comment*|meta|footer|footnote/
-      points -= 5000
-      return points
-    end
-
-    # reward if probably content
-    if classes_and_ids =~ /post|hentry|entry|article|story.*/
-      points += 500
-    end
-
-    # look at the actual text of the paragraph
-    content = paragraph.content
-
-    # deduct if very short
-    if content.length < 20
-      points -= 50
-    end
-
-    # reward if long
-    if content.length > 100
-      points += 50
-    end
-
-    # deduct if no periods, question marks, or exclamation points
-    unless (content.include?('.') or content.include?('?') or content.include?('!'))
-      points -= 100
-    end
-
-    # reward for periods and commas
-    points += content.count('.') * 10
-    points += content.count(',') * 20
-
-    points
-
-  end
 
   def process_entities
+    TransparencyData.api_key = KEYS["sunlight"]
+    TransparencyData.api_domain = KEYS["ie"] if KEYS["ie"]
+    extract_entities
+    link_entities
+    find_contributors
+  end
+
+  def extract_entities
     json_string = Calais.enlighten( :content => self.source_content,
                                     :content_type => (self.source_url.blank? ? :raw : :html),
                                     :output_format => :json,
                                     :license_id => KEYS["calais"] )
     json = JSON.parse(json_string)
-    entities = []
     desired_types = %w{Person Organization Company}
+    names_to_suppress = ["white house", "house", "senate", "congress", "assembly", 
+                         "legislature", "state senate", "administration", "obama administration"]
     json.each do |k,v|
-      if v["_typeGroup"] == "entities" && desired_types.include?(v["_type"])
+      if v["_typeGroup"] == "entities" && 
+         desired_types.include?(v["_type"]) && 
+         !names_to_suppress.include?(v["name"].downcase)
+        
         self.entities << Entity.new(:entity_type => v["_type"],
                                     :name => v["name"],
                                     :relevance => v["relevance"])
