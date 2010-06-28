@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '>= 3.0.0.beta3'
+gem 'rails', '>= 3.0.0.beta4'
 
 gem 'json'
 gem 'nokogiri'
@@ -10,6 +10,7 @@ gem 'bson_ext'
 gem 'mongo'
 gem 'mongo_mapper'
 gem 'delayed_job', :git => "git://github.com/luigi/delayed_job.git"
+gem 'transparency_data'
 
 group :test do
   gem "rspec-rails", ">= 2.0.0.beta.8"
