@@ -1,50 +1,40 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-  <head>
-    <title><%= h(yield(:title) + " | Poligraft") %></title>
-    <%= stylesheet_link_tag 'nifty' %>
-    <%= yield(:head) %>
-  </head>
-  <body>
-    <div id="container">
-      
-      <div id="header">
- 
-        <h1>Poligraft</h1>
-        
-        <div id="aside">
-          <ul id="navigation">
-            <li><%= link_to "Home", root_path %> |</li>
-            <li>About |</li>
-            <li>Contact</li>
-          </ul>
-        
-        </div><!-- aside -->
-        
-      </div><!-- header -->
-      
-      <div id="content">
-         <h2 id="page_title"><%=h yield(:title) %></h2>
-        
-        <%- flash.each do |name, msg| -%>
-          <%= content_tag :div, msg, :id => "flash_#{name}" %>
-        <%- end -%>
-        
-        <%= yield %>
-        
-      </div><!-- content -->
-      
-      <div id="footer">
-        <div id="footer_description">
-          <h4>A project of the Sunlight Foundation, funded by the Knight Foundation.</h4>
-          <p>Founded in 2006, the Sunlight Foundation uses cutting-edge technology and ideas to make government transparent and accountable. Through its projects and grant-making, Sunlight serves as a catalyst to create greater political transparency and to foster more openness and accountability in government. Visit <a href="http://sunlightfoundation.com">SunlightFoundation.com</a> to learn more.</p>
-        </div> 
-      </div><!-- footer -->      
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+  <meta name="description" content="Feed in a news article, blog post, or press release, and Poligraft will present you with an enhanced view of the people, organizations, and relationships described in the piece." />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title><%= h(yield(:title) + " | Poligraft") %></title>
+  <%= stylesheet_link_tag 'main' %>
+  <!--[if IE 6]><link rel="stylesheet" href="buggy.css" type="text/css" media="screen" /><![endif]-->
+  <!--[if IE 7]><link rel="stylesheet" href="buggy7.css" type="text/css" media="screen" /><![endif]-->
+  <%= yield :head %>
+</head>
 
-    </div><!-- container -->
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
-    <%= javascript_include_tag 'application', 'rails', 'underscore.min', 'jquery.highlight' %>
-  </body>
+<body class="<%= yield :body_class %>">
+  <div id="headerWrapper">
+    <div id="header">
+      <div id="bookmarkletBar">
+        <h3>Run Poligraft from any web page with this bookmarklet.</h3>
+        <a class="button" href="javascript:location.href='<%= poligraft_url %>?url='+encodeURIComponent(location.href)">Poligraft</a>
+        <span>Drag to your bookmarks toolbar.</span>
+      </div>    
+      <h1><a href="/">Poligraft</a></h1>
+    </div>
+  </div>
+  <div id="pageMain">
+    <%= yield %>
+  </div>
+
+  <div id="footerWrapper">
+    <div id="footer">
+      <a class="logo" id="foundationLogo" href="http://sunlightfoundation.com">Sunlight Foundation</a>
+      <a class="logo" id="calaisLogo" href="http://opencalais.com/">Calais</a>
+      <div class="clear"></div>
+      <p id="privacyPolicy">Founded in 2006, the Sunlight Foundation is a non-partisan non-profit that uses cutting-edge technology and ideas to make government transparent and accountable. Visit <a href="http://sunlightfoundation.com">SunlightFoundation.com</a> to learn more.</p>
+    </div>
+  </div>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
+  <%= javascript_include_tag 'application', 'rails', 'underscore.min', 'jquery.highlight' %>
+</body>
 </html>

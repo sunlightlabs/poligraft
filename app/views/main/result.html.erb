@@ -1,69 +1,77 @@
-<% content_for :title, "Results" %>
+<% content_for :title, "Report for '#{@result.source_title}'" %>
+<% content_for :body_class, "article "%>
 
-<div id="source_content">
-  <h3>Content</h3>
+<div id="shareResults">
+  <h3>Share these Results</h3>
+  <%= text_field_tag 'url', result_url(@result.slug), :id => 'share_url', :readonly => 'readonly', :size => 30 %>
+</div>
+
+<div id="ltColumn">
   <% if @result.source_format == 'plain_text' -%>
   <%= simple_format formatted_content(@result) %>
   <% else -%>
   <%= formatted_content(@result) %>
   <% end -%>
-  <% unless @result.source_url.blank? -%>
-  <p><%= link_to "View Original", @result.source_url %></p>
-  <% end -%>
-</div>
-<div id="sidebar">
-
-  <div id="copy_link">
-    <h3>Copy Link</h3>
-    <%= text_field_tag 'url', result_url(@result.slug), :id => 'share_url', :readonly => 'readonly', :size => 30 %>
-  </div>
   
-  <div id="status">
-    <h3>Status</h3>
-    <p><em><%= @result.status %></em></p>
-  </div>
-  
-  <% if @result.entities.nil? || @result.entities.empty? || @result.contribution_count == 0 -%>
-  <div id="contribution_report" style="display:none;">
-  <% else -%>
-  <div id="contribution_report">
-  <% end -%>
-    <h3>Contribution Report</h3>
-    <ul>
-    <% @result.entities.each do |recipient| -%>
-      <% if recipient.contributors -%>
-      <% recipient.contributors.each do |contributor| -%>
-      <li><%= link_to contributor.name, influence_explorer_url(contributor) %> has donated $<%= number_with_delimiter contributor.amount %> to <%= link_to recipient.name, influence_explorer_url(recipient) %></li>
-      <% end -%>
-      <% end -%>
+  <div id="source">
+    <span id="dateCreated">This page was created on: <span class="date"><%= @result.created_at.to_formatted_s(:day) %></span></span>
+    <% unless @result.source_url.blank? -%>
+    <span class="url"><%= link_to "View Original", @result.source_url %></span>
     <% end -%>
-    </ul>
-  </div>
-  
-  <% if @result.entities.nil? || @result.entities.empty? -%>
-  <div id="extracted_entities" style="display:none;">
-  <% else -%>
-  <div id="extracted_entities">  
-  <% end -%>
-    <h3>Extracted Entities</h3>
-    <table>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-      </tr>
-      <% @result.entities.each do |entity| -%>
-      <tr>
-        <td><%= entity.entity_type %></td>
-        <% if entity.tdata_id.blank? -%>
-        <td><%= entity.name %></td>
-        <% else -%>
-        <td><%= link_to entity.name, influence_explorer_url(entity) %></td>
-        <% end -%>
-      </tr>
-      <% end -%>
-    </table>
   </div>
 </div>
+
+<div id="rtColumnWrapper">
+  <div id="rtColumn">
+
+    <h3>The Report</h3>
+
+    <% if @result.entities.nil? || @result.entities.empty? || @result.contribution_count == 0 -%>
+    <div id="contribution_report" style="display:none;">
+    <% else -%>
+    <div id="contribution_report">
+    <% end -%>
+      <ul class="reportData">
+      <% @result.entities.each do |recipient| -%>
+        <% if recipient.contributors -%>
+        <% recipient.contributors.each do |contributor| -%>
+        <li>
+          <span class="<%= contributor.tdata_type == 'individual' ? 'person' : 'organization' %>"><%= link_to contributor.name, influence_explorer_url(contributor) %></span> has donated $<%= number_with_delimiter contributor.amount %> to <span class="person"><%= link_to recipient.name, influence_explorer_url(recipient) %></span>.
+          <a class="moreLink" href="#">Learn More</a>
+        </li>
+        <% end -%>
+        <% end -%>
+      <% end -%>
+      </ul>
+    </div>
+
+    <% if @result.entities.nil? || @result.entities.empty? -%>
+    <div id="extracted_entities" style="display:none;">
+    <% else -%>
+    <div id="extracted_entities">
+    <% end -%>
+      <h4>Individual Sources Found</h4>
+      <% @result.entities.each do |entity| -%>
+      <ul class="reportData">
+      <% if entity.tdata_id.blank? && @result.status == "Text Plucked" -%>
+        <li><%= entity.name %></li>
+      <% else -%>
+        <li><span class="<%= (entity.tdata_type == 'politician' || entity.tdata_type == 'individual') ? 'person' : 'organization' %>">
+          <%= link_to entity.name, influence_explorer_url(entity) %>
+        </span></li>
+      <% end -%>
+      </ul>
+      <% end -%>
+    </div>
+
+    <div id="status">
+      <h4>Status</h4>
+      <p><em><%= @result.status %></em></p>
+    </div>
+    
+  </div>
+</div>
+<div class="clear"></div>
 
 <script type="text/javascript" charset="utf-8">
   var slug = '<%= @result.slug %>';
