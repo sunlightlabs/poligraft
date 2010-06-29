@@ -1,5 +1,10 @@
 class ContentPlucker
   
+  def self.pluck_title_from(url)
+    doc = Nokogiri::HTML.parse(open(url), url, "UTF-8")
+    doc.search('title').inner_html
+  end
+  
   def self.pluck_from(url)
 
     # get the raw HTML
