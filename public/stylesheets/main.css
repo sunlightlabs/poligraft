@@ -1,0 +1,85 @@
+/*
+ * YUI Resect CSS version: 2.2.2 
+ * Copyright (c) 2007, Yahoo! Inc. All rights reserved.
+ * Licensed under the BSD License: http://developer.yahoo.net/yui/license.txt
+ */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,optgroup,button,p,blockquote,th,td{margin:0;padding:0;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}table{border-collapse:collapse;border-spacing:0;}caption,th{text-align:left;}ol,ul{list-style:none;}fieldset,img{border:0;}input,textarea,select,optgroup,option,button{font-family:inherit;font-size:100%;}button,input {width: auto;overflow: visible;}optgroup,address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym {border:0;}
+dl li{list-style: none;}
+
+a:link{outline: none; color: #eb9500;}
+a:visited{outline: none; color: #eb9500}
+a:hover{outline: none; color: #eb9500}
+a:active{outline: none; color: #eb9500}
+
+body{
+  background-color: #fff;
+  color: #706b68;
+  background: url(/images/bg_grid.jpg) top left repeat;
+  font-size: 80%;
+  line-height: 20px;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
+#header { background: url(/images/header_sidebar.jpg) top left no-repeat; width: 940px; margin: 0 auto; height: 258px; padding: 0 10px;}
+#headerWrapper { background: url(/images/header_bg.jpg) top center repeat-x;}
+body.home #header { background: url(/images/header_main.jpg) top left no-repeat;}
+
+#bookmarkletBar { float: right; padding-top: 10px; background: url(/images/bookmarkletBar_bar.png) bottom right no-repeat; padding-bottom: 20px;}
+#bookmarkletBar h3 { color: #1a1816; font-size: 115%; margin-bottom: 10px;}
+#bookmarkletBar span { float: right; text-align: right; width: 140px; font-family: Georgia, "Times New Roman", Times, serif; font-style: oblique; margin-right: 13px; line-height: 18px; margin-top: 3px;}
+
+/*edited*/a.button, .logo, button { text-indent: -9999em; display: block; border: none; cursor: pointer;}
+#bookmarkletBar a.button { background: url(/images/btn_bookmarklet.png) top left no-repeat; width: 191px; height: 42px; float: right;}
+
+div#shareResults { background: url(/images/share.png) top right no-repeat; width: 710px; height: 52px; margin-top: -72px; text-align: right; margin-left: 230px; padding-top: 20px; padding-right: 20px;}
+div#shareResults h3 { display: inline; color: #fff; text-transform: none; margin-right: 15px; font-size: 120%;}
+input#share_url { width: 280px; }
+
+/*edited*/#pageMain { width: 960px; margin: 0 auto 70px; min-height: 600px;}
+#ltColumn h3, #rtColumn h3  { font-size: 180%; text-transform: uppercase; color: #433f3d; }
+#rtColumn h3 { color: #b1b1b0;}
+#ltColumn h3, #rtColumn h3 { margin-bottom: 25px;}
+
+#ltColumn, #rtColumn { padding-top: 50px;}
+#ltColumn { float: left; padding-left: 10px; width: 605px; margin-right: 15px;}
+#rtColumn { padding: 50px 25px 50px 35px; background: url(/images/rtColumn.jpg) top center repeat-y;}
+#rtColumnWrapper { background: url(/images/rtColumn_bottom.jpg) right bottom no-repeat; float: left; width: 330px; padding-bottom: 15px;}
+
+.reportData { margin-bottom: 35px;}
+.reportData li { margin-bottom: 20px; padding-bottom: 20px; font-size: 120%; line-height: 22px; background: url(/images/li_line.png) bottom right no-repeat;}
+.moreLink { display: block; background: url(/images/arrows.png) left 6px no-repeat; padding-left: 18px; font-family: Georgia, "Times New Roman", Times, serif; font-style: oblique; margin-top: 10px;}
+
+div#source { background: url(/images/bar_article.jpg) top left no-repeat; margin-top: 40px; padding-top: 30px; color: #a09893;}
+#dateCreated { margin-bottom: 10px; display: block;}
+#pageMain p { margin-bottom: 1em;}
+
+span.person { background-color: #fde936; padding: 1px 2px;}
+span.organization { background-color: #b5d9d8; padding: 1px 2px;}
+
+span.date { font-style: oblique;}
+h4 { font-weight: bold;}
+div#rtColumn h4 { color: #b1b1b0; margin-bottom: 20px; font-size: 120%;}
+
+#footer { background: url(/images/footer.jpg) top center no-repeat; margin: 0 auto; width: 960px; height: 130px; padding-top: 75px;}
+#footerWrapper { background: url(/images/footer_wrapper.jpg) top center repeat-x; height: 220px;}
+a#foundationLogo { background: url(/images/logo_foundation.png) top left no-repeat; width: 127px; height: 56px; float: left; margin-right: 30px; margin-top: 18px;}
+a#calaisLogo { background: url(/images/logo_calais.png) top left no-repeat; width: 187px; height: 73px; float: left; }
+p#privacyPolicy { font-size: 90%; margin-top: 20px; line-height: 14px; width: 600px;}
+
+/*new*/
+label { color: #433f3d; display: block; text-transform: uppercase; font-size: 120%;  margin-bottom: 10px;}
+form li { margin-bottom: 20px;}
+
+#homeDescription { text-indent: -9999em; display: block; background: url(/images/description_home.png) top center no-repeat; width: 629px; height: 172px; margin-top: -75px; padding-bottom: 20px;}
+#fullColumn { width: 629px; margin: 0 auto;}
+input, textarea { border: 1px solid #c9c8c2; padding: 5px; -moz-border-radius: 3px; -webkit-border-radius: 3px; color: #a09893;}
+body.home input, body.home textarea { width: 629px; background-color: #f6f6f6;}
+#formDescriptor { font-family: Georgia, "Times New Roman", Times, serif; font-style: oblique; margin-bottom: 20px; display: block;}
+button#submit { background: url(/images/btn_submit.jpg) center -42px no-repeat; width: 191px; height: 42px; margin: 30px 0;}
+button#submit:hover { background: url(/images/btn_submit.jpg) center top no-repeat;}
+
+span.person a, span.person a:link, span.person a:visited, span.person a:hover, span.person a:active, span.company a, span.company a:link, span.company a:visited, span.company a:hover, span.company a:active { color: #706B68;}
+span.person a:hover, span.company a:hover { color: #433F3D;}
+/*end new*/
+
+.clear{ clear: both;}

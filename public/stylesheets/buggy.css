@@ -1,0 +1,11 @@
+div#shareResults, #homeDescription { position: relative;}
+
+#homeDescription { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/images/description_home.png", sizingMethod="crop"); }
+div#shareResults { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/images/share.png", sizingMethod="crop"); }
+a#foundationLogo { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/images/logo_foundation.png", sizingMethod="crop"); }
+a#calaisLogo { background: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/images/logo_calais.png", sizingMethod="crop"); }
+
+#bookmarkletBar { width: 450px;}
+#bookmarkletBar h3 { text-align: right;}
+
+p#privacyPolicy { margin-top: -50px; height: 20px;}
