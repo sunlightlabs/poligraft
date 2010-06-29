@@ -4,12 +4,12 @@ class MainController < ApplicationController
     
   end
   
-  def truthify
+  def poligraft
     if (@result = Result.create!(:source_url => params[:url], :source_text => params[:text]))
       @result.process_entities
       redirect_to "/" + @result.slug
     else
-      flash[:error] = "Sorry, couldn't truthify that input."
+      flash[:error] = "Sorry, couldn't process that input."
       redirect_to :back
     end
   end  

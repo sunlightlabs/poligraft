@@ -5,9 +5,9 @@ require "action_mailer/railtie"
 require "rails/test_unit/railtie"
 
 Bundler.require(:default, Rails.env) if defined?(Bundler)
-MongoMapper.database = "truthify-#{Rails.env}"
+MongoMapper.database = "poligraft-#{Rails.env}"
 
-module Truthify
+module Poligraft
   class Application < Rails::Application
     config.time_zone = 'Eastern Time (US & Canada)'
     config.encoding = "utf-8"
