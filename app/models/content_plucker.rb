@@ -37,7 +37,7 @@ class ContentPlucker
     winner.search('./p').each do |n| 
       winner_paragraphs = winner_paragraphs + "<p>#{n.inner_html}</p>"
     end
-    "<h4>" + doc.search('title').inner_html + "</h4>" + winner_paragraphs
+    "<h3>" + doc.search('title').inner_html + "</h3>" + winner_paragraphs
   end
 
 
