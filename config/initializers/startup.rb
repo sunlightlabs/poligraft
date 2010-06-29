@@ -3,3 +3,4 @@
 require 'digest/md5'
 require 'open-uri'
 KEYS = YAML.load_file("#{Rails.root}/config/keys.yml")
+Time::DATE_FORMATS[:day] = "%B %d, %Y"

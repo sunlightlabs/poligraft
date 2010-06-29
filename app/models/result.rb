@@ -3,21 +3,25 @@ class Result
   include MongoMapper::Document
 
   key :source_url, String
+  key :source_title, String
   key :source_text, Binary
   key :source_format, String
   key :source_hash, String
   key :slug, String
   key :status, String
   key :contribution_count, Integer, :default => 0
-
+  timestamps!
+  
   many :entities
 
+  validates_presence_of :source_title
   validates_presence_of :source_text
+  validates_presence_of :source_format
   validates_presence_of :slug
   validates_presence_of :source_hash
   validates_uniqueness_of :slug
   
-  before_validation :ensure_slug, :ensure_source_text, :ensure_hash
+  before_validation :ensure_slug, :ensure_source_title_text, :ensure_hash
   before_create :set_status
   
   def source_content
@@ -32,12 +36,14 @@ class Result
     end while (Result.first(:slug => self.slug))
   end
 
-  def ensure_source_text
+  def ensure_source_title_text
     return unless self.source_format.blank?
     self.source_format = 'plain_text'
+    self.source_title = self.source_content[0..30] + "..."
     if self.source_content.blank?
       raise "Must set source_url or source_content" if self.source_url.blank?
       self.source_text = ContentPlucker.pluck_from(self.source_url)
+      self.source_title = ContentPlucker.pluck_title_from(self.source_url)
       self.source_format = 'html'
     end
   end

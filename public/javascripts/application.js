@@ -52,8 +52,7 @@ var entitiesExtracted = function(result, processedStatus) {
     
     // populate the entities table
     _(result.entities).each(function(e) {
-      $("div#extracted_entities table").append('<tr><td>' + e.name  + '</td><td>'
-                                            + e.entity_type + '</td></tr>');
+      $("div#extracted_entities ul").append('<li>' + e.name  + '</li>');
       showTable = true;
     });
     if (showTable) {
@@ -72,7 +71,7 @@ var entitiesLinked = function(result, processedStatus) {
     _(result.entities).each(function(e) {
       
       if (e.tdata_id) {
-        $("td:contains('" + e.name  + "')").replaceWith('<td>' + influence_explorer_url(e) + '</td>');
+        $("li:contains('" + e.name  + "')").replaceWith(influence_explorer_url(e));
       }
     });
     return true;
