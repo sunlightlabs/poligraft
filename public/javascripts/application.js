@@ -14,13 +14,13 @@ $(function() {
     var ranContributorsIdentified = false;
     
     if (resultStatus != doneStatus) {
-      $("img#spinner").show();
+      $("div#processingBar").fadeIn("slow");
       var intervalId = setInterval(function() { 
         $.getJSON(slug + '.json', function(result) {
                     
           // break the loop if done
           if (result.status == doneStatus) {
-            $("img#spinner").hide();
+            $("div#processingBar").slideUp();
             clearInterval(intervalId);
           }
           
@@ -43,16 +43,16 @@ $(function() {
 });
 
 var entitiesExtracted = function(result, processedStatus) {
-  var showTable = false
+  var showEntities = false
   if (result.status == "Entities Extracted" && !_(result.entities).isEmpty()) {
     
     // populate the entities table
     _(result.entities).each(function(e) {
-      $("div#extracted_entities ul").append('<li>' + e.name  + '</li>');
-      showTable = true;
+      $("div#extracted_entities ul").append('<li>' + e.name  + '</li>').fadeIn();
+      showEntities = true;
     });
-    if (showTable) {
-      $("div#extracted_entities").show();
+    if (showEntities) {
+      $("div#extracted_entities").fadeIn();
     }
     return true;
   } else {
@@ -79,7 +79,7 @@ var entitiesLinked = function(result, processedStatus) {
       if (e.tdata_id) {
         $("div#extracted_entities ul li:contains('" + e.name  + "')").replaceWith("<li>" + influence_explorer_url(e) + "</li>");
       } else {
-        $("div#extracted_entities ul li:contains('" + e.name  + "')").remove();
+        $("div#extracted_entities ul li:contains('" + e.name  + "')").fadeOut();
       }
       
     });
@@ -105,7 +105,7 @@ var contributorsIdentified = function(result, processedStatus) {
       }
     });
     if (showReport) {
-      $("div#contribution_report").show();
+      $("div#contribution_report").fadeIn();
     }
     return true;
   } else {
