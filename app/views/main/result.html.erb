@@ -26,8 +26,8 @@
 <div id="rtColumnWrapper">
   <div id="rtColumn">
 
-    <h3>The Report</h3>
-
+    <h3>The Report <img src="/images/spinner.gif" id="spinner" style="display:none;" /></h3>
+    
     <% if @result.entities.nil? || @result.entities.empty? || @result.contribution_count == 0 -%>
     <div id="contribution_report" style="display:none;">
     <% else -%>

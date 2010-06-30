@@ -14,13 +14,13 @@ $(function() {
     var ranContributorsIdentified = false;
     
     if (resultStatus != doneStatus) {
+      $("img#spinner").show();
       var intervalId = setInterval(function() { 
         $.getJSON(slug + '.json', function(result) {
-          
-          $("div#status p em").text(result.status);
-          
+                    
           // break the loop if done
           if (result.status == doneStatus) {
+            $("img#spinner").hide();
             clearInterval(intervalId);
           }
           
@@ -28,11 +28,11 @@ $(function() {
             ranEntitiesExtracted = entitiesExtracted(result);
           }
           
-          if (ranEntitiesLinked == false) {
+          if (ranEntitiesExtracted == true && ranEntitiesLinked == false) {
             ranEntitiesLinked = entitiesLinked(result);
           }
 
-          if (ranContributorsIdentified == false) {
+          if (ranEntitiesLinked == true && ranContributorsIdentified == false) {
             ranContributorsIdentified = contributorsIdentified(result);
           }
         })
