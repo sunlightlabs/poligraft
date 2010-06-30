@@ -9,6 +9,7 @@ gem 'bson'
 gem 'bson_ext'
 gem 'mongo'
 gem 'mongo_mapper'
+gem 'daemons', '1.0.10'
 gem 'delayed_job', :git => "git://github.com/luigi/delayed_job.git"
 gem 'transparency_data'
 

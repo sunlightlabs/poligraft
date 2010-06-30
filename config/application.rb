@@ -6,6 +6,9 @@ require "rails/test_unit/railtie"
 
 Bundler.require(:default, Rails.env) if defined?(Bundler)
 MongoMapper.database = "poligraft-#{Rails.env}"
+MongoMapper.config = {
+  Rails.env => {'database' => "poligraft-#{Rails.env}"}
+}
 
 module Poligraft
   class Application < Rails::Application
