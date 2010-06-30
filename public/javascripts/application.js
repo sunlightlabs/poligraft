@@ -61,7 +61,7 @@ var entitiesExtracted = function(result, processedStatus) {
 }
 
 var entitiesLinked = function(result, processedStatus) {
-  if (result.status == "Entities Linked" && !_(result.entities).isEmpty()) {
+  if ((result.status == "Entities Linked" || result.status == "Contributors Identified") && !_(result.entities).isEmpty()) {
 
     // highlight the source text
     $("div#source_content").highlight(_(result.entities).map(

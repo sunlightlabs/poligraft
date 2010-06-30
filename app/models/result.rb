@@ -75,7 +75,8 @@ class Result
     json = JSON.parse(json_string)
     desired_types = %w{Person Organization Company}
     names_to_suppress = ["white house", "house", "senate", "congress", "assembly", 
-                         "legislature", "state senate", "administration", "obama administration"]
+                         "legislature", "state senate", "administration", "obama administration",
+                         "republicans", "republican party", "democrats", "democratic party"]
     json.each do |k,v|
       if v["_typeGroup"] == "entities" && 
          desired_types.include?(v["_type"]) && 
