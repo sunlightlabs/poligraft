@@ -7,11 +7,13 @@
 </div>
 
 <div id="ltColumn">
-  <% if @result.source_format == 'plain_text' -%>
-  <%= simple_format formatted_content(@result) %>
-  <% else -%>
-  <%= formatted_content(@result) %>
-  <% end -%>
+  <div id="source_content">
+    <% if @result.source_format == 'plain_text' -%>
+    <%= simple_format formatted_content(@result) %>
+    <% else -%>
+    <%= formatted_content(@result) %>
+    <% end -%>
+  </div>
   
   <div id="source">
     <span id="dateCreated">This page was created on: <span class="date"><%= @result.created_at.to_formatted_s(:day) %></span></span>
@@ -36,8 +38,7 @@
         <% if recipient.contributors -%>
         <% recipient.contributors.each do |contributor| -%>
         <li>
-          <span class="<%= contributor.tdata_type == 'individual' ? 'person' : 'organization' %>"><%= link_to contributor.name, influence_explorer_url(contributor) %></span> has donated $<%= number_with_delimiter contributor.amount %> to <span class="person"><%= link_to recipient.name, influence_explorer_url(recipient) %></span>.
-          <a class="moreLink" href="#">Learn More</a>
+          <%= link_to contributor.name, influence_explorer_url(contributor) %> has donated $<%= number_with_delimiter contributor.amount %> to <%= link_to recipient.name, influence_explorer_url(recipient) %>
         </li>
         <% end -%>
         <% end -%>
@@ -50,23 +51,16 @@
     <% else -%>
     <div id="extracted_entities">
     <% end -%>
-      <h4>Individual Sources Found</h4>
-      <% @result.entities.each do |entity| -%>
+      <h4>Points of Influence</h4>
       <ul class="reportData">
-      <% if entity.tdata_id.blank? && @result.status == "Text Plucked" -%>
-        <li><%= entity.name %></li>
-      <% else -%>
-        <li><span class="<%= (entity.tdata_type == 'politician' || entity.tdata_type == 'individual') ? 'person' : 'organization' %>">
-          <%= link_to entity.name, influence_explorer_url(entity) %>
-        </span></li>
+      <% @result.entities.each do |entity| -%>
+        <% if entity.tdata_id.blank? && @result.status == "Entities Extracted" -%>
+          <li><%= entity.name %></li>
+        <% elsif entity.tdata_id -%>
+          <li><%= link_to entity.name, influence_explorer_url(entity) %></li>
+        <% end -%>
       <% end -%>
       </ul>
-      <% end -%>
-    </div>
-
-    <div id="status">
-      <h4>Status</h4>
-      <p><em><%= @result.status %></em></p>
     </div>
     
   </div>

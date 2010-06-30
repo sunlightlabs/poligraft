@@ -46,10 +46,6 @@ var entitiesExtracted = function(result, processedStatus) {
   var showTable = false
   if (result.status == "Entities Extracted" && !_(result.entities).isEmpty()) {
     
-    // highlight the source text
-    $("div#source_content").highlight(_(result.entities).map(
-                                        function(e){ return e.name; }));
-    
     // populate the entities table
     _(result.entities).each(function(e) {
       $("div#extracted_entities ul").append('<li>' + e.name  + '</li>');
@@ -66,13 +62,26 @@ var entitiesExtracted = function(result, processedStatus) {
 
 var entitiesLinked = function(result, processedStatus) {
   if (result.status == "Entities Linked" && !_(result.entities).isEmpty()) {
+
+    // highlight the source text
+    $("div#source_content").highlight(_(result.entities).map(
+                                        function(e) { 
+                                          if (e.tdata_id) {
+                                            return e.name;
+                                          } else {
+                                            return "";
+                                          }
+                                         }));
     
     // link to Influence Explorer
     _(result.entities).each(function(e) {
-      
+
       if (e.tdata_id) {
-        $("li:contains('" + e.name  + "')").replaceWith(influence_explorer_url(e));
+        $("div#extracted_entities ul li:contains('" + e.name  + "')").replaceWith("<li>" + influence_explorer_url(e) + "</li>");
+      } else {
+        $("div#extracted_entities ul li:contains('" + e.name  + "')").remove();
       }
+      
     });
     return true;
   } else {
