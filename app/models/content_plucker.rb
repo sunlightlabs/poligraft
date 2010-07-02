@@ -16,10 +16,22 @@ class ContentPlucker
     doc.search('style').remove
     doc.search('a').each { |n| n.replace(n.nil? ? "" : n.inner_html) }
 
+    # try to find common names for containing div
+    parents = {}
+    divs = doc.search('div')
+    divs.each do |div|
+      class_and_id = (div.get_attribute('class') || '') + ' ' +
+                     (div.get_attribute('id') || '')
+      if class_and_id =~ /\A(hentry|entry|article|body|post|story.*)\z/
+        parents[div] = 3000
+      elsif class_and_id =~ /entrytext/
+        parents[div] = 15000
+      end
+    end
+
     paragraphs = doc.search('p')
 
     # assign points to the parent nodes for each paragraph
-    parents = {}
     paragraphs.each do |paragraph|
       points = self.calculate_points(paragraph)
       if parents.has_key?(paragraph.parent)
@@ -32,10 +44,13 @@ class ContentPlucker
     # get the parent node with the highest point total
     winner = parents.sort{ |a,b| a[1] <=> b[1] }.last[0]
 
+    
     # return the plucked HTML content
     winner_paragraphs = ""
-    winner.search('./p').each do |n| 
-      winner_paragraphs = winner_paragraphs + "<p>#{n.inner_html}</p>"
+    winner.search('.//p').each do |n|
+      unless n.get_attribute('class') =~ /\A(caption|posted|comment)\z/
+        winner_paragraphs = winner_paragraphs + "<p>#{n.inner_html}</p>"
+      end
     end
     "<h3>" + doc.search('title').inner_html + "</h3>" + winner_paragraphs
   end
@@ -53,14 +68,14 @@ class ContentPlucker
                       (paragraph.parent.get_attribute('id') || '')
 
     # deduct severely and return if clearly not content
-    if classes_and_ids =~ /comment*|meta|footer|footnote/
+    if classes_and_ids =~ /comment*|meta|footer|footnote|posted/
       points -= 5000
       return points
     end
 
     # reward if probably content
     if classes_and_ids =~ /post|hentry|entry|article|story.*/
-      points += 500
+      points += 1000
     end
 
     # look at the actual text of the paragraph
@@ -87,5 +102,5 @@ class ContentPlucker
 
     points
 
-  end  
+  end
 end
