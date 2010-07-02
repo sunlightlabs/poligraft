@@ -13,29 +13,44 @@ $(function() {
     var ranEntitiesLinked = false;
     var ranContributorsIdentified = false;
     
-    if (resultStatus != doneStatus) {
+    if (location.hash == "#done") {
+      $.getJSON(slug + '.json', function(result) {
+        result.status = "Entities Extracted";
+        if (ranEntitiesExtracted == false) {
+          ranEntitiesExtracted = entitiesExtracted(result);
+        }
+        result.status = "Entities Linked";      
+        if (ranEntitiesExtracted == true && ranEntitiesLinked == false) {
+          ranEntitiesLinked = entitiesLinked(result);
+        }
+        result.status = "Contributors Identified";
+        if (ranEntitiesLinked == true && ranContributorsIdentified == false) {
+          ranContributorsIdentified = contributorsIdentified(result);
+        }        
+      });
+      
+    } else if (resultStatus != doneStatus) {
       $("div#processingBar").fadeIn("slow");
       var intervalId = setInterval(function() { 
         $.getJSON(slug + '.json', function(result) {
-                    
+                   
           // break the loop if done
           if (result.status == doneStatus) {
             $("div#processingBar").slideUp();
+            location.hash = 'done';
             clearInterval(intervalId);
           }
           
           if (ranEntitiesExtracted == false) {
             ranEntitiesExtracted = entitiesExtracted(result);
-          }
-          
+          }        
           if (ranEntitiesExtracted == true && ranEntitiesLinked == false) {
             ranEntitiesLinked = entitiesLinked(result);
           }
-
           if (ranEntitiesLinked == true && ranContributorsIdentified == false) {
             ranContributorsIdentified = contributorsIdentified(result);
           }
-        })
+        });
       }, 2000);
     }
   }
