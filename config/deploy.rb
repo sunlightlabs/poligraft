@@ -31,7 +31,7 @@ namespace :deploy do
   end
   
   task :delayed_job do
-    run "cd #{release_path} && RAILS_ENV=production script/delayed_job restart"
+    run "cd #{release_path} && RAILS_ENV=production script/delayed_job stop && RAILS_ENV=production script/delayed_job start "
   end
 end
 
