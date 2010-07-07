@@ -11,21 +11,20 @@ class ContentPlucker
     doc = Nokogiri::HTML.parse(open(url), url, "UTF-8")
 
     # remove undesirable tags
-    doc.search('img').remove
-    doc.search('script').remove
-    doc.search('style').remove
+    %w{img script style input textarea}.each do |tag|
+      doc.search(tag).remove
+    end
     doc.search('a').each { |n| n.replace(n.nil? ? "" : n.inner_html) }
 
     # try to find common names for containing div
     parents = {}
     divs = doc.search('div')
     divs.each do |div|
-      class_and_id = (div.get_attribute('class') || '') + ' ' +
-                     (div.get_attribute('id') || '')
-      if class_and_id =~ /\A(hentry|entry|article|body|post|story.*)\z/
-        parents[div] = 3000
-      elsif class_and_id =~ /entrytext/
-        parents[div] = 15000
+      if div.get_attribute('id') =~ /\A(hentry|entry|article|body|post)\z/
+        parents[div] = 50000
+        Rails.logger.info div.get_attribute('id')
+      elsif div.get_attribute('id') =~ /entrytext/
+        parents[div] = 75000
       end
     end
 
@@ -43,8 +42,7 @@ class ContentPlucker
 
     # get the parent node with the highest point total
     winner = parents.sort{ |a,b| a[1] <=> b[1] }.last[0]
-
-    
+        
     # return the plucked HTML content
     winner_paragraphs = ""
     winner.search('.//p').each do |n|
@@ -75,7 +73,7 @@ class ContentPlucker
 
     # reward if probably content
     if classes_and_ids =~ /post|hentry|entry|article|story.*/
-      points += 1000
+      points += 500
     end
 
     # look at the actual text of the paragraph
