@@ -13,7 +13,7 @@ $(function() {
     var ranEntitiesLinked = false;
     var ranContributorsIdentified = false;
     
-    if (location.hash == "#done") {
+    if (location.hash == "#done" && resultStatus != doneStatus) {
       $.getJSON(slug + '.json', function(result) {
         result.status = "Entities Extracted";
         if (ranEntitiesExtracted == false) {
