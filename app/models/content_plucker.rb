@@ -11,7 +11,7 @@ class ContentPlucker
     doc = Nokogiri::HTML.parse(open(url), url, "UTF-8")
 
     # remove undesirable tags
-    %w{img script style input textarea}.each do |tag|
+    %w{meta img script style input textarea}.each do |tag|
       doc.search(tag).remove
     end
     doc.search('a').each { |n| n.replace(n.nil? ? "" : n.inner_html) }
