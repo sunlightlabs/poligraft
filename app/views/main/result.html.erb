@@ -62,7 +62,10 @@
         <% if entity.tdata_id.blank? && @result.status == "Entities Extracted" -%>
           <li><%= entity.name %></li>
         <% elsif entity.tdata_id -%>
-          <li><%= link_to entity.name, influence_explorer_url(entity) %></li>
+          <li>
+            <%= link_to entity.name, influence_explorer_url(entity) %><br />
+            <%= image_tag piechart_url(entity), :alt => "Chart for #{entity.name}" %>
+          </li>
         <% end -%>
       <% end -%>
       </ul>
@@ -73,7 +76,9 @@
 <div class="clear"></div>
 
 <script type="text/javascript" charset="utf-8">
+
   var slug = '<%= @result.slug %>';
   var entityCount = <%= @result.entities.length %>;
   var resultStatus = '<%= @result.status %>';
+
 </script>

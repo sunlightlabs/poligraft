@@ -12,7 +12,7 @@ class MainController < ApplicationController
       flash[:error] = "Sorry, couldn't process that input."
       redirect_to :back
     end
-  end  
+  end
   
   def result
     @result = Result.first(:slug => params[:slug])

@@ -7,6 +7,24 @@ module ApplicationHelper
   end
 
   def influence_explorer_url(entity)
-    "http://brisket.transparencydata.com/#{entity.tdata_type}/#{entity.tdata_slug}/#{entity.tdata_id}" 
+    "http://beta.influenceexplorer.com/#{entity.tdata_type}/#{entity.tdata_slug}/#{entity.tdata_id}" 
+  end
+  
+  def piechart_url(entity)
+    url = "http://chart.apis.google.com/chart?cht=p&chf=bg,s,F3F4EE&chp=1.57"
+    
+    if entity.tdata_type == "politician"
+      url += "&chs=140x50"
+      url += "&chco=ABDEBF|169552"
+      url += "&chd=t:#{entity.contributor_breakdown['in_state']},#{entity.contributor_breakdown['out_of_state']}"
+      url += "&chdl=In-State|Out-of-State"     
+    elsif (entity.tdata_type == "organization" || entity.tdata_type == "individual") 
+      url += "&chs=145x50"
+      url += "&chco=3072F3|DB2A3F"
+      url += "&chd=t:#{entity.recipient_breakdown['dem']},#{entity.recipient_breakdown['rep']}"
+      url += "&chdl=Democrats|Republicans"
+    end
+    
+    url
   end
 end

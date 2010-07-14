@@ -81,18 +81,15 @@ var entitiesLinked = function(result, processedStatus) {
     // highlight the source text
     $("div#source_content").highlight(_(result.entities).map(
                                         function(e) { 
-                                          if (e.tdata_id) {
-                                            return e.name;
-                                          } else {
-                                            return "";
-                                          }
+                                          if (e.tdata_id) { return e.name; } 
+                                          else { return ""; }
                                          }));
     
     // link to Influence Explorer
     _(result.entities).each(function(e) {
 
       if (e.tdata_id) {
-        $("div#extracted_entities ul li:contains('" + e.name  + "')").replaceWith("<li>" + influence_explorer_url(e) + "</li>");
+        $("div#extracted_entities ul li:contains('" + e.name  + "')").replaceWith("<li>" + influence_explorer_url(e) + "<br />" + breakdown_chart(e) + "</li>");
       } else {
         $("div#extracted_entities ul li:contains('" + e.name  + "')").fadeOut();
       }
@@ -129,8 +126,25 @@ var contributorsIdentified = function(result, processedStatus) {
 }
 
 var influence_explorer_url = function(entity) {
-  return '<a href="http://brisket.transparencydata.com/' + entity.tdata_type + 
+  return '<a href="http://beta.influenceexplorer.com/' + entity.tdata_type + 
          '/' + entity.tdata_slug + '/' + entity.tdata_id + '">' + entity.name +'</a>'
+}
+
+var breakdown_chart = function(entity) {
+  var url = "http://chart.apis.google.com/chart?cht=p&chf=bg,s,F3F4EE&chp=1.57";
+    
+  if (entity.tdata_type == "politician") {
+    url += "&chs=140x50";
+    url += "&chco=ABDEBF|169552";
+    url += "&chd=t:" + entity.contributor_breakdown.in_state + "," + entity.contributor_breakdown.out_of_state;
+    url += "&chdl=In-State|Out-of-State";
+  } else if (entity.tdata_type == "organization" || entity.tdata_type == "individual") {
+    url += "&chs=145x50";
+    url += "&chco=3072F3|DB2A3F";
+    url += "&chd=t:" + entity.recipient_breakdown.dem + ',' + entity.recipient_breakdown.rep;
+    url += "&chdl=Democrats|Republicans";
+  }
+  return "<img src='" + url + "' />";
 }
 
 var commafy = function(amount) {

@@ -8,6 +8,9 @@ class Entity
   key :tdata_type, String
   key :tdata_slug, String
   key :tdata_count, Integer
+  key :contributor_breakdown, Hash
+  key :recipient_breakdown, Hash
+  
   
   many :contributors
 end

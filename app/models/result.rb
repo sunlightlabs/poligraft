@@ -113,6 +113,34 @@ class Result
                 entity.tdata_slug = result.name.parameterize
                 entity.tdata_count = result.count_given + result.count_received
               
+                if result['type'] == "politician"
+                  tdata.local_breakdown(result.id) do |breakdown, error|
+                    in_state = breakdown.in_state_amount.to_i
+                    out_of_state = breakdown.out_of_state_amount.to_i
+                    sum = in_state + out_of_state
+                    
+                    entity.contributor_breakdown['in_state'] = (in_state * 100) / sum
+                    entity.contributor_breakdown['out_of_state'] = (out_of_state * 100) / sum
+                  end
+                elsif result['type'] == "individual"
+                  tdata.individual_party_breakdown(result.id) do |breakdown, error|
+                    dem = breakdown.dem_amount.to_i
+                    rep = breakdown.rep_amount.to_id
+                    sum = dem + rep
+                  
+                    entity.recipient_breakdown['dem'] = (dem * 100) / sum
+                    entity.recipient_breakdown['rep'] = (rep * 100) / sum
+                  end
+                elsif result['type'] == "organization"
+                  tdata.org_party_breakdown(result.id) do |breakdown, error|
+                    dem = breakdown.dem_amount.to_i
+                    rep = breakdown.rep_amount.to_i
+                    sum = dem + rep
+
+                    entity.recipient_breakdown['dem'] = (dem * 100) / sum
+                    entity.recipient_breakdown['rep'] = (rep * 100) / sum
+                  end
+                end
               end
             
             end
@@ -132,18 +160,21 @@ class Result
     self.entities.each do |recipient|
       if recipient.tdata_type == 'politician'
         self.entities.each do |contributor|
-          tdata.recipient_contributor_summary(recipient.tdata_id, contributor.tdata_id) do |summary, error|
-            if error
-              Rails.logger.info "Error in find_contributors: #{error}"
-            elsif summary.amount > 0
-              recipient.contributors << Contributor.new(:name => summary.contributor_name,
-                                                        :amount => summary.amount,
-                                                        :tdata_id => contributor.tdata_id,
-                                                        :tdata_type => contributor.tdata_type,
-                                                        :tdata_slug => contributor.tdata_slug)
-              self.contribution_count += 1
-            end
-          end
+          unless contributor.tdata_id.blank? || contributor.tdata_type == 'politician'
+            Rails.logger.info "recipient: #{recipient.tdata_id} | contributor: #{contributor.tdata_id}"
+            tdata.recipient_contributor_summary(recipient.tdata_id, contributor.tdata_id) do |summary, error|
+              if error
+                Rails.logger.info "Error in find_contributors: #{error}"
+              elsif summary.amount > 0
+                recipient.contributors << Contributor.new(:name => summary.contributor_name,
+                                                          :amount => summary.amount,
+                                                          :tdata_id => contributor.tdata_id,
+                                                          :tdata_type => contributor.tdata_type,
+                                                          :tdata_slug => contributor.tdata_slug)
+                self.contribution_count += 1
+              end
+            end 
+          end # unless contributor.tdata_id.blank?
         end # if self.entities.each do |contributor|
         recipient.save
       end # if recipient.tdata_type
