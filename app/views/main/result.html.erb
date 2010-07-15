@@ -43,7 +43,7 @@
         <% if recipient.contributors -%>
         <% recipient.contributors.each do |contributor| -%>
         <li>
-          <%= link_to contributor.name, influence_explorer_url(contributor) %> has donated $<%= number_with_delimiter contributor.amount %> to <%= link_to recipient.name, influence_explorer_url(recipient) %>
+          <%= link_to contributor.name, influence_explorer_url(contributor), "data-entity" => contributor.extracted_name %> has donated $<%= number_with_delimiter contributor.amount %> to <%= link_to recipient.name, influence_explorer_url(recipient), "data-entity" => recipient.name %>
         </li>
         <% end -%>
         <% end -%>
@@ -63,7 +63,7 @@
           <li><%= entity.name %></li>
         <% elsif entity.tdata_id -%>
           <li>
-            <%= link_to entity.name, influence_explorer_url(entity) %><br />
+            <%= link_to entity.name, influence_explorer_url(entity), "data-entity" => entity.name %><br />
             <%= image_tag piechart_url(entity), :alt => "Chart for #{entity.name}" %>
           </li>
         <% end -%>

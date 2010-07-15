@@ -3,7 +3,7 @@ module ApplicationHelper
   def formatted_content(result)
     highlight(result.source_content.html_safe,
               result.entities.map {|e| e.name if e.tdata_id }.compact!,
-              :highlighter => '<span class="highlight">\1</span>')
+              :highlighter => '<span class="highlight" data-entity="\1">\1</span>')
   end
 
   def influence_explorer_url(entity)

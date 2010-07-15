@@ -82,3 +82,4 @@ button#submit:hover { background: url(/images/btn_submit.jpg) center top no-repe
 #processingBar img { margin-right: 10px; float: left;}
 
 .clear{ clear: both;}
+.ui-effects-transfer { border: 1px solid #999; }

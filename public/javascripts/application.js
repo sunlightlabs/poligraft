@@ -4,6 +4,8 @@ $(function() {
     
     $("input#share_url").click(function() {$(this).select()});
     
+    $("span.highlight").click(triggerHighlights);
+    
     if (entityCount == 0) {
       $("div#extracted_entities").hide();
     }
@@ -26,7 +28,7 @@ $(function() {
         result.status = "Contributors Identified";
         if (ranEntitiesLinked == true && ranContributorsIdentified == false) {
           ranContributorsIdentified = contributorsIdentified(result);
-        }        
+        }
       });
       
     } else if (resultStatus != doneStatus) {
@@ -57,6 +59,13 @@ $(function() {
   
 });
 
+var triggerHighlights = function() {
+  var mySpan = $(this);
+  $("#rtColumn a[data-entity*='" + $(this).attr('data-entity') + "']").each(function() {
+    mySpan.effect("transfer", { to: $(this) }, 1000);
+  });
+}
+
 var entitiesExtracted = function(result, processedStatus) {
   var showEntities = false
   if (result.status == "Entities Extracted" && !_(result.entities).isEmpty()) {
@@ -84,6 +93,7 @@ var entitiesLinked = function(result, processedStatus) {
                                           if (e.tdata_id) { return e.name; } 
                                           else { return ""; }
                                          }));
+    $("span.highlight").attr("data-entity", function() { return $(this).text(); });
     
     // link to Influence Explorer
     _(result.entities).each(function(e) {
@@ -119,6 +129,8 @@ var contributorsIdentified = function(result, processedStatus) {
     if (showReport) {
       $("div#contribution_report").fadeIn();
     }
+    $("span.highlight").click(triggerHighlights);
+
     return true;
   } else {
     return false;
@@ -126,8 +138,13 @@ var contributorsIdentified = function(result, processedStatus) {
 }
 
 var influence_explorer_url = function(entity) {
+
+  var entityName = entity.name;
+  if (!_.isUndefined(entity.extracted_name)) {
+    entityName = entity.extracted_name;
+  }
   return '<a href="http://beta.influenceexplorer.com/' + entity.tdata_type + 
-         '/' + entity.tdata_slug + '/' + entity.tdata_id + '">' + entity.name +'</a>'
+         '/' + entity.tdata_slug + '/' + entity.tdata_id + '" data-entity="' +  entityName + '">' + entity.name +'</a>'
 }
 
 var breakdown_chart = function(entity) {

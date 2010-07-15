@@ -167,6 +167,7 @@ class Result
                 Rails.logger.info "Error in find_contributors: #{error}"
               elsif summary.amount > 0
                 recipient.contributors << Contributor.new(:name => summary.contributor_name,
+                                                          :extracted_name => contributor.name,
                                                           :amount => summary.amount,
                                                           :tdata_id => contributor.tdata_id,
                                                           :tdata_type => contributor.tdata_type,
