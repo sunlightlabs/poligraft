@@ -8,7 +8,9 @@
   <!--[if IE 6]><link rel="stylesheet" href="buggy.css" type="text/css" media="screen" /><![endif]-->
   <!--[if IE 7]><link rel="stylesheet" href="buggy7.css" type="text/css" media="screen" /><![endif]-->
   <%= yield :head %>
+  <%= csrf_meta_tag %>
 </head>
+
 
 <body class="<%= yield :body_class %>">
   <div id="headerWrapper">
