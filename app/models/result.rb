@@ -125,7 +125,7 @@ class Result
                 elsif result['type'] == "individual"
                   tdata.individual_party_breakdown(result.id) do |breakdown, error|
                     dem = breakdown.dem_amount.to_i
-                    rep = breakdown.rep_amount.to_id
+                    rep = breakdown.rep_amount.to_i
                     sum = dem + rep
                   
                     entity.recipient_breakdown['dem'] = (dem * 100) / sum
