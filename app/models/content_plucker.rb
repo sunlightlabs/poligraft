@@ -10,6 +10,9 @@ class ContentPlucker
     # get the raw HTML
     doc = Nokogiri::HTML.parse(open(url), url, "UTF-8")
 
+    # set up attribution
+    attribution = "<p class='attribution'>Original Source: <img width='16px' src='http://#{pluck_domain(url)}/favicon.ico' /><a href='#{url}'>#{pluck_domain(url)}</a></p>"
+
     # remove undesirable tags
     %w{meta img script style input textarea}.each do |tag|
       doc.search(tag).remove
@@ -50,7 +53,7 @@ class ContentPlucker
         winner_paragraphs = winner_paragraphs + "<p>#{n.inner_html}</p>"
       end
     end
-    "<h3>" + doc.search('title').inner_html + "</h3>" + winner_paragraphs
+    "<h3>" + doc.search('title').inner_html + "</h3>" + attribution + winner_paragraphs
   end
 
 
@@ -100,5 +103,9 @@ class ContentPlucker
 
     points
 
+  end
+  
+  def self.pluck_domain(url)
+    url.split('/')[2]
   end
 end

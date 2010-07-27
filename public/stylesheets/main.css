@@ -56,6 +56,9 @@ input#share_url { width: 280px; }
 
 a.ie_link { font-size: 85%; }
 
+p.attribution { font-weight: bold; }
+p.attribution img { vertical-align: text-bottom; }
+
 div#source { background: url(/images/bar_article.jpg) top left no-repeat; margin-top: 40px; padding-top: 30px; color: #a09893;}
 #dateCreated { margin-bottom: 10px; display: block;}
 #pageMain p { margin-bottom: 1em;}
