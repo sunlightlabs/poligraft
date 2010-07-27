@@ -66,7 +66,21 @@
             <%= link_to entity.name, influence_explorer_url(entity), "data-entity" => entity.name %><br />
             
             <% if entity.tdata_count > 0 -%>
-            <%= image_tag piechart_url(entity), :alt => "Chart for #{entity.name}" %>
+            <%= image_tag piechart_url(entity), :alt => "Chart for #{entity.name}" %><br />
+            
+              <% unless entity.top_industries.empty? -%>
+              <div class="industries">
+                <p>Top Contributing Industries</p>
+                <ol>
+                  <% entity.top_industries.each do |industry_name| -%>
+                  <li><%= industry_name %></li>
+                  <% end -%>
+                </ol>
+              </div>
+              <% end -%>
+            
+              <%= link_to "More &raquo;".html_safe, influence_explorer_url(entity), :class => "ie_link" %>
+            
             <% end -%>
           </li>
         <% end -%>

@@ -100,10 +100,12 @@ var entitiesLinked = function(result, processedStatus) {
 
       if (e.tdata_id) {
         
-        if (e.tdata_count > 0) {
-          var entityEntry = "<li>" + influence_explorer_url(e) + "<br />" + breakdown_chart(e) + "</li>";
+        if (e.tdata_count > 0 && _.isEmpty(e.top_industries)) {
+          var entityEntry = "<li>" + influence_explorer_link(e) + "<br />" + breakdown_chart(e) + more_link(e) + "</li>";
+        } else if (e.tdata_count > 0 && e.top_industries.length > 0) {
+          var entityEntry = "<li>" + influence_explorer_link(e) + "<br />" + breakdown_chart(e) + top_industries(e) + more_link(e) + "</li>";
         } else {
-          var entityEntry = "<li>" + influence_explorer_url(e) + "</li>";
+          var entityEntry = "<li>" + influence_explorer_link(e) + "</li>";
         }
                 
         $("div#extracted_entities ul li:contains('" + e.name  + "')").replaceWith(entityEntry);
@@ -126,9 +128,9 @@ var contributorsIdentified = function(result, processedStatus) {
     _(result.entities).each(function(e) {
       if (e.contributors) {
         _(e.contributors).each(function(contributor) {
-          $("div#contribution_report ul").append('<li>' + influence_explorer_url(contributor) + 
+          $("div#contribution_report ul").append('<li>' + influence_explorer_link(contributor) + 
                                                  ' has donated $' +  commafy(contributor.amount) +
-                                                 ' to ' + influence_explorer_url(e) + '</li>');
+                                                 ' to ' + influence_explorer_link(e) + '</li>');
           showReport = true;
         });
       }
@@ -144,7 +146,7 @@ var contributorsIdentified = function(result, processedStatus) {
   }
 }
 
-var influence_explorer_url = function(entity) {
+var influence_explorer_link = function(entity) {
 
   var entityName = entity.name;
   if (!_.isUndefined(entity.extracted_name)) {
@@ -152,6 +154,12 @@ var influence_explorer_url = function(entity) {
   }
   return '<a href="http://beta.influenceexplorer.com/' + entity.tdata_type + 
          '/' + entity.tdata_slug + '/' + entity.tdata_id + '" data-entity="' +  entityName + '">' + entity.name +'</a>'
+}
+
+var more_link = function(entity) {
+
+  return '<a class="ie_link" href="http://beta.influenceexplorer.com/' + entity.tdata_type + 
+         '/' + entity.tdata_slug + '/' + entity.tdata_id + '">More &raquo;</a>'
 }
 
 var breakdown_chart = function(entity) {
@@ -168,7 +176,19 @@ var breakdown_chart = function(entity) {
     url += "&chd=t:" + entity.recipient_breakdown.dem + ',' + entity.recipient_breakdown.rep;
     url += "&chdl=Democrats|Republicans";
   }
-  return "<img src='" + url + "' />";
+  return "<img src='" + url + "' /><br />";
+}
+
+var top_industries = function(entity) {
+  
+  var industries = '<div class="industries"><p>Top Contributing Industries</p><ol>';
+  
+  _(entity.top_industries).each(function(industry_name) { 
+    industries += '<li>' + industry_name + '</li>';
+  });
+  industries += "</ol></div>";
+  
+  return industries;
 }
 
 var commafy = function(amount) {
