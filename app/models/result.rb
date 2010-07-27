@@ -10,6 +10,7 @@ class Result
   key :slug, String
   key :status, String
   key :contribution_count, Integer, :default => 0
+  key :processed, Boolean, :default => false
   timestamps!
   
   many :entities
@@ -186,6 +187,7 @@ class Result
     end # self.entities.each do |recipient|
     hydra.run
     self.status = "Contributors Identified"
+    self.processed = true
     self.save
   end
   
