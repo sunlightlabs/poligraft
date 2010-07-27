@@ -32,6 +32,10 @@
       <img src="/images/spinner.gif" id="spinner"/>
       <span>Processing</span>
     </div>
+
+    <% if (@result.entities.nil? || @result.entities.empty?) && @result.processed %>
+    <p id="nothing_found">Sorry, no results found.</p>
+    <% end -%>
     
     <% if @result.entities.nil? || @result.entities.empty? || @result.contribution_count == 0 -%>
     <div id="contribution_report" style="display:none;">

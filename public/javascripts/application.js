@@ -40,6 +40,11 @@ $(function() {
           if (result.status == doneStatus) {
             $("div#processingBar").slideUp();
             location.hash = 'done';
+            
+            if (_(result.entities).isEmpty()) {
+              $("div#processingBar").after('<p id="nothing_found">Sorry, no results found.</p>');
+            }
+            
             clearInterval(intervalId);
           }
           
