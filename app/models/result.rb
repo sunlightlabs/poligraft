@@ -113,32 +113,29 @@ class Result
                 entity.tdata_slug = result.name.parameterize
                 entity.tdata_count = result.count_given + result.count_received
               
-                if result['type'] == "politician"
+                if result['type'] == "politician" && entity.tdata_count > 0
                   tdata.local_breakdown(result.id) do |breakdown, error|
-                    in_state = breakdown.in_state_amount.to_i
-                    out_of_state = breakdown.out_of_state_amount.to_i
-                    sum = in_state + out_of_state
-                    
-                    entity.contributor_breakdown['in_state'] = (in_state * 100) / sum
-                    entity.contributor_breakdown['out_of_state'] = (out_of_state * 100) / sum
+                    entity = add_breakdown(breakdown, entity, :first   => "in_state", 
+                                                              :second  => "out_of_state",
+                                                              :type    => "contributor")
                   end
-                elsif result['type'] == "individual"
-                  tdata.individual_party_breakdown(result.id) do |breakdown, error|
-                    dem = breakdown.dem_amount.to_i
-                    rep = breakdown.rep_amount.to_i
-                    sum = dem + rep
-                  
-                    entity.recipient_breakdown['dem'] = (dem * 100) / sum
-                    entity.recipient_breakdown['rep'] = (rep * 100) / sum
+                  tdata.contributor_type_breakdown(result.id) do |breakdown, error|
+                    entity = add_breakdown(breakdown, entity, :first   => "individual", 
+                                                              :second  => "pac",
+                                                              :type    => "contributor")
                   end
-                elsif result['type'] == "organization"
-                  tdata.org_party_breakdown(result.id) do |breakdown, error|
-                    dem = breakdown.dem_amount.to_i
-                    rep = breakdown.rep_amount.to_i
-                    sum = dem + rep
 
-                    entity.recipient_breakdown['dem'] = (dem * 100) / sum
-                    entity.recipient_breakdown['rep'] = (rep * 100) / sum
+                elsif result['type'] == "individual" && entity.tdata_count > 0
+                  tdata.individual_party_breakdown(result.id) do |breakdown, error|
+                    entity = add_breakdown(breakdown, entity, :first   => "dem", 
+                                                              :second  => "rep",
+                                                              :type    => "recipient")
+                  end
+                elsif result['type'] == "organization" && entity.tdata_count > 0
+                  tdata.org_party_breakdown(result.id) do |breakdown, error|
+                    entity = add_breakdown(breakdown, entity, :first   => "dem", 
+                                                              :second  => "rep",
+                                                              :type    => "recipient")
                   end
                 end
               end
