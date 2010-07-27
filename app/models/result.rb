@@ -125,6 +125,13 @@ class Result
                                                               :type    => "contributor")
                   end
 
+                  tdata.top_sectors(result.id, :limit => 3) do |sectors, error|
+                    
+                    sectors.each do |sector|
+                      entity.top_industries << sector.name
+                    end
+                    
+                  end
                 elsif result['type'] == "individual" && entity.tdata_count > 0
                   tdata.individual_party_breakdown(result.id) do |breakdown, error|
                     entity = add_breakdown(breakdown, entity, :first   => "dem", 

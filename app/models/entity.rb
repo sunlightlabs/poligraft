@@ -10,7 +10,7 @@ class Entity
   key :tdata_count, Integer
   key :contributor_breakdown, Hash
   key :recipient_breakdown, Hash
-  
+  key :top_industries, Array
   
   many :contributors
 end
