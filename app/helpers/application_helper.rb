@@ -16,8 +16,8 @@ module ApplicationHelper
     if entity.tdata_type == "politician"
       url += "&chs=140x50"
       url += "&chco=ABDEBF|169552"
-      url += "&chd=t:#{entity.contributor_breakdown['in_state']},#{entity.contributor_breakdown['out_of_state']}"
-      url += "&chdl=In-State|Out-of-State"     
+      url += "&chd=t:#{entity.contributor_breakdown['individual']},#{entity.contributor_breakdown['pac']}"
+      url += "&chdl=Indivduals|PACs"     
     elsif (entity.tdata_type == "organization" || entity.tdata_type == "individual") 
       url += "&chs=145x50"
       url += "&chco=3072F3|DB2A3F"
