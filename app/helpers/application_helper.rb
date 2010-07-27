@@ -17,7 +17,7 @@ module ApplicationHelper
       url += "&chs=140x50"
       url += "&chco=ABDEBF|169552"
       url += "&chd=t:#{entity.contributor_breakdown['individual']},#{entity.contributor_breakdown['pac']}"
-      url += "&chdl=Indivduals|PACs"     
+      url += "&chdl=Individuals|PACs"     
     elsif (entity.tdata_type == "organization" || entity.tdata_type == "individual") 
       url += "&chs=145x50"
       url += "&chco=3072F3|DB2A3F"
