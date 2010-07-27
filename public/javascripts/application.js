@@ -99,7 +99,14 @@ var entitiesLinked = function(result, processedStatus) {
     _(result.entities).each(function(e) {
 
       if (e.tdata_id) {
-        $("div#extracted_entities ul li:contains('" + e.name  + "')").replaceWith("<li>" + influence_explorer_url(e) + "<br />" + breakdown_chart(e) + "</li>");
+        
+        if (e.tdata_count > 0) {
+          var entityEntry = "<li>" + influence_explorer_url(e) + "<br />" + breakdown_chart(e) + "</li>";
+        } else {
+          var entityEntry = "<li>" + influence_explorer_url(e) + "</li>";
+        }
+                
+        $("div#extracted_entities ul li:contains('" + e.name  + "')").replaceWith(entityEntry);
       } else {
         $("div#extracted_entities ul li:contains('" + e.name  + "')").fadeOut();
       }

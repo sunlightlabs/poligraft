@@ -64,7 +64,10 @@
         <% elsif entity.tdata_id -%>
           <li>
             <%= link_to entity.name, influence_explorer_url(entity), "data-entity" => entity.name %><br />
+            
+            <% if entity.tdata_count > 0 -%>
             <%= image_tag piechart_url(entity), :alt => "Chart for #{entity.name}" %>
+            <% end -%>
           </li>
         <% end -%>
       <% end -%>
