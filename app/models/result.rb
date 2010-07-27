@@ -181,6 +181,17 @@ class Result
     self.status = "Contributors Identified"
     self.save
   end
+  
+  def add_breakdown(breakdown, entity, params)
+    first = breakdown.send("#{params[:first]}_amount").to_i
+    second = breakdown.send("#{params[:second]}_amount").to_i
+    sum = first + second
+    sum = 1 if sum == 0
+  
+    entity.send("#{params[:type]}_breakdown")[params[:first]] = (first * 100) / sum
+    entity.send("#{params[:type]}_breakdown")[params[:second]] = (second * 100) / sum
+    entity
+  end
 
   handle_asynchronously :process_entities
 
