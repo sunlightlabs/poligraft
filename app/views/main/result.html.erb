@@ -10,7 +10,7 @@
   <div id="source_content">
     <% if @result.source_format == 'plain_text' -%>
     <%= simple_format formatted_content(@result) %>
-    <% else -%>
+    <% else -%>    
     <%= formatted_content(@result) %>
     <% end -%>
   </div>
