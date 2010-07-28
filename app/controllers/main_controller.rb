@@ -28,6 +28,7 @@ class MainController < ApplicationController
     if params[:feedback]
       @feedback = Feedback.create(params[:feedback])
       if @feedback.save
+        Notifier.feedback_email(@feedback).deliver
         flash[:notice] = "Thanks! Your message has been recorded."
         redirect_to feedback_path
       else
