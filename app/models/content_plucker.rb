@@ -11,7 +11,12 @@ class ContentPlucker
     doc = Nokogiri::HTML.parse(open(url), url, "UTF-8")
 
     # set up attribution
-    attribution = "<p class='attribution'>Original Source: <img width='16px' src='http://#{pluck_domain(url)}/favicon.ico' /><a href='#{url}'>#{pluck_domain(url)}</a></p>"
+    favicon = ''
+    response_code = Net::HTTP.get_response(URI.parse("http://#{pluck_domain(url)}/favicon.ico")).code.to_i
+    if (response_code >= 200 && response_code < 400)
+      favicon = "<img width='16px' src='http://#{pluck_domain(url)}/favicon.ico' />"
+    end
+    attribution = "<p class='attribution'>Original Source: #{favicon}<a href='#{url}'>#{pluck_domain(url)}</a></p>"
 
     # remove undesirable tags
     %w{meta img script style input textarea}.each do |tag|
