@@ -78,6 +78,9 @@ p#privacyPolicy { font-size: 90%; margin-top: 20px; line-height: 14px; width: 60
 label { color: #433f3d; display: block; text-transform: uppercase; font-size: 120%;  margin-bottom: 10px;}
 form li { margin-bottom: 20px;}
 
+div#flash_notice { background-color: #FFFAB3; }
+div#flash_error { background-color: #FCB8C0; }
+
 #homeDescription { text-indent: -9999em; display: block; background: url(/images/description_home.png) top center no-repeat; width: 629px; height: 172px; margin-top: -75px; padding-bottom: 20px;}
 #fullColumn { width: 629px; margin: 0 auto;}
 input, textarea { border: 1px solid #c9c8c2; padding: 5px; -moz-border-radius: 3px; -webkit-border-radius: 3px; color: #a09893;}
