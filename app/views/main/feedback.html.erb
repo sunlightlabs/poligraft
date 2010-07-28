@@ -1,0 +1,38 @@
+<% content_for :title, "Feedback" %>
+<% content_for :body_class, "home" %>
+
+<div id="fullColumn">
+  <h2>Leave Feedback</h2>
+  <p>Notice something weird? Use this form to report problems and ask questions.</p>
+
+  <%- flash.each do |name, msg| -%>
+    <%= content_tag :div, msg, :id => "flash_#{name}" %>
+  <%- end -%>
+  
+  <%= form_for :feedback do |f| -%>
+  
+  <% if params[:slug] || @feedback.slug -%>
+    <%= hidden_field_tag "feedback[slug]", (params[:slug] || @feedback.slug) %>
+  <% end -%>
+  <ul>
+    <li>
+      <%= label_tag "feedback[name]", "Your Name" %>
+      <%= text_field_tag "feedback[name]", @feedback.name %>
+    </li>
+    <li>
+      <%= label_tag "feedback[email]", "Your Email" %>
+      <%= text_field_tag "feedback[email]", @feedback.email %>
+    </li>
+    <li>
+      <%= label_tag "feedback[message]", "What went wrong?" %>
+      <%= text_area_tag "feedback[message]", @feedback.message, :rows => 10, :cols => 32 %>
+    </li>
+    <li>
+      <button id="submit" type="submit">
+        <span>Submit</span>
+      </button>
+    </li>
+  </ul>
+  <% end -%>
+
+</div>

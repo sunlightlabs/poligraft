@@ -23,4 +23,23 @@ class MainController < ApplicationController
     end
   end
   
+  def feedback
+    
+    if params[:feedback]
+      @feedback = Feedback.create(params[:feedback])
+      if @feedback.save
+        flash[:notice] = "Thanks! Your message has been recorded."
+        redirect_to feedback_path
+      else
+        flash[:error] = "Error saving. Please fill in all fields."
+      end
+    else
+      @feedback = Feedback.new
+    end
+  end
+    
+  def about
+    
+  end
+  
 end
