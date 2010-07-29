@@ -6,6 +6,7 @@
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,optgroup,button,p,blockquote,th,td{margin:0;padding:0;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}table{border-collapse:collapse;border-spacing:0;}caption,th{text-align:left;}ol,ul{list-style:none;}fieldset,img{border:0;}input,textarea,select,optgroup,option,button{font-family:inherit;font-size:100%;}button,input {width: auto;overflow: visible;}optgroup,address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym {border:0;}
 dl li{list-style: none;}
 
+strong { font-weight: bold; }
 a:link{outline: none; color: #eb9500;}
 a:visited{outline: none; color: #eb9500}
 a:hover{outline: none; color: #eb9500}
@@ -50,9 +51,7 @@ input#share_url { width: 280px; }
 .reportData li { margin-bottom: 15px; padding-bottom: 15px; font-size: 115%; line-height: 22px; background: url(/images/li_line.png) bottom right no-repeat;}
 .moreLink { display: block; background: url(/images/arrows.png) left 6px no-repeat; padding-left: 18px; font-family: Georgia, "Times New Roman", Times, serif; font-style: oblique; margin-top: 10px;}
 
-.industries p { font-size: 85%; font-weight: bold; }
-.industries ol {list-style-type: decimal; margin: -15px 0px 0px 15px;}
-.industries li { font-size:80%; padding: 0px 0px 0px 0px; margin: 0px 0px; background: none;}
+#extracted_entities p { font-size: 80%; }
 
 a.ie_link { font-size: 85%; }
 

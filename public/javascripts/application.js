@@ -186,12 +186,9 @@ var breakdown_chart = function(entity) {
 
 var top_industries = function(entity) {
   
-  var industries = '<div class="industries"><p>Top Contributing Industries</p><ol>';
-  
-  _(entity.top_industries).each(function(industry_name) { 
-    industries += '<li>' + industry_name + '</li>';
-  });
-  industries += "</ol></div>";
+  var industries = '<div class="industries"><p><strong>Top Contributing Industries:</strong> ';
+  industries += entity.top_industries.join(', ');
+  industries += '</p>';
   
   return industries;
 }

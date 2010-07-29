@@ -74,12 +74,7 @@
             
               <% unless entity.top_industries.empty? -%>
               <div class="industries">
-                <p>Top Contributing Industries</p>
-                <ol>
-                  <% entity.top_industries.each do |industry_name| -%>
-                  <li><%= industry_name %></li>
-                  <% end -%>
-                </ol>
+                <p><strong>Top Contributing Industries:</strong> <%= entity.top_industries.join(", ") %></p>
               </div>
               <% end -%>
             
@@ -93,7 +88,7 @@
     </div>
     
     <div id="feedback">
-      <p>Help us improve Poligraft. <a href="/feedback"><%= link_to "Leave feedback", feedback_path(:slug => @result.slug) %></a> if you think something is amiss.</p>
+      <p>Help us improve Poligraft. <%= link_to "Leave feedback", feedback_path(:slug => @result.slug) %> if you think something is amiss.</p>
     </div>
     
   </div>
