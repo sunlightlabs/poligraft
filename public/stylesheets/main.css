@@ -51,12 +51,14 @@ input#share_url { width: 280px; }
 .reportData li { margin-bottom: 15px; padding-bottom: 15px; font-size: 115%; line-height: 22px; background: url(/images/li_line.png) bottom right no-repeat;}
 .moreLink { display: block; background: url(/images/arrows.png) left 6px no-repeat; padding-left: 18px; font-family: Georgia, "Times New Roman", Times, serif; font-style: oblique; margin-top: 10px;}
 
-#extracted_entities p { font-size: 80%; }
+#extracted_entities .industries p { font-size: 80%; }
 
 a.ie_link { font-size: 85%; }
 
 p.attribution { font-weight: bold; }
 p.attribution img { vertical-align: text-bottom; }
+
+p.explanation { color: #7e7e7e; font-style: italic; margin-bottom: 15px; padding-bottom: 15px; background: url(/images/li_line.png) bottom right no-repeat; }
 
 div#source { background: url(/images/bar_article.jpg) top left no-repeat; margin-top: 40px; padding-top: 30px; color: #a09893;}
 #dateCreated { margin-bottom: 10px; display: block;}

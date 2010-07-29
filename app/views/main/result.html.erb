@@ -42,12 +42,15 @@
     <% else -%>
     <div id="contribution_report">
     <% end -%>
+      <h4>Aggregated Contributions</h4>
+      <p class="explanation">Represents total campaign contributions from an organization's employees and/or its PAC.</p>
+
       <ul class="reportData">
       <% @result.entities.each do |recipient| -%>
         <% if recipient.contributors -%>
         <% recipient.contributors.each do |contributor| -%>
         <li>
-          <%= link_to contributor.name, influence_explorer_url(contributor), "data-entity" => contributor.extracted_name %> has donated $<%= number_with_delimiter contributor.amount %> to <%= link_to recipient.name, influence_explorer_url(recipient), "data-entity" => recipient.name %>
+          <%= link_to contributor.name, influence_explorer_url(contributor), "data-entity" => contributor.extracted_name %> has aggregated $<%= number_with_delimiter contributor.amount %> to <%= link_to recipient.name, influence_explorer_url(recipient), "data-entity" => recipient.name %>
         </li>
         <% end -%>
         <% end -%>
@@ -61,6 +64,8 @@
     <div id="extracted_entities">
     <% end -%>
       <h4>Points of Influence</h4>
+      <p class="explanation">Graphs for politicians represent received campaign contributions, while graphs for organizations represent aggregate campaign contributions made.</p>
+
       <ul class="reportData">
       <% @result.entities.each do |entity| -%>
         <% if entity.tdata_id.blank? && @result.status == "Entities Extracted" -%>
