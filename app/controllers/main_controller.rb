@@ -10,7 +10,7 @@ class MainController < ApplicationController
       redirect_to "/" + @result.slug
     else
       flash[:error] = "Sorry, couldn't process that input."
-      redirect_to :back
+      redirect_to :root
     end
   end
   
