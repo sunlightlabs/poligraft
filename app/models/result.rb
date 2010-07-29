@@ -126,10 +126,13 @@ class Result
                                                               :type    => "contributor")
                   end
 
-                  tdata.top_sectors(result.id, :limit => 3) do |sectors, error|
+                  tdata.top_sectors(result.id, :limit => 5) do |sectors, error|
                     
                     sectors.each do |sector|
-                      entity.top_industries << sector.name
+                      if entity.top_industries.length < 3 && 
+                         sector.name != "Other" && sector.name != "Unknown"
+                        entity.top_industries << sector.name
+                      end
                     end
                     
                   end
