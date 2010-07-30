@@ -58,7 +58,7 @@ class ContentPlucker
         winner_paragraphs = winner_paragraphs + "<p>#{n.inner_html}</p>"
       end
     end
-    "<h3>" + doc.search('title').inner_html + "</h3>" + attribution + winner_paragraphs
+    "<h2>" + doc.search('title').inner_html + "</h2>" + attribution + winner_paragraphs
   end
 
 
