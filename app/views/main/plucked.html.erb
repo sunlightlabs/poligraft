@@ -1,0 +1,8 @@
+<% content_for :title, "Plucker Check" %>
+<% content_for :body_class, "home" %>
+
+<div id="fullColumn">
+  <% @articles.each do |a| %>
+    <%= a.html_safe %>
+  <% end %>
+</div>

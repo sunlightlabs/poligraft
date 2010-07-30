@@ -43,4 +43,16 @@ class MainController < ApplicationController
     
   end
   
+  def plucked
+    urls = ['http://www.nytimes.com/2010/05/06/opinion/06gcollins.html',
+            'http://www.politico.com/news/stories/0610/38121.html',
+            'http://www.theatlantic.com/politics/archive/2010/07/wikileak-ethics/60660/',
+            'http://indexjournal.com/articles/2010/07/30/news/b073010%20edwards.txt',
+            'http://www.cbsnews.com/stories/2010/07/15/politics/main6681481.shtml',
+            'http://www.latimes.com/business/la-fi-financial-reform-20100716,0,2303004.story',
+            'http://www.washingtonpost.com/wp-dyn/content/article/2010/07/30/AR2010073000806.html']
+
+    @articles = urls.map { |url| ContentPlucker.pluck_from url }
+  end
+  
 end
