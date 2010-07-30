@@ -14,23 +14,37 @@ class ContentPlucker
     favicon = ''
     response_code = Net::HTTP.get_response(URI.parse("http://#{pluck_domain(url)}/favicon.ico")).code.to_i
     if (response_code >= 200 && response_code < 400)
-      favicon = "<img width='16px' src='http://#{pluck_domain(url)}/favicon.ico' />"
+      favicon = "<img width='16px' src='http://#{pluck_domain(url)}/favicon.ico' />&nbsp;"
     end
     attribution = "<p class='attribution'>Original Source: #{favicon}<a href='#{url}'>#{pluck_domain(url)}</a></p>"
 
-    # remove undesirable tags
+    # remove undesirable elements
     %w{meta img script style input textarea}.each do |tag|
       doc.search(tag).remove
     end
     doc.search('a').each { |n| n.replace(n.nil? ? "" : n.inner_html) }
+    doc.search('div').each do |div|
+      if div.get_attribute('id') =~ /(combx|comment|disqus|foot|header|menu|rss|shoutbox|sidebar|sponsor|ad-break|agegate|related|promo|list|photo|social)/i ||
+         div.get_attribute('class') =~ /(combx|comment|disqus|foot|header|menu|rss|shoutbox|sidebar|sponsor|ad-break|agegate|related|promo|list|photo|social)/i
+         div.remove
+      end
+    end
+    
+    # convert <div>s that should be <p>s into <div>s
+    doc.search('div').each do |div|    
+      brs = 0
+      div.children.each do |child|
+        brs += 1 if child.name == 'br'
+      end
+      div.name = 'p' if brs > 2
+    end
 
     # try to find common names for containing div
     parents = {}
-    divs = doc.search('div')
-    divs.each do |div|
-      if div.get_attribute('id') =~ /\A(hentry|entry|article|body|post)\z/
+    doc.search('div').each do |div|
+      if div.get_attribute('id') =~ /\A(article|body|entry|hentry|page|post|text|blog|story)\z/
         parents[div] = 50000
-        Rails.logger.info div.get_attribute('id')
+
       elsif div.get_attribute('id') =~ /entrytext/
         parents[div] = 75000
       end
@@ -50,15 +64,27 @@ class ContentPlucker
 
     # get the parent node with the highest point total
     winner = parents.sort{ |a,b| a[1] <=> b[1] }.last[0]
+
+    winner_points = parents.sort{ |a,b| a[1] <=> b[1] }.last[1]
         
-    # return the plucked HTML content
-    winner_paragraphs = ""
+    # return the plucked HTML content   
+    winner_text = ""
     winner.search('.//p').each do |n|
-      unless n.get_attribute('class') =~ /\A(caption|posted|comment)\z/
-        winner_paragraphs = winner_paragraphs + "<p>#{n.inner_html}</p>"
+      unless n.get_attribute('class') =~ /\A(summary|caption|posted|comment)\z/
+        
+        n.search('div').each do |div|
+          div.remove
+        end
+        
+        winner_text = winner_text + "<p>#{n.inner_html}</p>"
       end
     end
-    "<h2>" + doc.search('title').inner_html + "</h2>" + attribution + winner_paragraphs
+    
+    if winner_text == ""
+      winner_text = winner.inner_html
+    end
+
+    "<h2>" + doc.search('title').inner_html + "</h2>" + attribution + winner_text
   end
 
 
@@ -74,7 +100,7 @@ class ContentPlucker
                       (paragraph.parent.get_attribute('id') || '')
 
     # deduct severely and return if clearly not content
-    if classes_and_ids =~ /comment*|meta|footer|footnote|posted/
+    if classes_and_ids =~ /(comment|meta|footer|footnote|posted)/i
       points -= 5000
       return points
     end
@@ -105,6 +131,7 @@ class ContentPlucker
     # reward for periods and commas
     points += content.count('.') * 10
     points += content.count(',') * 20
+    points += content.count('<br') * 30
 
     points
 
