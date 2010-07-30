@@ -2,8 +2,12 @@
 <% content_for :body_class, "article" %>
 
 <div id="shareResults">
-  <h3>Share these Results</h3>
-  <%= text_field_tag 'url', result_url(@result.slug), :id => 'share_url', :readonly => 'readonly', :size => 30 %>
+  <div id="shareContent">
+    <h3>Share these Results</h3>
+    <%= text_field_tag 'url', result_url(@result.slug), :id => 'share_url', :readonly => 'readonly', :size => 30 %>
+    <a id="facebook" title="Share on Facebook" href="#">Facebook</a>
+    <a id="twitter" title="Share on Twitter" href="#">Twitter</a>
+  </div>
 </div>
 
 <div id="ltColumn">
@@ -40,7 +44,7 @@
     <% if @result.entities.nil? || @result.entities.empty? || @result.contribution_count == 0 -%>
     <div id="contribution_report" style="display:none;">
     <% else -%>
-    <div id="contribution_report">
+    <div class="module" id="contribution_report">
     <% end -%>
       <h4>Aggregated Contributions</h4>
       <p class="explanation">Represents total campaign contributions from an organization's employees and/or its PAC.</p>
@@ -59,7 +63,7 @@
     </div>
 
     <% if @result.entities.nil? || @result.entities.empty? -%>
-    <div id="extracted_entities" style="display:none;">
+    <div class="module" id="extracted_entities" style="display:none;">
     <% else -%>
     <div id="extracted_entities">
     <% end -%>
@@ -72,18 +76,24 @@
           <li><%= entity.name %></li>
         <% elsif entity.tdata_id -%>
           <li>
-            <%= link_to entity.name, influence_explorer_url(entity), "data-entity" => entity.name %><br />
+            <%= link_to entity.name, influence_explorer_url(entity), "data-entity" => entity.name, "class" => "influenceName"%>
             
             <% if entity.tdata_count > 0 -%>
-            <%= image_tag piechart_url(entity), :alt => "Chart for #{entity.name}" %><br />
-            
+            <%= image_tag piechart_url(entity), :alt => "Chart for #{entity.name}" %>
+            <div class="clear"></div>
               <% unless entity.top_industries.empty? -%>
               <div class="industries">
-                <p><strong>Top Contributing Industries:</strong> <%= entity.top_industries.join(", ") %></p>
+                <span class="industriesHeader">Top Contributing Industries:</span> 
+                <ul>
+                  <% entity.top_industries.each do |industry| %>
+                  <li><%= industry %>, </li>
+                  <% end -%>
+                </ul>
+                <div class="clear"></div>
               </div>
               <% end -%>
             
-              <%= link_to "More &raquo;".html_safe, influence_explorer_url(entity), :class => "ie_link" %>
+              <%= link_to "Learn More &raquo;".html_safe, influence_explorer_url(entity), :class => "ie_link" %>
             
             <% end -%>
           </li>
@@ -93,6 +103,7 @@
     </div>
     
     <div id="feedback">
+      <img alt="checkbox image" src="/images/icon_check.png"/>
       <p>Help us improve Poligraft. <%= link_to "Leave feedback", feedback_path(:slug => @result.slug) %> if you think something is amiss.</p>
     </div>
     
