@@ -42,7 +42,7 @@
     <% end -%>
     
     <% if @result.entities.nil? || @result.entities.empty? || @result.contribution_count == 0 -%>
-    <div id="contribution_report" style="display:none;">
+    <div class="module" id="contribution_report" style="display:none;">
     <% else -%>
     <div class="module" id="contribution_report">
     <% end -%>
@@ -65,7 +65,7 @@
     <% if @result.entities.nil? || @result.entities.empty? -%>
     <div class="module" id="extracted_entities" style="display:none;">
     <% else -%>
-    <div id="extracted_entities">
+    <div class="module" id="extracted_entities">
     <% end -%>
       <h4>Points of Influence</h4>
       <p class="explanation">Graphs for politicians represent received campaign contributions, while graphs for organizations represent aggregate campaign contributions made.</p>
