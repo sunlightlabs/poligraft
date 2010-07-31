@@ -3,7 +3,7 @@
 
 <div id="fullColumn">
   <h2>Leave Feedback</h2>
-  <p>Notice something weird? Use this form to report problems and ask questions.</p>
+  <p>Use this form to report problems and ask questions.</p>
 
   <%- flash.each do |name, msg| -%>
     <%= content_tag :div, msg, :id => "flash_#{name}" %>
@@ -24,7 +24,7 @@
       <%= text_field_tag "feedback[email]", @feedback.email %>
     </li>
     <li>
-      <%= label_tag "feedback[message]", "What went wrong?" %>
+      <%= label_tag "feedback[message]", "Your Message" %>
       <%= text_area_tag "feedback[message]", @feedback.message, :rows => 10, :cols => 32 %>
     </li>
     <li>
