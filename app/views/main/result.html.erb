@@ -85,8 +85,10 @@
               <div class="industries">
                 <span class="industriesHeader">Top Contributing Industries:</span> 
                 <ul>
-                  <% entity.top_industries.each do |industry| %>
-                  <li><%= industry %>, </li>
+                  <% entity.top_industries.each_index do |index| %>
+                  <li>
+                    <%= entity.top_industries[index] %><%= ", " if index < entity.top_industries.length - 1  %>
+                  </li>
                   <% end -%>
                 </ul>
                 <div class="clear"></div>
