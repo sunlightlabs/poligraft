@@ -89,7 +89,7 @@ span.highlight { background-color: #fde936; padding: 1px 2px; cursor: pointer;}
 span.date { font-style: oblique;}
 div#rtColumn h4 { color: #575454; margin-bottom: 5px; font-size: 150%; font-family: Georgia, "Times New Roman", Times, serif; line-height: 24px;}
 
-a.influenceName { display: block;}
+span.influenceName { display: block;}
 .reportData img { margin-top: 10px;}
 
 div.industries { font-size: 85%; }
