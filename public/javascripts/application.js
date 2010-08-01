@@ -106,11 +106,11 @@ var entitiesLinked = function(result, processedStatus) {
       if (e.tdata_id) {
         
         if (e.tdata_count > 0 && _.isEmpty(e.top_industries)) {
-          var entityEntry = "<li>" + influence_explorer_link(e) + "<br />" + breakdown_chart(e) + more_link(e) + "</li>";
+          var entityEntry = "<li>" + influence_explorer_link(e, true) + breakdown_chart(e) + more_link(e) + "</li>";
         } else if (e.tdata_count > 0 && e.top_industries.length > 0) {
-          var entityEntry = "<li>" + influence_explorer_link(e) + "<br />" + breakdown_chart(e) + top_industries(e) + more_link(e) + "</li>";
+          var entityEntry = "<li>" + influence_explorer_link(e, true) + breakdown_chart(e) + top_industries(e) + more_link(e) + "</li>";
         } else {
-          var entityEntry = "<li>" + influence_explorer_link(e) + "</li>";
+          var entityEntry = "<li>" + influence_explorer_link(e, true) + "</li>";
         }
                 
         $("div#extracted_entities ul li:contains('" + e.name  + "')").replaceWith(entityEntry);
@@ -133,9 +133,9 @@ var contributorsIdentified = function(result, processedStatus) {
     _(result.entities).each(function(e) {
       if (e.contributors) {
         _(e.contributors).each(function(contributor) {
-          $("div#contribution_report ul").append('<li>' + influence_explorer_link(contributor) + 
-                                                 ' has donated $' +  commafy(contributor.amount) +
-                                                 ' to ' + influence_explorer_link(e) + '</li>');
+          $("div#contribution_report ul").append('<li>' + influence_explorer_link(contributor, false) + 
+                                                 ' has aggregated $' +  commafy(contributor.amount) +
+                                                 ' to ' + influence_explorer_link(e, false) + '</li>');
           showReport = true;
         });
       }
@@ -151,20 +151,25 @@ var contributorsIdentified = function(result, processedStatus) {
   }
 }
 
-var influence_explorer_link = function(entity) {
+var influence_explorer_link = function(entity, addSpan) {
 
   var entityName = entity.name;
   if (!_.isUndefined(entity.extracted_name)) {
     entityName = entity.extracted_name;
   }
-  return '<a href="http://beta.influenceexplorer.com/' + entity.tdata_type + 
-         '/' + entity.tdata_slug + '/' + entity.tdata_id + '" data-entity="' +  entityName + '">' + entity.name +'</a>'
+  var link = '<a href="http://beta.influenceexplorer.com/' + entity.tdata_type + 
+         '/' + entity.tdata_slug + '/' + entity.tdata_id + '" data-entity="' +  
+         entityName + '">' + entity.name +'</a>';
+  if (addSpan) {
+    link = '<span class="influenceName">' + link + '</span>';
+  }
+  return link;
 }
 
 var more_link = function(entity) {
 
   return '<a class="ie_link" href="http://beta.influenceexplorer.com/' + entity.tdata_type + 
-         '/' + entity.tdata_slug + '/' + entity.tdata_id + '">More &raquo;</a>'
+         '/' + entity.tdata_slug + '/' + entity.tdata_id + '">Learn More &raquo;</a>'
 }
 
 var breakdown_chart = function(entity) {
@@ -181,15 +186,22 @@ var breakdown_chart = function(entity) {
     url += "&chd=t:" + entity.recipient_breakdown.dem + ',' + entity.recipient_breakdown.rep;
     url += "&chdl=Democrats|Republicans";
   }
-  return "<img src='" + url + "' /><br />";
+  return "<img src='" + url + "' /><div class='clear'></div>";
 }
 
 var top_industries = function(entity) {
   
-  var industries = '<div class="industries"><p><strong>Top Contributing Industries:</strong> ';
-  industries += entity.top_industries.join(', ');
-  industries += '</p>';
-  
+  var industries = '<div class="industries"><span class="industriesHeader">Top Contributing Industries</span><ul>';
+
+  for (i in entity.top_industries) { 
+    industries += '<li>' + entity.top_industries[i]
+    if (i < entity.top_industries.length - 1) {
+      industries += ", ";
+    }
+    industries += '</li>';
+  }
+  industries += '</ul><div class="clear"></div></div>';
+
   return industries;
 }
 
