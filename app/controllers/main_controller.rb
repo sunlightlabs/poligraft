@@ -33,8 +33,7 @@ class MainController < ApplicationController
       @feedback = Feedback.create(params[:feedback])
       if @feedback.save
         Notifier.feedback_email(@feedback).deliver
-        flash[:notice] = "Thanks! Your message has been recorded."
-        redirect_to feedback_path
+        redirect_to thanks_path
       else
         flash[:error] = "Error saving. Please fill in all fields."
       end

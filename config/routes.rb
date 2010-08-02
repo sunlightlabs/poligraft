@@ -4,5 +4,6 @@ Poligraft::Application.routes.draw do |map|
   match 'plucked' => "main#plucked",  :as => 'plucked'
   match 'about'     => "main#about",      :as => 'about'
   match 'feedback'  => "main#feedback",   :as => 'feedback'
+  match 'thanks'  => "main#thanks",   :as => 'thanks'
   match ':slug(.:format)' => "main#result",         :as => 'result'
 end
