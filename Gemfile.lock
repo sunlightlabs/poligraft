@@ -1,0 +1,206 @@
+--- 
+dependencies: 
+  mongo: 
+    group: 
+    - :default
+    version: ">= 0"
+  bson_ext: 
+    group: 
+    - :default
+    version: ">= 0"
+  rr: 
+    group: 
+    - :test
+    version: ">= 0"
+  rails: 
+    group: 
+    - :default
+    version: ">= 3.0.0.beta4"
+  mongo_mapper: 
+    group: 
+    - :default
+    version: ">= 0"
+  autotest: 
+    group: 
+    - :test
+    version: ">= 0"
+  thor: 
+    group: 
+    - :default
+    version: ~> 0.13.6
+  autotest-growl: 
+    group: 
+    - :test
+    version: ">= 0"
+  delayed_job: 
+    group: 
+    - :default
+    version: ">= 0"
+  rspec-rails: 
+    group: 
+    - :test
+    version: ">= 2.0.0.beta.8"
+  bson: 
+    group: 
+    - :default
+    version: ">= 0"
+  json: 
+    group: 
+    - :default
+    version: ">= 0"
+  calais: 
+    group: 
+    - :default
+    version: ">= 0"
+  steak: 
+    group: 
+    - :test
+    version: ">= 0.4.0.a4"
+  transparency_data: 
+    group: 
+    - :default
+    version: ">= 0"
+  daemons: 
+    group: 
+    - :default
+    version: = 1.0.10
+  capybara: 
+    group: 
+    - :test
+    version: ">= 0"
+  nokogiri: 
+    group: 
+    - :default
+    version: ">= 0"
+  autotest-rails: 
+    group: 
+    - :test
+    version: ">= 0"
+specs: 
+- rake: 
+    version: 0.8.7
+- ZenTest: 
+    version: 4.3.3
+- abstract: 
+    version: 1.0.0
+- activesupport: 
+    version: 3.0.0.beta4
+- builder: 
+    version: 2.1.2
+- i18n: 
+    version: 0.4.1
+- activemodel: 
+    version: 3.0.0.beta4
+- erubis: 
+    version: 2.6.6
+- rack: 
+    version: 1.1.0
+- rack-mount: 
+    version: 0.6.9
+- rack-test: 
+    version: 0.5.4
+- tzinfo: 
+    version: 0.3.22
+- actionpack: 
+    version: 3.0.0.beta4
+- mime-types: 
+    version: "1.16"
+- polyglot: 
+    version: 0.3.1
+- treetop: 
+    version: 1.4.8
+- mail: 
+    version: 2.2.5
+- actionmailer: 
+    version: 3.0.0.beta4
+- arel: 
+    version: 0.4.0
+- activerecord: 
+    version: 3.0.0.beta4
+- activeresource: 
+    version: 3.0.0.beta4
+- autotest: 
+    version: 4.3.2
+- autotest-growl: 
+    version: 0.2.4
+- autotest-rails: 
+    version: 4.1.0
+- bson: 
+    version: 1.0.4
+- bson_ext: 
+    version: 1.0.4
+- bundler: 
+    version: 0.9.26
+- curb: 
+    version: 0.7.7.1
+- json: 
+    version: 1.4.3
+- nokogiri: 
+    version: 1.4.3.1
+- calais: 
+    version: 0.0.10
+- culerity: 
+    version: 0.2.10
+- ffi: 
+    version: 0.6.3
+- json_pure: 
+    version: 1.4.3
+- rubyzip: 
+    version: 0.9.4
+- selenium-webdriver: 
+    version: 0.0.27
+- capybara: 
+    version: 0.3.9
+- daemons: 
+    version: 1.0.10
+- delayed_job: 
+    version: 2.1.0.pre
+    source: 0
+- diff-lcs: 
+    version: 1.1.2
+- hashie: 
+    version: 0.2.2
+- jnunemaker-validatable: 
+    version: 1.8.4
+- mongo: 
+    version: 1.0.6
+- plucky: 
+    version: 0.3.2
+- mongo_mapper: 
+    version: 0.8.2
+- typhoeus: 
+    version: 0.1.31
+- monster_mash: 
+    version: 0.1.4
+- thor: 
+    version: 0.13.8
+- railties: 
+    version: 3.0.0.beta4
+- rails: 
+    version: 3.0.0.beta4
+- rr: 
+    version: 0.10.11
+- rspec-core: 
+    version: 2.0.0.beta.19
+- rspec-expectations: 
+    version: 2.0.0.beta.19
+- rspec-mocks: 
+    version: 2.0.0.beta.19
+- rspec: 
+    version: 2.0.0.beta.19
+- webrat: 
+    version: 0.7.2.beta.1
+- rspec-rails: 
+    version: 2.0.0.beta.19
+- steak: 
+    version: 0.4.0.beta.1
+- transparency_data: 
+    version: 0.0.4
+hash: a6525d56592ba6119fbdef0a54f8cb84a920509a
+sources: 
+- Git: 
+    uri: git://github.com/luigi/delayed_job.git
+    git: git://github.com/luigi/delayed_job.git
+    ref: de0ac521f42a84d35b7c73d8d1014e3bc8c5703b
+- Rubygems: 
+    uri: http://rubygems.org

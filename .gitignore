@@ -2,7 +2,6 @@
 .DS_Store
 db/*.sqlite3
 config/*.yml
-Gemfile.lock
 log/
 tmp/
 bin/
