@@ -16,10 +16,14 @@ class MainController < ApplicationController
   
   def result
     @result = Result.first(:slug => params[:slug])
-    respond_to do |format|
-      format.html
-      format.json { render :json => @result.to_json(:methods  => [:source_content],
-                                                    :except   => [:source_text]) }
+    if @result
+      respond_to do |format|
+        format.html
+        format.json { render :json => @result.to_json(:methods  => [:source_content],
+                                                      :except   => [:source_text]) }
+      end
+    else
+      render :file => "#{RAILS_ROOT}/public/404.html", :layout => false, :status => 404
     end
   end
   
