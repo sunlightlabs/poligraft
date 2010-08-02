@@ -6,8 +6,10 @@ set :deploy_to, "/home/poligraft/www"
 
 if environment == 'production'
   set :domain, "poligraft.com"
+  set :num_workers, "4"
 else
   set :domain, "staging.poligraft.org"
+  set :num_workers, "2"
 end
 
 set :repository,  "git@github.com:sunlightlabs/poligraft.git"
@@ -32,7 +34,7 @@ namespace :deploy do
   end
   
   task :delayed_job do
-    run "cd #{release_path} && RAILS_ENV=production script/delayed_job stop && RAILS_ENV=production script/delayed_job -n 2 start "
+    run "cd #{release_path} && RAILS_ENV=production script/delayed_job stop && RAILS_ENV=production script/delayed_job -n #{num_workers} start "
   end
 end
 
