@@ -5,7 +5,7 @@ set :application, user
 set :deploy_to, "/home/poligraft/www"
 
 if environment == 'production'
-  set :domain, "poligraft.org"
+  set :domain, "poligraft.com"
 else
   set :domain, "staging.poligraft.org"
 end
