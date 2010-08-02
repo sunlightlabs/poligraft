@@ -28,6 +28,7 @@ namespace :deploy do
   
   task :symlink_config do
     run "ln -s #{shared_path}/config/keys.yml #{release_path}/config/keys.yml"
+    run "ln -s #{shared_path}/config/mail.yml #{release_path}/config/mail.yml"
   end
   
   task :delayed_job do

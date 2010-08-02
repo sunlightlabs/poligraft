@@ -46,10 +46,11 @@ Poligraft::Application.configure do
   config.action_mailer.smtp_settings = {
     :address      => s["address"],
     :port         => s["port"],
-    :domain       => s["port"],
-    :authentication => :login,
+    :domain       => s["domain"],
     :user_name    => s["user_name"],
-    :password     => s["password"]
+    :password     => s["password"],
+    :authentication => :plain,
+    :enable_starttls_auto => false
   }
 
 end
