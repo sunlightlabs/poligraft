@@ -12,6 +12,7 @@ gem 'mongo_mapper'
 gem 'daemons', '1.0.10'
 gem 'delayed_job', :git => "git://github.com/luigi/delayed_job.git"
 gem 'transparency_data'
+gem 'thor', '~> 0.13.6'
 
 group :test do
   gem "rspec-rails", ">= 2.0.0.beta.8"
