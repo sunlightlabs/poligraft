@@ -39,4 +39,18 @@ Poligraft::Application.configure do
 
   # Enable threaded mode
   # config.threadsafe!
+
+  config.action_mailer.delivery_method = :smtp
+  mail_settings = YAML.load_file(Rails.root.to_s + "/config/mail.yml")
+  s = mail_settings["production"]
+  config.action_mailer.smtp_settings = {
+    :address      => s["address"],
+    :port         => s["port"],
+    :domain       => s["port"],
+    :authentication => :login,
+    :user_name    => s["user_name"],
+    :password     => s["password"]
+  }
+
 end
+
