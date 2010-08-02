@@ -20,8 +20,8 @@ group :test do
   gem "autotest"
   gem "autotest-rails"
   gem "autotest-growl"
-  gem "autotest-fsevent"
-  gem "autotest-inotify"
+#  gem "autotest-fsevent"
+#  gem "autotest-inotify"
   gem 'steak', '>= 0.4.0.a4'
   gem 'capybara'
 end
