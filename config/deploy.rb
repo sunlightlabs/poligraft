@@ -48,7 +48,7 @@ namespace :bundler do
 
   task :bundle do
     bundler.symlink_vendor
-    run("cd #{release_path} && export PATH=/home/#{user}/.gem/ruby/1.8/bin:$PATH && bundle install --without test")
+    run("cd #{release_path} && export PATH=/home/#{user}/.gem/ruby/1.8/bin:$PATH && bundle install")
   end
 end
 
