@@ -96,7 +96,7 @@ class Result
     hydra = Typhoeus::Hydra.new
     tdata = TransparencyData::Client.new(hydra)
     self.entities.each do |entity|
-      tdata.entities(:search => entity.name.gsub!('.', '')) do |results, error|
+      tdata.entities(:search => entity.name) do |results, error|
         if error
           Rails.logger.info "Error in link_entities: #{error}"
         else
