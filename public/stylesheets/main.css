@@ -67,7 +67,7 @@ div#examples li { margin-bottom: 5px;}
 
 .industriesHeader { font-weight: bold;}
 
-.reportData { margin-bottom: 35px; margin-left: 30px;}
+.reportData { margin-bottom: 35px; }
 .reportData li { margin-bottom: 20px; padding-bottom: 20px; font-size: 105%; line-height: 22px; background: url(/images/li_line.png) bottom left no-repeat;}
 .moreLink { display: block; background: url(/images/arrows.png) left 6px no-repeat; padding-left: 18px; font-family: Georgia, "Times New Roman", Times, serif; font-style: oblique; margin-top: 10px;}
 
@@ -90,9 +90,9 @@ span.date { font-style: oblique;}
 div#rtColumn h4 { color: #575454; margin-bottom: 5px; font-size: 150%; font-family: Georgia, "Times New Roman", Times, serif; line-height: 24px;}
 
 span.influenceName { display: block;}
-.reportData img { margin-top: 10px;}
+.reportData img { margin: 10px 0 0 20px;}
 
-div.industries { font-size: 85%; }
+div.industries { font-size: 85%; margin-left: 30px;}
 div.industries li { margin-bottom: 0px; padding-bottom: 0px; background: none; float: left; margin-right: 5px; line-height: 18px;}
 
 #feedback { background-color: #625f5c; color: #fff; padding: 10px 15px 0px; -moz-border-radius: 3px; -webkit-border-radius: 3px; border: 1px solid #444240; margin-left: 10px; }
