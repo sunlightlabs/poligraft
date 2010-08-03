@@ -7,7 +7,11 @@ class MainController < ApplicationController
   def poligraft
     if (@result = Result.create!(:source_url => params[:url], :source_text => params[:text]))
       @result.process_entities
-      redirect_to "/" + @result.slug
+      if params[:json] == "1"
+        redirect_to "/" + @result.slug + ".json"
+      else
+        redirect_to "/" + @result.slug
+      end
     else
       flash[:error] = "Sorry, couldn't process that input."
       redirect_to :root
