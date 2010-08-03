@@ -1,7 +1,7 @@
 class Contributor
   include MongoMapper::EmbeddedDocument
   
-  key :name, String
+  key :tdata_name, String
   key :extracted_name, String
   key :amount, Integer
   key :tdata_id, String

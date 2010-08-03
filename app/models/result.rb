@@ -110,8 +110,9 @@ class Result
                (result['type'] == "organization" && entity.entity_type == "Organization")
               
               if entity.tdata_count.nil? || 
-                 entity.tdata_count < (result.count_given + result.count_received)
-              
+                entity.tdata_count < (result.count_given + result.count_received)
+                
+                entity.tdata_name = result.name
                 entity.tdata_type = result['type']
                 entity.tdata_id = result.id
                 entity.tdata_slug = result.name.parameterize
@@ -177,7 +178,7 @@ class Result
               if error
                 Rails.logger.info "Error in find_contributors: #{error}"
               elsif summary.amount > 0
-                recipient.contributors << Contributor.new(:name => summary.contributor_name,
+                recipient.contributors << Contributor.new(:tdata_name => summary.contributor_name,
                                                           :extracted_name => contributor.name,
                                                           :amount => summary.amount,
                                                           :tdata_id => contributor.tdata_id,

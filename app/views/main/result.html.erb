@@ -54,7 +54,7 @@
         <% if recipient.contributors -%>
         <% recipient.contributors.each do |contributor| -%>
         <li>
-          <%= link_to contributor.name, influence_explorer_url(contributor), "data-entity" => contributor.extracted_name %> has aggregated $<%= number_with_delimiter contributor.amount %> to <%= link_to recipient.name, influence_explorer_url(recipient), "data-entity" => recipient.name %>
+          <%= link_to contributor.tdata_name, influence_explorer_url(contributor), "data-entity" => contributor.extracted_name %> has aggregated $<%= number_with_delimiter contributor.amount %> to <%= link_to recipient.name, influence_explorer_url(recipient), "data-entity" => recipient.name %>
         </li>
         <% end -%>
         <% end -%>
@@ -76,7 +76,9 @@
           <li><%= entity.name %></li>
         <% elsif entity.tdata_id -%>
           <li>
-            <span class="influenceName"><%= link_to entity.name, influence_explorer_url(entity), "data-entity" => entity.name %></span>
+            <span class="influenceName">
+              <%= link_to entity.tdata_name, influence_explorer_url(entity), "data-entity" => entity.name %>
+            </span>
             
             <% if entity.tdata_count > 0 -%>
             <%= image_tag piechart_url(entity), :alt => "Chart for #{entity.name}" %>

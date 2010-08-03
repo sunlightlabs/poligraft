@@ -162,7 +162,7 @@ var influence_explorer_link = function(entity, addSpan) {
   }
   var link = '<a href="http://beta.influenceexplorer.com/' + entity.tdata_type + 
          '/' + entity.tdata_slug + '/' + entity.tdata_id + '" data-entity="' +  
-         entityName + '">' + entity.name +'</a>';
+         entityName + '">' + entity.tdata_name +'</a>';
   if (addSpan) {
     link = '<span class="influenceName">' + link + '</span>';
   }

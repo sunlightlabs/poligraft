@@ -4,6 +4,7 @@ class Entity
   key :name, String
   key :entity_type, String
   key :relevance, Float
+  key :tdata_name, String
   key :tdata_id, String
   key :tdata_type, String
   key :tdata_slug, String
