@@ -35,6 +35,16 @@ $(function() {
       $("div#processingBar").fadeIn("slow");
       var intervalId = setInterval(function() { 
         $.getJSON(slug + '.json', function(result) {
+
+          if (ranEntitiesExtracted == false) {
+            ranEntitiesExtracted = entitiesExtracted(result);
+          }        
+          if (ranEntitiesExtracted == true && ranEntitiesLinked == false) {
+            ranEntitiesLinked = entitiesLinked(result);
+          }
+          if (ranEntitiesLinked == true && ranContributorsIdentified == false) {
+            ranContributorsIdentified = contributorsIdentified(result);
+          }
                    
           // break the loop if done
           if (result.status == doneStatus) {
@@ -48,15 +58,6 @@ $(function() {
             clearInterval(intervalId);
           }
           
-          if (ranEntitiesExtracted == false) {
-            ranEntitiesExtracted = entitiesExtracted(result);
-          }        
-          if (ranEntitiesExtracted == true && ranEntitiesLinked == false) {
-            ranEntitiesLinked = entitiesLinked(result);
-          }
-          if (ranEntitiesLinked == true && ranContributorsIdentified == false) {
-            ranContributorsIdentified = contributorsIdentified(result);
-          }
         });
       }, 2000);
     }
