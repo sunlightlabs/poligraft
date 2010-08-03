@@ -96,7 +96,7 @@ class Result
   end
   
   def link_entities
-    hydra = Typhoeus::Hydra.new
+    hydra = Typhoeus::Hydra.new(:max_concurrency => 10)
     tdata = TransparencyData::Client.new(hydra)
     self.entities.each do |entity|
       tdata.entities(:search => entity.name) do |results, error|
@@ -166,7 +166,7 @@ class Result
   end
 
   def find_contributors
-    hydra = Typhoeus::Hydra.new
+    hydra = Typhoeus::Hydra.new(:max_concurrency => 1)
     tdata = TransparencyData::Client.new(hydra)
     self.entities.each do |recipient|
       if recipient.tdata_type == 'politician'
