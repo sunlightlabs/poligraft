@@ -26,15 +26,18 @@ after "deploy", "deploy:cleanup"
 namespace :deploy do
   task :restart, :roles => :app, :except => { :no_release => true } do
     run "touch #{current_path}/tmp/restart.txt"
+    deploy.delayed_job
   end
+  
+  task :delayed_job do
+    run "cd #{current_path} && RAILS_ENV=production script/delayed_job stop"
+    sleep 2
+    run "cd #{current_path} && RAILS_ENV=production script/delayed_job -n #{num_workers} start"
+  end  
   
   task :symlink_config do
     run "ln -s #{shared_path}/config/keys.yml #{release_path}/config/keys.yml"
     run "ln -s #{shared_path}/config/mail.yml #{release_path}/config/mail.yml"
-  end
-  
-  task :delayed_job do
-    run "cd #{release_path} && RAILS_ENV=production script/delayed_job stop && RAILS_ENV=production script/delayed_job -n #{num_workers} start "
   end
 end
 
@@ -58,5 +61,4 @@ end
 after 'deploy:update_code' do
   bundler.bundle
   deploy.symlink_config
-  deploy.delayed_job
 end
