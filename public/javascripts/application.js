@@ -33,6 +33,8 @@ $(function() {
       
     } else if (resultStatus != doneStatus) {
       $("div#processingBar").fadeIn("slow");
+      var maxPolls = 60;
+      var counter = 0;
       var intervalId = setInterval(function() { 
         $.getJSON(slug + '.json', function(result) {
 
@@ -47,7 +49,7 @@ $(function() {
           }
 
           // break the loop if done
-          if (result.status == doneStatus) {
+          if (counter == maxPolls || result.status == doneStatus) {
             $("div#processingBar").slideUp();
             location.hash = 'done';
             
@@ -57,7 +59,7 @@ $(function() {
             
             clearInterval(intervalId);
           }
-          
+          counter++;
         });
       }, 2000);
     }
