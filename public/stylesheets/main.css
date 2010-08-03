@@ -7,6 +7,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,op
 dl li{list-style: none;}
 
 strong { font-weight: bold; }
+code { font-size: 120%; background-color: #eee;}
 a:link{outline: none; color: #eb9500;}
 a:visited{outline: none; color: #eb9500}
 a:hover{outline: none; color: #eb9500}
