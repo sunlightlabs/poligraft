@@ -20,8 +20,9 @@ class MainController < ApplicationController
   
   def result
     @result = Result.first(:slug => params[:slug])
-    response_code = @result.processed ? 200 : 202
     if @result
+      response_code = @result.processed ? 200 : 202
+
       respond_to do |format|
         format.html
         format.json { render :json => @result.to_json(:methods  => [:source_content],
