@@ -45,7 +45,7 @@ $(function() {
           if (ranEntitiesLinked == true && ranContributorsIdentified == false) {
             ranContributorsIdentified = contributorsIdentified(result);
           }
-                   
+
           // break the loop if done
           if (result.status == doneStatus) {
             $("div#processingBar").slideUp();
@@ -74,7 +74,7 @@ var triggerHighlights = function() {
 
 var entitiesExtracted = function(result, processedStatus) {
   var showEntities = false
-  if (result.status == "Entities Extracted" && !_(result.entities).isEmpty()) {
+  if ((result.status == "Entities Extracted" || result.status == "Entities Linked" || result.status == "Contributors Identified") && !_(result.entities).isEmpty()) {
     
     // populate the entities table
     _(result.entities).each(function(e) {
