@@ -15,6 +15,9 @@ class Result
   
   many :entities
 
+  ensure_index :slug
+  ensure_index :source_url
+
   validates_presence_of :source_title
   validates_presence_of :source_text
   validates_presence_of :source_format
