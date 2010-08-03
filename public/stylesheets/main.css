@@ -53,7 +53,7 @@ a#twitter { background: url(/images/Twitter-icon.png) top right no-repeat;}
 a#facebook { background: url(/images/FaceBook-icon.png) top right no-repeat; margin-right: 5px;}
 
 #pageMain { width: 960px; margin: 0 auto 70px; min-height: 600px;}
-#rtColumn h3, body.home h3  { font-size: 200%; color: #433f3d; font-family: Georgia, "Times New Roman", Times, serif; margin-bottom: 25px;}
+#rtColumn h3, body.home h3  { font-size: 200%; color: #433f3d; font-family: Georgia, "Times New Roman", Times, serif; margin: 25px 0;}
 
 #ltColumn, #rtColumn { padding-top: 50px;}
 #ltColumn { float: left; padding-left: 10px; width: 605px; margin-right: 15px; color: #8b8581;}
