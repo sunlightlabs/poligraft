@@ -24,8 +24,8 @@ class ContentPlucker
     end
     doc.search('a').each { |n| n.replace(n.nil? ? "" : n.inner_html) }
     doc.search('div').each do |div|
-      if div.get_attribute('id') =~ /(combx|comment|disqus|foot|header|menu|rss|shoutbox|sidebar|sponsor|ad-break|agegate|related|promo|list|photo|social)/i ||
-         div.get_attribute('class') =~ /(combx|comment|disqus|foot|header|menu|rss|shoutbox|sidebar|sponsor|ad-break|agegate|related|promo|list|photo|social)/i
+      if div.get_attribute('id') =~ /(combx|comment|disqus|foot|header|menu|rss|shoutbox|sidebar|sponsor|ad-break|agegate|related|promo|list|photo|social|singleAd)/i ||
+         div.get_attribute('class') =~ /(combx|comment|disqus|foot|header|menu|rss|shoutbox|sidebar|sponsor|ad-break|agegate|related|promo|list|photo|social|singleAd)/i
          div.remove
       end
     end
