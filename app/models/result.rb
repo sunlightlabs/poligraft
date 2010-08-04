@@ -177,7 +177,7 @@ class Result
             tdata.recipient_contributor_summary(recipient.tdata_id, contributor.tdata_id) do |summary, error|
               if error
                 Rails.logger.info "Error in find_contributors: #{error}"
-              elsif summary.amount > 0
+              elsif summary.amount.to_i > 0
                 recipient.contributors << Contributor.new(:tdata_name => summary.contributor_name,
                                                           :extracted_name => contributor.name,
                                                           :amount => summary.amount,
