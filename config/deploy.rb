@@ -6,10 +6,10 @@ set :deploy_to, "/home/poligraft/www"
 
 if environment == 'production'
   set :domain, "poligraft.com"
-  set :num_workers, "3"
+  set :num_workers, "6"
 else
   set :domain, "staging.poligraft.org"
-  set :num_workers, "3"
+  set :num_workers, "6"
 end
 
 set :repository,  "git@github.com:sunlightlabs/poligraft.git"
