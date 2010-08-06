@@ -1,3 +1,9 @@
+#
+# Algorithm heavily inspired by arc90's Readability: 
+#
+# http://lab.arc90.com/experiments/readability/
+# http://code.google.com/p/arc90labs-readability/source/browse/trunk/js/readability.js
+#
 class ContentPlucker
   
   def self.pluck_title_from(url)
