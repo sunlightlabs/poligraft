@@ -96,7 +96,7 @@ class Result
   end
   
   def link_entities
-    hydra = Typhoeus::Hydra.new(:max_concurrency => 10)
+    hydra = Typhoeus::Hydra.new
     tdata = TransparencyData::Client.new(hydra)
     self.entities.each do |entity|
       tdata.entities(:search => entity.name) do |results, error|
@@ -117,53 +117,61 @@ class Result
                 entity.tdata_id = result.id
                 entity.tdata_slug = result.name.parameterize
                 entity.tdata_count = result.count_given + result.count_received
-              
-                if result['type'] == "politician" && entity.tdata_count > 0
-                  tdata.local_breakdown(result.id) do |breakdown, error|
-                    entity = add_breakdown(breakdown, entity, :first   => "in_state", 
-                                                              :second  => "out_of_state",
-                                                              :type    => "contributor")
-                  end
-                  tdata.contributor_type_breakdown(result.id) do |breakdown, error|
-                    entity = add_breakdown(breakdown, entity, :first   => "individual", 
-                                                              :second  => "pac",
-                                                              :type    => "contributor")
-                  end
-
-                  tdata.top_sectors(result.id, :limit => 5) do |sectors, error|
-                    
-                    sectors.each do |sector|
-                      if entity.top_industries.length < 3 && 
-                         sector.name != "Other" && sector.name != "Unknown"
-                        entity.top_industries << sector.name
-                      end
-                    end
-                    
-                  end
-                elsif result['type'] == "individual" && entity.tdata_count > 0
-                  tdata.individual_party_breakdown(result.id) do |breakdown, error|
-                    entity = add_breakdown(breakdown, entity, :first   => "dem", 
-                                                              :second  => "rep",
-                                                              :type    => "recipient")
-                  end
-                elsif result['type'] == "organization" && entity.tdata_count > 0
-                  tdata.org_party_breakdown(result.id) do |breakdown, error|
-                    entity = add_breakdown(breakdown, entity, :first   => "dem", 
-                                                              :second  => "rep",
-                                                              :type    => "recipient")
-                  end
-                end
+                entity.save
               end
-            
             end
           end # results.each
         end # if error
-      end # self.entities.each
+      end # tdata.entities
+    end # self.entities.each
+    hydra.run
+    
+    hydra2 = Typhoeus::Hydra.new
+    tdata2 = TransparencyData::Client.new(hydra2)
+    self.entities.each do |entity|
+
+      if entity.tdata_type == "politician" && entity.tdata_count > 0
+        tdata2.local_breakdown(entity.tdata_id) do |breakdown, error|
+          add_breakdown(breakdown, entity, :first   => "in_state", 
+                                                    :second  => "out_of_state",
+                                                    :type    => "contributor")
+        end
+        tdata2.contributor_type_breakdown(entity.tdata_id) do |breakdown, error|
+          add_breakdown(breakdown, entity, :first   => "individual", 
+                                                    :second  => "pac",
+                                                    :type    => "contributor")
+        end
+
+        tdata2.top_sectors(entity.tdata_id, :limit => 5) do |sectors, error|
+        
+          sectors.each do |sector|
+            if entity.top_industries.length < 3 && 
+               sector.name != "Other" && sector.name != "Unknown"
+              entity.top_industries << sector.name
+            end
+          end
+        
+        end
+      elsif entity.tdata_type == "individual" && entity.tdata_count > 0
+        tdata2.individual_party_breakdown(entity.tdata_id) do |breakdown, error|
+          add_breakdown(breakdown, entity, :first   => "dem", 
+                                                    :second  => "rep",
+                                                    :type    => "recipient")
+        end
+      elsif entity.tdata_type == "organization" && entity.tdata_count > 0
+        tdata2.org_party_breakdown(entity.tdata_id) do |breakdown, error|
+          add_breakdown(breakdown, entity, :first   => "dem", 
+                                                    :second  => "rep",
+                                                    :type    => "recipient")
+        end
+      end
       entity.save
     end
-    hydra.run
+    hydra2.run
+
     self.status = "Entities Linked"
     self.save
+
   end
 
   def find_contributors
@@ -203,10 +211,9 @@ class Result
     second = breakdown.send("#{params[:second]}_amount").to_i
     sum = first + second
     sum = 1 if sum == 0
-  
     entity.send("#{params[:type]}_breakdown")[params[:first]] = (first * 100) / sum
     entity.send("#{params[:type]}_breakdown")[params[:second]] = (second * 100) / sum
-    entity
+    entity.save
   end
 
   handle_asynchronously :process_entities
