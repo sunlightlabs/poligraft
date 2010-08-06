@@ -142,11 +142,12 @@ class Result
                                                     :type    => "contributor")
         end
 
-        tdata2.top_sectors(entity.tdata_id, :limit => 5) do |sectors, error|
+        tdata2.top_sectors(entity.tdata_id, :limit => 6) do |sectors, error|
         
           sectors.each do |sector|
             if entity.top_industries.length < 3 && 
-               sector.name != "Other" && sector.name != "Unknown"
+               sector.name != "Other" && sector.name != "Unknown" && 
+               sector.name != "Administrative Use"
               entity.top_industries << sector.name
             end
           end
