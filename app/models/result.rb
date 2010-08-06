@@ -78,7 +78,7 @@ class Result
                                     :license_id => KEYS["calais"] )
     json = JSON.parse(json_string)
     desired_types = %w{Person Organization Company}
-    names_to_suppress = ["white house", "house", "senate", "congress", "assembly", 
+    names_to_suppress = ["white house", "house", "senate", "congress", "assembly", "supreme court",
                          "legislature", "state senate", "administration", "obama administration",
                          "republicans", "republican party", "democrats", "democratic party"]
     json.each do |k,v|
