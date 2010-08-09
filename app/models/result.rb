@@ -86,9 +86,12 @@ class Result
          desired_types.include?(v["_type"]) && 
          !names_to_suppress.include?(v["name"].downcase)
         
-        self.entities << Entity.new(:entity_type => v["_type"],
-                                    :name => v["name"],
-                                    :relevance => v["relevance"])
+        unless v["_type"] == "Person" && !v["name"].include?(' ')
+
+          self.entities << Entity.new(:entity_type => v["_type"],
+                                      :name => v["name"],
+                                      :relevance => v["relevance"])
+        end
       end
     end
     self.status = "Entities Extracted"
