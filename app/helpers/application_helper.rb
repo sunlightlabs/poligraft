@@ -7,7 +7,7 @@ module ApplicationHelper
   end
 
   def influence_explorer_url(entity)
-    "http://beta.influenceexplorer.com/#{entity.tdata_type}/#{entity.tdata_slug}/#{entity.tdata_id}" 
+    "http://influenceexplorer.com/#{entity.tdata_type}/#{entity.tdata_slug}/#{entity.tdata_id}" 
   end
   
   def piechart_url(entity)

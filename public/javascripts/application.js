@@ -160,7 +160,7 @@ var influence_explorer_link = function(entity, addSpan) {
   if (!_.isUndefined(entity.extracted_name)) {
     entityName = entity.extracted_name;
   }
-  var link = '<a href="http://beta.influenceexplorer.com/' + entity.tdata_type + 
+  var link = '<a href="http://influenceexplorer.com/' + entity.tdata_type + 
          '/' + entity.tdata_slug + '/' + entity.tdata_id + '" data-entity="' +  
          entityName + '">' + entity.tdata_name +'</a>';
   if (addSpan) {
@@ -171,7 +171,7 @@ var influence_explorer_link = function(entity, addSpan) {
 
 var more_link = function(entity) {
 
-  return '<a class="ie_link" href="http://beta.influenceexplorer.com/' + entity.tdata_type + 
+  return '<a class="ie_link" href="http://influenceexplorer.com/' + entity.tdata_type + 
          '/' + entity.tdata_slug + '/' + entity.tdata_id + '">Learn More &raquo;</a>'
 }
 
