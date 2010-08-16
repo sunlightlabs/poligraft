@@ -134,17 +134,17 @@ specs:
 - curb: 
     version: 0.7.7.1
 - json: 
-    version: 1.4.3
+    version: 1.4.6
 - nokogiri: 
     version: 1.4.3.1
 - calais: 
-    version: 0.0.10
+    version: 0.0.11
 - culerity: 
     version: 0.2.10
 - ffi: 
     version: 0.6.3
 - json_pure: 
-    version: 1.4.3
+    version: 1.4.6
 - rubyzip: 
     version: 0.9.4
 - selenium-webdriver: 
@@ -163,11 +163,11 @@ specs:
 - jnunemaker-validatable: 
     version: 1.8.4
 - mongo: 
-    version: 1.0.6
+    version: 1.0.7
 - plucky: 
-    version: 0.3.2
+    version: 0.3.4
 - mongo_mapper: 
-    version: 0.8.2
+    version: 0.8.3
 - typhoeus: 
     version: 0.1.31
 - monster_mash: 
