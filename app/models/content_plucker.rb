@@ -7,15 +7,24 @@
 class ContentPlucker
   
   def self.pluck_title_from(url)
-    doc = Nokogiri::HTML.parse(open(url), url, "UTF-8")
+    url = CGI::unescape(url)
+    begin
+      doc = Nokogiri::HTML.parse(open(url), url, "UTF-8")
+    rescue
+      return "Cannot load URL"
+    end
     doc.search('title').inner_html
   end
   
   def self.pluck_from(url)
-
+    
     # get the raw HTML
-    doc = Nokogiri::HTML.parse(open(url), url, "UTF-8")
-
+    url = CGI::unescape(url)
+    begin
+      doc = Nokogiri::HTML.parse(open(url), url, "UTF-8")
+    rescue OpenURI::HTTPError
+      return "<h2>Cannot load URL</h2><p>Poligraft is unable to load that URL.</p><p>Please copy and paste the text into the <a href='/'>text area on the front page</a>."
+    end
     # set up attribution
     favicon = ''
     response_code = Net::HTTP.get_response(URI.parse("http://#{pluck_domain(url)}/favicon.ico")).code.to_i
@@ -28,7 +37,15 @@ class ContentPlucker
     %w{meta img script style input textarea}.each do |tag|
       doc.search(tag).remove
     end
-    doc.search('a').each { |n| n.replace(n.nil? ? "" : n.inner_html) }
+    doc.search('a').each do |n|
+      unless n.nil?
+        begin
+          n.replace(n.inner_html)
+        rescue NoMethodError
+          
+        end
+      end
+    end
     doc.search('div').each do |div|
       if div.get_attribute('id') =~ /(combx|comment|disqus|foot|header|menu|rss|shoutbox|sidebar|sponsor|ad-break|agegate|related|promo|list|photo|social|singleAd)/i ||
          div.get_attribute('class') =~ /(combx|comment|disqus|foot|header|menu|rss|shoutbox|sidebar|sponsor|ad-break|agegate|related|promo|list|photo|social|singleAd)/i
