@@ -53,13 +53,9 @@ namespace :bundler do
     run("mkdir -p #{shared_gems} && mkdir -p #{release_gems} && rm -rf #{release_gems} && ln -s #{shared_gems} #{release_gems}")
   end
 
-  task :bundle do
-    bundler.symlink_vendor
-    run("cd #{release_path} && export PATH=/home/#{user}/.gem/ruby/1.8/bin:$PATH && bundle install")
-  end
 end
 
 after 'deploy:update_code' do
-  bundler.bundle
+  bundle.install
   deploy.symlink_config
 end
