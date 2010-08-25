@@ -5,8 +5,7 @@ class MainController < ApplicationController
   end
   
   def poligraft
-    source_url = params[:url].gsub(/\?/, '-')
-    if (@result = Result.create!(:source_url => source_url, :source_text => params[:text]))
+    if (@result = Result.create!(:source_url => params[:url], :source_text => params[:text]))
       @result.process_entities
       if params[:json] == "1"
         redirect_to "/" + @result.slug + ".json"
@@ -61,7 +60,9 @@ class MainController < ApplicationController
             'http://www.cbsnews.com/stories/2010/07/15/politics/main6681481.shtml',
             'http://www.huffingtonpost.com/2010/08/07/theresa-riggi-american-mo_n_674423.html',
             'http://www.latimes.com/business/la-fi-financial-reform-20100716,0,2303004.story',
-            'http://www.washingtonpost.com/wp-dyn/content/article/2010/07/30/AR2010073000806.html']
+            'http://www.washingtonpost.com/wp-dyn/content/article/2010/07/30/AR2010073000806.html',
+            'http://www.newyorker.com/reporting/2010/08/30/100830fa_fact_mayer?currentPage=all']
+    urls = ['http://www.newyorker.com/reporting/2010/08/30/100830fa_fact_mayer?currentPage=all']
 
     @articles = urls.map { |url| ContentPlucker.pluck_from url }
   end
