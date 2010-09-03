@@ -8,7 +8,8 @@ class MainController < ApplicationController
     if (@result = Result.create!(:source_url => params[:url], :source_text => params[:text]))
       @result.process_entities
       if params[:json] == "1"
-        redirect_to "/" + @result.slug + ".json"
+        params[:callback] ? callback = '?callback=' + params[:callback] : callback = ''
+        redirect_to "/" + @result.slug + ".json" + callback
       else
         redirect_to "/" + @result.slug
       end
@@ -25,9 +26,11 @@ class MainController < ApplicationController
 
       respond_to do |format|
         format.html
-        format.json { render :json => @result.to_json(:methods  => [:source_content],
-                                                      :except   => [:source_text]),
-                             :status => response_code }
+        format.json do 
+          response = @result.to_json(:methods => [:source_content],:except => [:source_text])
+          response = "#{params[:callback]}(#{response})" if params[:callback]
+          render :json => response, :status => response_code
+        end
       end
     else
       render :file => "#{RAILS_ROOT}/public/404.html", :layout => false, :status => 404
