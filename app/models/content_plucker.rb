@@ -46,9 +46,10 @@ class ContentPlucker
         end
       end
     end
+    doc.search('ul.breadcrumb').remove
     doc.search('div').each do |div|
-      if div.get_attribute('id') =~ /(combx|comment|disqus|foot|header|menu|rss|shoutbox|sidebar|sponsor|ad-break|agegate|related|promo|list|photo|social|singleAd)/i ||
-         div.get_attribute('class') =~ /(combx|comment|disqus|foot|header|menu|rss|shoutbox|sidebar|sponsor|ad-break|agegate|related|promo|list|photo|social|singleAd)/i
+      if div.get_attribute('id') =~ /(combx|comment|disqus|foot|header|menu|rss|shoutbox|sidebar|sponsor|ad-break|agegate|promo|list|photo|social|singleAd|adx|relatedarea)/i ||
+         div.get_attribute('class') =~ /(combx|comment|disqus|foot|header|menu|rss|shoutbox|sidebar|sponsor|ad-break|agegate|promo|list|photo|social|singleAd|adx|relatedarea)/i
          div.remove
       end
     end
@@ -68,9 +69,10 @@ class ContentPlucker
       if div.get_attribute('id') =~ /\A(article|body|entry|hentry|page|post|text|blog|story)\z/
         parents[div] = 50000
 
-      elsif div.get_attribute('id') =~ /entrytext/
+      elsif div.get_attribute('id') =~ /(entrytext|story_content)/
         parents[div] = 75000
       end
+
     end
 
     paragraphs = doc.search('p')
@@ -86,6 +88,7 @@ class ContentPlucker
     end
 
     # get the parent node with the highest point total
+    Rails.logger.info "Parents count: #{parents.length}"
     winner = parents.sort{ |a,b| a[1] <=> b[1] }.last[0]
 
     winner_points = parents.sort{ |a,b| a[1] <=> b[1] }.last[1]

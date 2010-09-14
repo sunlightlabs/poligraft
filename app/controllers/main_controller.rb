@@ -64,9 +64,9 @@ class MainController < ApplicationController
             'http://www.huffingtonpost.com/2010/08/07/theresa-riggi-american-mo_n_674423.html',
             'http://www.latimes.com/business/la-fi-financial-reform-20100716,0,2303004.story',
             'http://www.washingtonpost.com/wp-dyn/content/article/2010/07/30/AR2010073000806.html',
-            'http://www.newyorker.com/reporting/2010/08/30/100830fa_fact_mayer?currentPage=all']
-    urls = ['http://www.newyorker.com/reporting/2010/08/30/100830fa_fact_mayer?currentPage=all']
-
+            'http://www.newyorker.com/reporting/2010/08/30/100830fa_fact_mayer?currentPage=all',
+            'http://www.bloomberg.com/news/2010-09-14/wal-mart-accused-by-labor-union-farmers-of-suppressing-agriculture-prices.html']
+            
     @articles = urls.map { |url| ContentPlucker.pluck_from url }
   end
   
