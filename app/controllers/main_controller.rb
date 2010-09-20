@@ -16,6 +16,7 @@ class MainController < ApplicationController
       end
       
       if params[:json] == "1"
+        headers["Access-Control-Allow-Origin"] = "*" 
         params[:callback] ? callback = '?callback=' + params[:callback] : callback = ''
         redirect_to "/" + @result.slug + ".json" + callback
       else
@@ -40,6 +41,7 @@ class MainController < ApplicationController
           methods << :source_content unless @result.suppress_text
           response = @result.to_json(:methods => methods, :except => [:source_text])
           response = "#{params[:callback]}(#{response})" if params[:callback]
+          headers["Access-Control-Allow-Origin"] = "*" 
           render :json => response, :status => response_code
         end
       end
