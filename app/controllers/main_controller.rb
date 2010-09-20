@@ -5,14 +5,23 @@ class MainController < ApplicationController
   end
   
   def poligraft
-    if (@result = Result.create!(:source_url => params[:url], :source_text => params[:text]))
-      @result.process_entities
+    if (@result = Result.create!( :source_url => params[:url],
+                                  :source_text => params[:text],
+                                  :suppress_text => params[:suppresstext]))
+      if params[:textonly] == true
+        @result.processed = true
+        @result.save
+      else
+        @result.process_entities
+      end
+      
       if params[:json] == "1"
         params[:callback] ? callback = '?callback=' + params[:callback] : callback = ''
         redirect_to "/" + @result.slug + ".json" + callback
       else
         redirect_to "/" + @result.slug
       end
+
     else
       flash[:error] = "Sorry, couldn't process that input."
       redirect_to :root
@@ -27,7 +36,9 @@ class MainController < ApplicationController
       respond_to do |format|
         format.html
         format.json do 
-          response = @result.to_json(:methods => [:source_content],:except => [:source_text])
+          methods = []
+          methods << :source_content unless @result.suppress_text
+          response = @result.to_json(:methods => methods, :except => [:source_text])
           response = "#{params[:callback]}(#{response})" if params[:callback]
           render :json => response, :status => response_code
         end

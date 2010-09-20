@@ -28,15 +28,19 @@
   <p>Poligraft is built on the public Transparency Data API. For more information see its <a href="http://transparencydata.com/api/aggregates/contributions/">API documentation</a>.</p>
 
   <p>Poligraft also has its own built-in API. Specify a URL or text to be processed, and get back the results in JSON format. In fact, every result page in Poligraft has a corresponding JSON representation. Just append a <code>.json</code> to the unique slug, <a href="/vyJf.json">like so</a>.</p>
-  
+
   <p>To process an article, use the <code>/poligraft</code> endpoint in conjunction with a <code>POST</code> or <code>GET</code> request:</p>
-  
+
   <p><code>http://poligraft.com/poligraft?url=ARTICLE_URL_HERE&json=1</code></p>
 
-  <p>Be sure to pass in <code>json=1</code> or else HTML will be returned, and use <code>url=</code> to pass in a URL or <code>text=</code> to pass in a selection of text. To get back JSONP instead of JSON, append <code>callback=foo</code> to the request, where <code>foo</code> is the name of the desired callback function to wrap the JSON inside. HTTP clients must have redirection enabled, as the response will be a redirect to a slug endpoint like <code>/ABCD.json</code>.
-    
+  <p>Be sure to pass in <code>json=1</code> or else HTML will be returned, and use <code>url=</code> to pass in a URL or <code>text=</code> to pass in a selection of text. To get back JSONP instead of JSON, append <code>callback=foo</code> to the request, where <code>foo</code> is the name of the desired callback function to wrap the JSON inside. HTTP clients must have redirection enabled, as the response will be a redirect to a slug endpoint like <code>/ABCD.json</code>.</p>
+
   <p>Because Poligraft does processing asynchronously, this endpoint will return a <code>202 ACCEPTED</code> code until processing is finished, when it returns a <code>200 OK</code>. In addition to the HTTP response code, there's a top-level field in the JSON called <code>processed</code> which is set to <code>false</code> while processing is active. Poll the endpoint every few seconds until the return code is <code>200</code> or the <code>processed</code> value in the JSON is true. Both techniques will work.</p>
-  
+
+  <p>Don't want Poligraft to save the text you pass in? Append <code>suppresstext=true</code>.</p>
+
+  <p>If you only want to use the API for its text-plucking capabilities, pass in <code>textonly=true</code>. You'll get a response quickly without any influence data -- nothing will be processed asynchronously.</p>
+
   <h3>Contact Us</h3>
 
   <p>For questions or comments, please use the Feedback link at the bottom of the page.</p>

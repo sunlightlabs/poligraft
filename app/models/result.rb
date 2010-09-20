@@ -11,6 +11,7 @@ class Result
   key :status, String
   key :contribution_count, Integer, :default => 0
   key :processed, Boolean, :default => false
+  key :suppress_text, Boolean, :default => false
   timestamps!
   
   many :entities
@@ -69,6 +70,8 @@ class Result
     extract_entities
     link_entities
     find_contributors
+    self.source_text = '' if self.suppress_text == true
+    self.save
   end
 
   def extract_entities
