@@ -116,7 +116,7 @@ class Result
                (result['type'] == "organization" && entity.entity_type == "Organization")
               
               if entity.tdata_count.nil? || 
-                entity.tdata_count < (result.count_given + result.count_received)
+                entity.tdata_count < (result.count_given.to_i + result.count_received.to_i)
                 
                 entity.tdata_name = result.name
                 entity.tdata_type = result['type']
