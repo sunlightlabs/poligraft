@@ -48,8 +48,8 @@ class ContentPlucker
     end
     doc.search('ul.breadcrumb').remove
     doc.search('div').each do |div|
-      if div.get_attribute('id') =~ /(combx|comment|disqus|foot|header|menu|rss|shoutbox|sidebar|sponsor|ad-break|agegate|promo|list|photo|social|singleAd|adx|relatedarea)/i ||
-         div.get_attribute('class') =~ /(combx|comment|disqus|foot|header|menu|rss|shoutbox|sidebar|sponsor|ad-break|agegate|promo|list|photo|social|singleAd|adx|relatedarea)/i
+      if div.get_attribute('id') =~ /(combx|comment|disqus|foot|menu|rss|shoutbox|sidebar|sponsor|ad-break|agegate|promo|list|photo|social|singleAd|adx|relatedarea)/i ||
+         div.get_attribute('class') =~ /(combx|comment|disqus|foot|menu|rss|shoutbox|sidebar|sponsor|ad-break|agegate|promo|list|photo|social|singleAd|adx|relatedarea)/i
          div.remove
       end
     end
@@ -88,9 +88,7 @@ class ContentPlucker
     end
 
     # get the parent node with the highest point total
-    Rails.logger.info "Parents count: #{parents.length}"
     winner = parents.sort{ |a,b| a[1] <=> b[1] }.last[0]
-
     winner_points = parents.sort{ |a,b| a[1] <=> b[1] }.last[1]
         
     # return the plucked HTML content   

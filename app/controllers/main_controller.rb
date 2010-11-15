@@ -78,7 +78,8 @@ class MainController < ApplicationController
             'http://www.latimes.com/business/la-fi-financial-reform-20100716,0,2303004.story',
             'http://www.washingtonpost.com/wp-dyn/content/article/2010/07/30/AR2010073000806.html',
             'http://www.newyorker.com/reporting/2010/08/30/100830fa_fact_mayer?currentPage=all',
-            'http://www.bloomberg.com/news/2010-09-14/wal-mart-accused-by-labor-union-farmers-of-suppressing-agriculture-prices.html']
+            'http://www.bloomberg.com/news/2010-09-14/wal-mart-accused-by-labor-union-farmers-of-suppressing-agriculture-prices.html',
+            'http://www.washingtonexaminer.com/politics/_Naked-scanners__-Lobbyists-join-the-war-on-terror-1540901-107548388.html']
             
     @articles = urls.map { |url| ContentPlucker.pluck_from url }
   end
