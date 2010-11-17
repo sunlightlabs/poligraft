@@ -10,7 +10,8 @@
   <%= yield :head %>
   <%= csrf_meta_tag %>
 
-  <script src="http://services.sunlightlabs.com/brandingbar/hat_js/poligraft/" type="text/javascript"></script> 
+  <script src="http://services.sunlightlabs.com/brandingbar/hat_js/poligraft/" type="text/javascript"></script>
+  <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
 </head>
 
 
@@ -21,7 +22,7 @@
         <h3>Run Poligraft from any web page with this bookmarklet</h3>
         <a class="button" href="javascript:location.href='<%= poligraft_url %>?url='+encodeURIComponent(location.href)">Poligraft</a>
         <span>Drag to your bookmarks toolbar</span>
-      </div>    
+      </div>
       <h1><a href="/">Poligraft</a></h1>
     </div>
   </div>
@@ -67,6 +68,26 @@
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+  </script>
+
+  <script type="text/javascript">
+  var _sf_async_config={uid:14977,domain:"poligraft.com"};
+  (function(){
+    function loadChartbeat() {
+      window._sf_endpt=(new Date()).getTime();
+      var e = document.createElement('script');
+      e.setAttribute('language', 'javascript');
+      e.setAttribute('type', 'text/javascript');
+      e.setAttribute('src',
+         (("https:" == document.location.protocol) ? "https://s3.amazonaws.com/" : "http://") +
+         "static.chartbeat.com/js/chartbeat.js");
+      document.body.appendChild(e);
+    }
+    var oldonload = window.onload;
+    window.onload = (typeof window.onload != 'function') ?
+       loadChartbeat : function() { oldonload(); loadChartbeat(); };
   })();
 
   </script>
