@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '>= 3.0.0.rc2'
+gem 'rails', '>= 3.0.3'
 
 gem 'json'
 gem 'nokogiri'
@@ -14,7 +14,7 @@ gem 'delayed_job', :git => "git://github.com/luigi/delayed_job.git"
 gem 'transparency_data'
 
 group :test do
-  gem "rspec-rails", ">= 2.0.0.beta.20"
+  gem "rspec-rails", ">= 2.1"
   gem 'rr'
   gem "autotest"
   gem "autotest-rails"
