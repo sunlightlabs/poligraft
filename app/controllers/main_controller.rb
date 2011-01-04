@@ -1,9 +1,9 @@
 class MainController < ApplicationController
 
   def index
-    
+
   end
-  
+
   def poligraft
     if (@result = Result.create!( :source_url => params[:url],
                                   :source_text => params[:text],
@@ -14,9 +14,13 @@ class MainController < ApplicationController
       else
         @result.process_entities
       end
-      
+
       if params[:json] == "1"
-        headers["Access-Control-Allow-Origin"] = "*" 
+        headers["Access-Control-Allow-Origin"] = "*"
+        headers['Access-Control-Allow-Methods'] = '*'
+        headers['Access-Control-Allow-Headers'] = '*'
+        headers['Access-Control-Max-Age'] = '172800'
+
         params[:callback] ? callback = '?callback=' + params[:callback] : callback = ''
         redirect_to "/" + @result.slug + ".json" + callback
       else
@@ -28,7 +32,7 @@ class MainController < ApplicationController
       redirect_to :root
     end
   end
-  
+
   def result
     @result = Result.first(:slug => params[:slug])
     if @result
@@ -36,22 +40,26 @@ class MainController < ApplicationController
 
       respond_to do |format|
         format.html
-        format.json do 
+        format.json do
           methods = []
           methods << :source_content unless @result.suppress_text
           response = @result.to_json(:methods => methods, :except => [:source_text])
           response = "#{params[:callback]}(#{response})" if params[:callback]
-          headers["Access-Control-Allow-Origin"] = "*" 
-          render :json => response, :status => response_code
+          headers["Access-Control-Allow-Origin"] = "*"
+          headers['Access-Control-Allow-Methods'] = '*'
+          headers['Access-Control-Allow-Headers'] = '*'
+          headers['Access-Control-Max-Age'] = '172800'
+
+         render :json => response, :status => response_code
         end
       end
     else
       render :file => "#{RAILS_ROOT}/public/404.html", :layout => false, :status => 404
     end
   end
-  
+
   def feedback
-    
+
     if params[:feedback]
       @feedback = Feedback.create(params[:feedback])
       if @feedback.save
@@ -64,11 +72,11 @@ class MainController < ApplicationController
       @feedback = Feedback.new
     end
   end
-    
+
   def about
-    
+
   end
-  
+
   def plucked
     urls = ['http://www.nytimes.com/2010/05/06/opinion/06gcollins.html',
             'http://www.politico.com/news/stories/0610/38121.html',
@@ -80,8 +88,8 @@ class MainController < ApplicationController
             'http://www.newyorker.com/reporting/2010/08/30/100830fa_fact_mayer?currentPage=all',
             'http://www.bloomberg.com/news/2010-09-14/wal-mart-accused-by-labor-union-farmers-of-suppressing-agriculture-prices.html',
             'http://www.washingtonexaminer.com/politics/_Naked-scanners__-Lobbyists-join-the-war-on-terror-1540901-107548388.html']
-            
+
     @articles = urls.map { |url| ContentPlucker.pluck_from url }
   end
-  
+
 end
