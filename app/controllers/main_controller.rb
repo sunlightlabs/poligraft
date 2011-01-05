@@ -4,6 +4,10 @@ class MainController < ApplicationController
 
   end
 
+  def verify_authenticity_token
+    (verified_request? || raise(ActionController::InvalidAuthenticityToken)) unless params[:json] == "1"
+  end
+
   def poligraft
     if request.method == "OPTIONS"
       headers["Access-Control-Allow-Origin"] = "*"
