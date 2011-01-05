@@ -39,6 +39,8 @@ Poligraft::Application.configure do
 
   # Enable threaded mode
   # config.threadsafe!
+  
+  config.active_support.deprecation = :notify
 
   config.action_mailer.delivery_method = :smtp
   mail_settings = YAML.load_file(Rails.root.to_s + "/config/mail.yml")
