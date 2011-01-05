@@ -5,6 +5,15 @@ class MainController < ApplicationController
   end
 
   def poligraft
+    if request.method == "OPTIONS"
+      headers["Access-Control-Allow-Origin"] = "*"
+      headers['Access-Control-Allow-Methods'] = '*'
+      headers['Access-Control-Allow-Headers'] = '*'
+      headers['Access-Control-Max-Age'] = '172800'
+      render :nothing => true
+      return
+    end
+
     if (@result = Result.create!( :source_url => params[:url],
                                   :source_text => params[:text],
                                   :suppress_text => params[:suppresstext]))
