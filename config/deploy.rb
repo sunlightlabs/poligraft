@@ -1,11 +1,16 @@
+$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
+require "rvm/capistrano"
+set :rvm_ruby_string, '1.9.2'
+set :rvm_type, :user
+
 set :environment, (ENV['target'] || 'staging')
 
 set :user, 'poligraft'
 set :application, user
-set :deploy_to, "/home/poligraft/www"
+set :deploy_to, "/projects/poligraft/www"
 
 if environment == 'production'
-  set :domain, "poligraft.com"
+  set :domain, "ec2-184-72-134-174.compute-1.amazonaws.com"
   set :num_workers, "6"
 else
   set :domain, "staging.poligraft.org"
@@ -19,7 +24,7 @@ set :deploy_via, :remote_cache
 
 role :web, domain
 role :app, domain
-role :db,  domain, :primary => true 
+role :db,  domain, :primary => true
 
 after "deploy", "deploy:cleanup"
 
@@ -28,14 +33,14 @@ namespace :deploy do
     run "touch #{current_path}/tmp/restart.txt"
     deploy.delayed_job
   end
-  
+
   task :delayed_job do
     run "cd #{current_path} && RAILS_ENV=production script/delayed_job stop"
     sleep 2
     run "#{shared_path}/kill_rogues.rb"
     run "cd #{current_path} && RAILS_ENV=production script/delayed_job -n #{num_workers} start"
-  end  
-  
+  end
+
   task :symlink_config do
     run "ln -s #{shared_path}/config/keys.yml #{release_path}/config/keys.yml"
     run "ln -s #{shared_path}/config/mail.yml #{release_path}/config/mail.yml"
@@ -56,6 +61,6 @@ namespace :bundler do
 end
 
 after 'deploy:update_code' do
-  bundle.install
+  #bundle.install
   deploy.symlink_config
 end
