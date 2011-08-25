@@ -37,7 +37,7 @@ namespace :deploy do
   task :delayed_job do
     run "cd #{current_path} && RAILS_ENV=production script/delayed_job stop"
     sleep 2
-    run "#{shared_path}/kill_rogues.rb"
+    #run "#{shared_path}/kill_rogues.rb"
     run "cd #{current_path} && RAILS_ENV=production script/delayed_job -n #{num_workers} start"
   end
 
@@ -60,7 +60,25 @@ namespace :bundler do
 
 end
 
-after 'deploy:update_code' do
-  #bundle.install
-  deploy.symlink_config
+namespace :unicorn do
+  desc "start unicorn"
+  task :start, :roles => :app, :except => { :no_release => true } do
+    run "cd #{current_path} && unicorn_rails -c #{current_path}/config/unicorn.rb -E production -D"
+  end
+  desc "stop unicorn"
+  task :stop, :roles => :app, :except => { :no_release => true } do
+    run "kill `cat #{unicorn_pid}`"
+  end
+  desc "graceful stop unicorn"
+  task :graceful_stop, :roles => :app, :except => { :no_release => true } do
+    run "kill -s QUIT `cat #{unicorn_pid}`"
+  end
+  desc "reload unicorn"
+  task :reload, :roles => :app, :except => { :no_release => true } do
+    run "kill -s USR2 `cat #{unicorn_pid}`"
+  end
 end
+
+after "deploy", "deploy:cleanup"
+after "deploy:update_code", "deploy:symlink_config"
+after "deploy:restart", "unicorn:reload"
