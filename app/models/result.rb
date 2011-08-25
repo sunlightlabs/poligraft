@@ -13,7 +13,7 @@ class Result
   key :processed, Boolean, :default => false
   key :suppress_text, Boolean, :default => false
   timestamps!
-  
+
   many :entities
 
   ensure_index :slug
@@ -25,10 +25,10 @@ class Result
   validates_presence_of :slug
   validates_presence_of :source_hash
   validates_uniqueness_of :slug
-  
+
   before_validation :ensure_slug, :ensure_source_title_text, :ensure_hash
   before_create :set_status
-  
+
   def source_content
     self.source_text.to_s
   end
@@ -59,10 +59,10 @@ class Result
       self.source_hash = Digest::MD5.hexdigest(self.source_content)
     end
   end
-  
+
   def set_status
     self.status = "Text Plucked"
-  end  
+  end
 
   def process_entities
     TransparencyData.api_key = KEYS["sunlight"]
@@ -85,10 +85,10 @@ class Result
                          "legislature", "state senate", "administration", "obama administration",
                          "republicans", "republican party", "democrats", "democratic party"]
     json.each do |k,v|
-      if v["_typeGroup"] == "entities" && 
-         desired_types.include?(v["_type"]) && 
+      if v["_typeGroup"] == "entities" &&
+         desired_types.include?(v["_type"]) &&
          !names_to_suppress.include?(v["name"].downcase)
-        
+
         unless v["_type"] == "Person" && !v["name"].include?(' ')
 
           self.entities << Entity.new(:entity_type => v["_type"],
@@ -100,7 +100,7 @@ class Result
     self.status = "Entities Extracted"
     self.save
   end
-  
+
   def link_entities
     hydra = Typhoeus::Hydra.new
     tdata = TransparencyData::Client.new(hydra)
@@ -114,10 +114,10 @@ class Result
                (result['type'] == "individual" && entity.entity_type == "Person") ||
                (result['type'] == "organization" && entity.entity_type == "Company") ||
                (result['type'] == "organization" && entity.entity_type == "Organization")
-              
-              if entity.tdata_count.nil? || 
+
+              if entity.tdata_count.nil? ||
                 entity.tdata_count < (result.count_given.to_i + result.count_received.to_i)
-                
+
                 entity.tdata_name = result.name
                 entity.tdata_type = result['type']
                 entity.tdata_id = result.id
@@ -131,43 +131,43 @@ class Result
       end # tdata.entities
     end # self.entities.each
     hydra.run
-    
+
     hydra2 = Typhoeus::Hydra.new
     tdata2 = TransparencyData::Client.new(hydra2)
     self.entities.each do |entity|
 
       if entity.tdata_type == "politician" && entity.tdata_count > 0
         tdata2.local_breakdown(entity.tdata_id) do |breakdown, error|
-          add_breakdown(breakdown, entity, :first   => "in_state", 
+          add_breakdown(breakdown, entity, :first   => "in_state",
                                                     :second  => "out_of_state",
                                                     :type    => "contributor")
         end
         tdata2.contributor_type_breakdown(entity.tdata_id) do |breakdown, error|
-          add_breakdown(breakdown, entity, :first   => "individual", 
+          add_breakdown(breakdown, entity, :first   => "individual",
                                                     :second  => "pac",
                                                     :type    => "contributor")
         end
 
         tdata2.top_sectors(entity.tdata_id, :limit => 6) do |sectors, error|
-        
+
           sectors.each do |sector|
-            if entity.top_industries.length < 3 && 
-               sector.name != "Other" && sector.name != "Unknown" && 
+            if entity.top_industries.length < 3 &&
+               sector.name != "Other" && sector.name != "Unknown" &&
                sector.name != "Administrative Use"
               entity.top_industries << sector.name
             end
           end
-        
+
         end
       elsif entity.tdata_type == "individual" && entity.tdata_count > 0
         tdata2.individual_party_breakdown(entity.tdata_id) do |breakdown, error|
-          add_breakdown(breakdown, entity, :first   => "dem", 
+          add_breakdown(breakdown, entity, :first   => "dem",
                                                     :second  => "rep",
                                                     :type    => "recipient")
         end
       elsif entity.tdata_type == "organization" && entity.tdata_count > 0
         tdata2.org_party_breakdown(entity.tdata_id) do |breakdown, error|
-          add_breakdown(breakdown, entity, :first   => "dem", 
+          add_breakdown(breakdown, entity, :first   => "dem",
                                                     :second  => "rep",
                                                     :type    => "recipient")
         end
@@ -201,7 +201,7 @@ class Result
                                                           :tdata_slug => contributor.tdata_slug)
                 self.contribution_count += 1
               end
-            end 
+            end
           end # unless contributor.tdata_id.blank?
         end # if self.entities.each do |contributor|
         recipient.save
@@ -212,7 +212,7 @@ class Result
     self.processed = true
     self.save
   end
-  
+
   def add_breakdown(breakdown, entity, params)
     first = breakdown.send("#{params[:first]}_amount").to_i
     second = breakdown.send("#{params[:second]}_amount").to_i

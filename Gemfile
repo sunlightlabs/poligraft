@@ -1,26 +1,24 @@
 source 'http://rubygems.org'
 
-gem 'rails', '>= 3.0.3'
+gem 'rails', '~> 3.0.10'
+gem 'unicorn', '~> 3.4'
+gem 'capistrano', '~> 2.5'
+gem 'nokogiri', '~> 1.5'
+gem 'calais', '~> 0.0.11'
+gem 'mongo_mapper', '~> 0.9.1'
+gem 'bson_ext', '~> 1.2'
 
-gem 'json'
-gem 'nokogiri'
-gem 'calais'
-gem 'bson'
-gem 'bson_ext'
-gem 'mongo'
-gem 'mongo_mapper'
 gem 'daemons', '1.0.10'
 gem 'delayed_job', :git => "git://github.com/luigi/delayed_job.git"
+
 gem 'transparency_data'
 
 group :test do
-  gem "rspec-rails", ">= 2.1"
-  gem 'rr'
-  gem "autotest"
-  gem "autotest-rails"
-  gem "autotest-growl"
-#  gem "autotest-fsevent"
-#  gem "autotest-inotify"
-  gem 'steak', '>= 0.4.0.beta.1'
-  gem 'capybara'
+  gem 'rspec-rails', '~> 2.5'
+  gem 'rr', '~> 1.0'
+  gem 'autotest'
+  gem 'autotest-rails'
+  gem 'autotest-growl'
+  gem 'steak', '~> 2.0'
+  gem 'capybara', '~> 1.0'
 end
