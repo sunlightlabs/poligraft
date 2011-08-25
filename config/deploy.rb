@@ -21,6 +21,8 @@ set :repository,  "git@github.com:sunlightlabs/poligraft.git"
 set :scm, 'git'
 set :use_sudo, false
 set :deploy_via, :remote_cache
+set :unicorn_pid, "#{current_path}/tmp/pids/unicorn.pid"
+
 
 role :web, domain
 role :app, domain
