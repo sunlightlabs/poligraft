@@ -4,7 +4,7 @@ class Result
 
   key :source_url, String
   key :source_title, String
-  key :source_text, Binary
+  key :source_text, String
   key :source_format, String
   key :source_hash, String
   key :slug, String
