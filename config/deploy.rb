@@ -65,7 +65,7 @@ end
 namespace :unicorn do
   desc "start unicorn"
   task :start, :roles => :app, :except => { :no_release => true } do
-    run "cd #{current_path} && unicorn_rails -c #{current_path}/config/unicorn.rb -E production -D"
+    run "cd #{current_path} && unicorn_rails -c #{current_path}/config/unicorn.rb -E production -D -p 8888"
   end
   desc "stop unicorn"
   task :stop, :roles => :app, :except => { :no_release => true } do
