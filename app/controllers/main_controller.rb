@@ -10,10 +10,6 @@ class MainController < ApplicationController
 
   def poligraft
     if request.method == "OPTIONS"
-      headers["Access-Control-Allow-Origin"] = "*"
-      headers['Access-Control-Allow-Methods'] = '*'
-      headers['Access-Control-Allow-Headers'] = '*'
-      headers['Access-Control-Max-Age'] = '172800'
       render :nothing => true
       return
     end
@@ -29,11 +25,6 @@ class MainController < ApplicationController
       end
 
       if params[:json] == "1"
-        headers["Access-Control-Allow-Origin"] = "*"
-        headers['Access-Control-Allow-Methods'] = '*'
-        headers['Access-Control-Allow-Headers'] = '*'
-        headers['Access-Control-Max-Age'] = '172800'
-
         params[:callback] ? callback = '?callback=' + params[:callback] : callback = ''
         redirect_to "/" + @result.slug + ".json" + callback
       else
@@ -58,12 +49,7 @@ class MainController < ApplicationController
           methods << :source_content unless @result.suppress_text
           response = @result.to_json(:methods => methods, :except => [:source_text])
           response = "#{params[:callback]}(#{response})" if params[:callback]
-          headers["Access-Control-Allow-Origin"] = "*"
-          headers['Access-Control-Allow-Methods'] = '*'
-          headers['Access-Control-Allow-Headers'] = '*'
-          headers['Access-Control-Max-Age'] = '172800'
-
-         render :json => response, :status => response_code
+          render :json => response, :status => response_code
         end
       end
     else
