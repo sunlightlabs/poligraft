@@ -10,8 +10,8 @@ set :application, user
 set :deploy_to, "/projects/poligraft/www"
 
 if environment == 'production'
-  set :domain, "ec2-184-72-134-174.compute-1.amazonaws.com"
-  set :num_workers, "6"
+  set :domain, "ec2-107-20-76-29.compute-1.amazonaws.com"
+  set :num_workers, "4"
 else
   set :domain, "staging.poligraft.org"
   set :num_workers, "6"
