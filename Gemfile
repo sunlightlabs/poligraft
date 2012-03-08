@@ -11,6 +11,7 @@ gem 'bson_ext', '~> 1.2'
 gem 'delayed_job', '~> 2.1'
 gem 'delayed_job_mongo_mapper', git: 'https://github.com/earbits/delayed_job_mongo_mapper.git'
 gem 'transparency_data'
+gem 'honeypot-captcha'
 
 group :test do
   gem 'rspec-rails', '~> 2.5'

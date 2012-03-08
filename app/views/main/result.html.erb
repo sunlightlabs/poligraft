@@ -14,15 +14,15 @@
   <div id="source_content">
     <% if @result.source_format == 'plain_text' -%>
     <%= simple_format formatted_content(@result) %>
-    <% else -%>    
+    <% else -%>
     <%= formatted_content(@result) %>
     <% end -%>
   </div>
-  
+
   <div id="source">
     <span id="dateCreated">This page was created on: <span class="date"><%= @result.created_at.to_formatted_s(:day) %></span></span>
     <% unless @result.source_url.blank? -%>
-    <span class="url"><%= link_to "View Original", @result.source_url %></span>
+    <span class="url"><%= link_to "View Original", @result.source_url, :rel => 'nofollow' %></span>
     <% end -%>
   </div>
 </div>
@@ -40,7 +40,7 @@
     <% if (@result.entities.nil? || @result.entities.empty?) && @result.processed %>
     <p id="nothing_found">Sorry, no results found.</p>
     <% end -%>
-    
+
     <% if @result.entities.nil? || @result.entities.empty? || @result.contribution_count == 0 -%>
     <div class="module" id="contribution_report" style="display:none;">
     <% else -%>
@@ -79,13 +79,13 @@
             <span class="influenceName">
               <%= link_to entity.tdata_name, influence_explorer_url(entity), "data-entity" => entity.name %>
             </span>
-            
+
             <% if entity.tdata_count > 0 -%>
             <%= image_tag piechart_url(entity), :alt => "Chart for #{entity.name}" %>
             <div class="clear"></div>
               <% unless entity.top_industries.empty? -%>
               <div class="industries">
-                <span class="industriesHeader">Top Contributing Industries:</span> 
+                <span class="industriesHeader">Top Contributing Industries:</span>
                 <ul>
                   <% entity.top_industries.each_index do |index| %>
                   <li>
@@ -96,21 +96,21 @@
                 <div class="clear"></div>
               </div>
               <% end -%>
-            
+
               <%= link_to "Learn More &raquo;".html_safe, influence_explorer_url(entity), :class => "ie_link" %>
-            
+
             <% end -%>
           </li>
         <% end -%>
       <% end -%>
       </ul>
     </div>
-    
+
     <div id="feedback">
       <img alt="checkbox image" src="/images/icon_check.png"/>
       <p>Help us improve Poligraft. <%= link_to "Leave feedback", feedback_path(:slug => @result.slug) %> if something seems amiss or confusing.</p>
     </div>
-    
+
   </div>
 </div>
 <div class="clear"></div>

@@ -7,7 +7,7 @@
     <%= content_tag :div, msg, :id => "flash_#{name}" %>
   <%- end -%>
 
-  <%= form_tag poligraft_path do -%>
+  <%= form_tag poligraft_path, :honeypot => true do -%>
   <ul>
     <li>
       <%= label_tag "url", "Enter URL:" %>
