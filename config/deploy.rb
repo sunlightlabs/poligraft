@@ -37,10 +37,10 @@ namespace :deploy do
   end
 
   task :delayed_job do
-    run "cd #{current_path} && RAILS_ENV=production script/delayed_job stop"
+    run "cd #{current_path} && RAILS_ENV=production bundle exec script/delayed_job stop"
     sleep 2
     #run "#{shared_path}/kill_rogues.rb"
-    run "cd #{current_path} && RAILS_ENV=production script/delayed_job -n #{num_workers} start"
+    run "cd #{current_path} && RAILS_ENV=production bundle exec script/delayed_job -n #{num_workers} start"
   end
 
   task :symlink_config do
@@ -65,7 +65,7 @@ end
 namespace :unicorn do
   desc "start unicorn"
   task :start, :roles => :app, :except => { :no_release => true } do
-    run "cd #{current_path} && unicorn_rails -c #{current_path}/config/unicorn.rb -E production -D -p 8888"
+    run "cd #{current_path} && bundle exec unicorn_rails -c #{current_path}/config/unicorn.rb -E production -D -p 8888"
   end
   desc "stop unicorn"
   task :stop, :roles => :app, :except => { :no_release => true } do

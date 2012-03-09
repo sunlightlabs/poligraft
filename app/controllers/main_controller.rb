@@ -14,9 +14,9 @@ class MainController < ApplicationController
       return
     end
 
-    if (@result = Result.create!( :source_url => params[:url],
-                                  :source_text => params[:text],
-                                  :suppress_text => params[:suppresstext]))
+    if params[:a_comment_body].blank? && (@result = Result.create!( :source_url => params[:url],
+                                                                    :source_text => params[:text],
+                                                                    :suppress_text => params[:suppresstext]))
       if params[:textonly] == true
         @result.processed = true
         @result.save
