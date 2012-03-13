@@ -8,7 +8,7 @@ gem 'inboxinfluence', :git => 'https://github.com/sunlightlabs/ruby-inboxinfluen
 gem 'mongo_mapper', '~> 0.9'
 gem 'bson_ext', '~> 1.2'
 
-gem 'delayed_job', '~> 2.1'
+gem 'delayed_job', '~> 2.1.1'
 gem 'delayed_job_mongo_mapper', git: 'https://github.com/earbits/delayed_job_mongo_mapper.git'
 gem 'transparency_data'
 gem 'hashie', '~> 0.2.0'
