@@ -68,7 +68,7 @@ class Result
     TransparencyData.api_key = KEYS["sunlight"]
     TransparencyData.api_domain = KEYS["ie"] if KEYS["ie"]
     InboxInfluence.api_key = KEYS["sunlight"]
-    results = InboxInfluence::Contextualizer.contextualize(self.source_content)
+    results = InboxInfluence::Client.contextualize(self.source_content)
     if results
       extract_entities(results)
       find_contributors

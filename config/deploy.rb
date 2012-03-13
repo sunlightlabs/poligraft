@@ -1,3 +1,4 @@
+# FIXME: Running passenger in production and nginx/unicorn in stage sucks!
 $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 require "rvm/capistrano"
 set :rvm_ruby_string, '1.9.2'
@@ -15,15 +16,16 @@ set :scm, 'git'
 if environment == 'production'
   set :domain, "ec2-107-20-76-29.compute-1.amazonaws.com"
   set :num_workers, "4"
+  set :unicorn_pid, "#{current_path}/tmp/pids/unicorn.pid"
 else
   set :domain, "ec2-50-16-84-118.compute-1.amazonaws.com"
   set :num_workers, "6"
   set :branch, "inbox-influence-api"
+  set :unicorn_pid, "#{shared_path}/pids/unicorn.pid"
 end
 
 set :use_sudo, false
 set :deploy_via, :remote_cache
-set :unicorn_pid, "#{current_path}/tmp/pids/unicorn.pid"
 
 
 role :web, domain
@@ -34,7 +36,9 @@ after "deploy", "deploy:cleanup"
 
 namespace :deploy do
   task :restart, :roles => :app, :except => { :no_release => true } do
-    run "touch #{current_path}/tmp/restart.txt"
+    if environment == 'production'
+      run "touch #{current_path}/tmp/restart.txt"
+    end
     deploy.delayed_job
   end
 
