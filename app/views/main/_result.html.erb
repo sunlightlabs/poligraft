@@ -34,15 +34,15 @@
   <ul class="reportData">
   <% @result.entities.each do |entity| -%>
     <% if entity.tdata_id.blank? && @result.status == "Entities Extracted" -%>
-      <li><%= entity.name %></li>
+      <li><%= entity.tdata_name %></li>
     <% elsif entity.tdata_id -%>
       <li>
         <span class="influenceName">
-          <%= link_to entity.tdata_name, influence_explorer_url(entity), "data-entity" => entity.name %>
+          <%= link_to entity.tdata_name, influence_explorer_url(entity), "data-entity" => entity.tdata_name %>
         </span>
 
         <% if entity.tdata_count > 0 -%>
-        <%= image_tag piechart_url(entity), :alt => "Chart for #{entity.name}" %>
+        <%= image_tag piechart_url(entity), :alt => "Chart for #{entity.tdata_name}" %>
         <div class="clear"></div>
           <% unless entity.top_industries.empty? -%>
           <div class="industries">
