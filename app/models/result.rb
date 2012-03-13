@@ -67,118 +67,66 @@ class Result
   def process_entities
     TransparencyData.api_key = KEYS["sunlight"]
     TransparencyData.api_domain = KEYS["ie"] if KEYS["ie"]
-    extract_entities
-    link_entities
-    find_contributors
+    InboxInfluence.api_key = KEYS["sunlight"]
+    results = InboxInfluence::Contextualizer.contextualize(self.source_content)
+    if results
+      extract_entities(results)
+      find_contributors
+    end
     self.source_text = '' if self.suppress_text == true
     self.save
   end
 
-  def extract_entities
-    json_string = Calais.enlighten( :content => self.source_content,
-                                    :content_type => (self.source_url.blank? ? :raw : :html),
-                                    :output_format => :json,
-                                    :license_id => KEYS["calais"] )
-    json = JSON.parse(json_string)
-    desired_types = %w{Person Organization Company}
+  def extract_entities(results)
     names_to_suppress = ["white house", "house", "senate", "congress", "assembly", "supreme court",
                          "legislature", "state senate", "administration", "obama administration",
                          "republicans", "republican party", "democrats", "democratic party"]
-    json.each do |k,v|
-      if v["_typeGroup"] == "entities" &&
-         desired_types.include?(v["_type"]) &&
-         !names_to_suppress.include?(v["name"].downcase)
 
-        unless v["_type"] == "Person" && !v["name"].include?(' ')
-
-          self.entities << Entity.new(:entity_type => v["_type"],
-                                      :name => v["name"],
-                                      :relevance => v["relevance"])
-        end
-      end
-    end
-    self.status = "Entities Extracted"
-    self.save
-  end
-
-  def link_entities
-    hydra = Typhoeus::Hydra.new
-    tdata = TransparencyData::Client.new(hydra)
-    self.entities.each do |entity|
-      tdata.entities(:search => entity.name) do |results, error|
-        if error
-          Rails.logger.info "Error in link_entities: #{error}"
-        else
-          results.each do |result|
-            if (result['type'] == "politician" && entity.entity_type == "Person") ||
-               (result['type'] == "individual" && entity.entity_type == "Person") ||
-               (result['type'] == "organization" && entity.entity_type == "Company") ||
-               (result['type'] == "organization" && entity.entity_type == "Organization")
-
-              if entity.tdata_count.nil? ||
-                entity.tdata_count < (result.count_given.to_i + result.count_received.to_i)
-
-                entity.tdata_name = result.name
-                entity.tdata_type = result['type']
-                entity.tdata_id = result.id
-                entity.tdata_slug = result.name.parameterize
-                entity.tdata_count = result.count_given + result.count_received
-                entity.save
-              end
-            end
-          end # results.each
-        end # if error
-      end # tdata.entities
-    end # self.entities.each
-    hydra.run
-
-    hydra2 = Typhoeus::Hydra.new
-    tdata2 = TransparencyData::Client.new(hydra2)
-    self.entities.each do |entity|
-
-      if entity.tdata_type == "politician" && entity.tdata_count > 0
-        tdata2.local_breakdown(entity.tdata_id) do |breakdown, error|
-          add_breakdown(breakdown, entity, :first   => "in_state",
-                                                    :second  => "out_of_state",
-                                                    :type    => "contributor")
-        end
-        tdata2.contributor_type_breakdown(entity.tdata_id) do |breakdown, error|
-          add_breakdown(breakdown, entity, :first   => "individual",
-                                                    :second  => "pac",
-                                                    :type    => "contributor")
+    results.each do |result|
+      unless names_to_suppress.include?(result.entity_data.name.downcase)
+        entity = Entity.new({:name => result.entity_data.name,
+                             :type => result.entity_data.type,
+                             :tdata_id => result.entity_data.id,
+                             :slug => result.entity_data.slug,
+                             })
+        begin
+          local_breakdown = result.entity_data.campaign_finance.contributor_local_breakdown
+          breakdown = Hashie::Mash.new({:in_state_amount => local_breakdown.in_state, :out_of_state_amount => local_breakdown.out_of_state})
+          add_breakdown(breakdown, entity, :first => 'in_state', :second => 'out_of_state', :type => 'contributor')
+        rescue nil
         end
 
-        tdata2.top_sectors(entity.tdata_id, :limit => 6) do |sectors, error|
+        begin
+          contributor_type_breakdown = result.entity_data.contributor_type_breakdown
+          breakdown = Hashie::Mash.new({:pac_amount => contributor_type_breakdown.pac, :individual_amount => contributor_type_breakdown.individual})
+          add_breakdown(breakdown, entity, :first => 'individual', :second => 'pac', :type => 'contributor')
+        rescue nil
+        end
 
-          sectors.each do |sector|
+        begin
+          result.entity_data.campaign_finance.top_industries.each do |industry|
             if entity.top_industries.length < 3 &&
-               sector.name != "Other" && sector.name != "Unknown" &&
-               sector.name != "Administrative Use"
-              entity.top_industries << sector.name
+               sector.name != 'Other' &&
+               sector.name != 'Unknown' &&
+               sector.name != 'Administrative Use'
+              entity.top_industries << industry[:name]
             end
           end
+        rescue nil
+        end
 
+        begin
+          recipient_breakdown = result.entity_data.campaign_finance.recipient_breakdown
+          breakdown = Hashie::Mash.new({:dem_amount => recipient_breakdown.dem, :rep_amount => recipient_breakdown.rep})
+          add_breakdown(breakdown, entity, :first => 'dem', :second => 'rep', :type => 'recipient')
+        rescue nil
         end
-      elsif entity.tdata_type == "individual" && entity.tdata_count > 0
-        tdata2.individual_party_breakdown(entity.tdata_id) do |breakdown, error|
-          add_breakdown(breakdown, entity, :first   => "dem",
-                                                    :second  => "rep",
-                                                    :type    => "recipient")
-        end
-      elsif entity.tdata_type == "organization" && entity.tdata_count > 0
-        tdata2.org_party_breakdown(entity.tdata_id) do |breakdown, error|
-          add_breakdown(breakdown, entity, :first   => "dem",
-                                                    :second  => "rep",
-                                                    :type    => "recipient")
-        end
+
+        self.entities << entity
       end
-      entity.save
     end
-    hydra2.run
-
     self.status = "Entities Linked"
     self.save
-
   end
 
   def find_contributors

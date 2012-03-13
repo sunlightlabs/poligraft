@@ -9,16 +9,18 @@ set :user, 'poligraft'
 set :application, user
 set :deploy_to, "/projects/poligraft/www"
 
+set :repository,  "git@github.com:sunlightlabs/poligraft.git"
+set :scm, 'git'
+
 if environment == 'production'
   set :domain, "ec2-107-20-76-29.compute-1.amazonaws.com"
   set :num_workers, "4"
 else
-  set :domain, "staging.poligraft.org"
+  set :domain, "ec2-50-16-84-118.compute-1.amazonaws.com"
   set :num_workers, "6"
+  set :branch, "inbox-influence-api"
 end
 
-set :repository,  "git@github.com:sunlightlabs/poligraft.git"
-set :scm, 'git'
 set :use_sudo, false
 set :deploy_via, :remote_cache
 set :unicorn_pid, "#{current_path}/tmp/pids/unicorn.pid"

@@ -14,9 +14,10 @@ class MainController < ApplicationController
       return
     end
 
-    if params[:a_comment_body].blank? && (@result = Result.create!( :source_url => params[:url],
-                                                                    :source_text => params[:text],
-                                                                    :suppress_text => params[:suppresstext]))
+    captcha = params[:a_comment_body]
+    if captcha.blank? && !captcha.nil? && (@result = Result.create!( :source_url => params[:url],
+                                                                     :source_text => params[:text],
+                                                                     :suppress_text => params[:suppresstext]))
       if params[:textonly] == true
         @result.processed = true
         @result.save
@@ -52,6 +53,16 @@ class MainController < ApplicationController
           render :json => response, :status => response_code
         end
       end
+    else
+      render :file => "#{RAILS_ROOT}/public/404.html", :layout => false, :status => 404
+    end
+  end
+
+  def result_widget
+    @result = Result.first(:slug => params[:slug])
+    if @result
+      response_code = @result.processed ? 200 : 202
+      render :layout => false
     else
       render :file => "#{RAILS_ROOT}/public/404.html", :layout => false, :status => 404
     end
