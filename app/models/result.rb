@@ -83,12 +83,16 @@ class Result
                          "republicans", "republican party", "democrats", "democratic party"]
 
     results.each do |result|
-      unless names_to_suppress.include?(result.entity_data.name.downcase)
+      campfin = result.entity_data.campaign_finance rescue {}
+      unless names_to_suppress.include?(result.entity_data.name.downcase) ||
+             (campfin.contributor_type_breakdown.nil? && campfin.recipient_breakdown.nil?)
         entity = Entity.new({:tdata_name => result.entity_data.name,
                              :tdata_type => result.entity_data.type,
                              :tdata_id => result.entity_data.id,
                              :tdata_slug => result.entity_data.slug,
+                             :tdata_count => 1,
                              })
+
         begin
           local_breakdown = result.entity_data.campaign_finance.contributor_local_breakdown
           breakdown = Hashie::Mash.new({:in_state_amount => local_breakdown.in_state, :out_of_state_amount => local_breakdown.out_of_state})
