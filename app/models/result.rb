@@ -93,14 +93,16 @@ class Result
           local_breakdown = result.entity_data.campaign_finance.contributor_local_breakdown
           breakdown = Hashie::Mash.new({:in_state_amount => local_breakdown.in_state, :out_of_state_amount => local_breakdown.out_of_state})
           add_breakdown(breakdown, entity, :first => 'in_state', :second => 'out_of_state', :type => 'contributor')
-        rescue nil
+        rescue 
+          nil
         end
 
         begin
           contributor_type_breakdown = result.entity_data.contributor_type_breakdown
           breakdown = Hashie::Mash.new({:pac_amount => contributor_type_breakdown.pac, :individual_amount => contributor_type_breakdown.individual})
           add_breakdown(breakdown, entity, :first => 'individual', :second => 'pac', :type => 'contributor')
-        rescue nil
+        rescue 
+          nil
         end
 
         begin
@@ -112,14 +114,16 @@ class Result
               entity.top_industries << industry[:name]
             end
           end
-        rescue nil
+        rescue 
+          nil
         end
 
         begin
           recipient_breakdown = result.entity_data.campaign_finance.recipient_breakdown
           breakdown = Hashie::Mash.new({:dem_amount => recipient_breakdown.dem, :rep_amount => recipient_breakdown.rep})
           add_breakdown(breakdown, entity, :first => 'dem', :second => 'rep', :type => 'recipient')
-        rescue nil
+        rescue 
+          nil
         end
 
         self.entities << entity
