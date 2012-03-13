@@ -19,7 +19,7 @@ if environment == 'production'
   set :unicorn_pid, "#{current_path}/tmp/pids/unicorn.pid"
 else
   set :domain, "ec2-50-16-84-118.compute-1.amazonaws.com"
-  set :num_workers, "6"
+  set :num_workers, "2"
   set :branch, "inbox-influence-api"
   set :unicorn_pid, "#{shared_path}/pids/unicorn.pid"
 end
