@@ -1,4 +1,4 @@
-Poligraft::Application.routes.draw do |map|
+Poligraft::Application.routes.draw do
   root :to => "main#index"
   match 'poligraft' => "main#poligraft", :as => 'poligraft', :via => [:get, :post, :options]
   match 'plucked' => "main#plucked", :as => 'plucked'

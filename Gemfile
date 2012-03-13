@@ -15,11 +15,12 @@ gem 'hashie', '~> 0.2.0'
 gem 'honeypot-captcha'
 
 group :test do
+  gem 'ruby-debug19', :require => 'ruby-debug'
   gem 'rspec-rails', '~> 2.5'
   gem 'rr', '~> 1.0'
   gem 'autotest'
   gem 'autotest-rails'
   gem 'autotest-growl'
   gem 'steak', '~> 2.0'
-  gem 'capybara', '~> 1.0'
+  gem 'capybara', '~> 1.1.0'
 end
