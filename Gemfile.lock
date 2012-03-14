@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/sunlightlabs/ruby-inboxinfluence.git
-  revision: f9c4ce2e1c17a5c171898b13faaefa433fe287b9
+  revision: fc0b532cd667233688039f2f064e4073a4fb45d3
   specs:
     inboxinfluence (0.1.0)
       hashie (>= 0.2.0)
