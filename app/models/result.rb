@@ -83,6 +83,8 @@ class Result
                          "republicans", "republican party", "democrats", "democratic party"]
 
     results.each do |result|
+      result.matched_text.keep_if {|match| match =~ /^[A-Z0-9]/ }
+      continue unless result.matched_text.any?
       campfin = result.entity_data.campaign_finance rescue {}
       unless names_to_suppress.include?(result.entity_data.name.downcase) ||
              (campfin.contributor_type_breakdown.nil? && campfin.recipient_breakdown.nil?)
