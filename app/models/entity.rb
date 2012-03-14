@@ -2,6 +2,7 @@ class Entity
   include MongoMapper::EmbeddedDocument
 
   key :tdata_id, String
+  key :matched_names, Array
   key :tdata_name, String
   key :tdata_type, String
   key :tdata_slug, String

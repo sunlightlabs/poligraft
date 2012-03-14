@@ -35,10 +35,10 @@
   <% @result.entities.each do |entity| -%>
     <% if entity.tdata_id.blank? && @result.status == "Entities Extracted" -%>
       <li><%= entity.tdata_name %></li>
-    <% elsif entity.tdata_id -%>
+    <% elsif entity.tdata_id && entity.matched_names.any? -%>
       <li>
         <span class="influenceName">
-          <%= link_to entity.tdata_name, influence_explorer_url(entity), "data-entity" => entity.tdata_name %>
+          <%= link_to entity.tdata_name, influence_explorer_url(entity), "data-entity" => entity.matched_names.first.parameterize %>
         </span>
 
         <% if entity.tdata_count > 0 -%>

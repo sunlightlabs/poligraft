@@ -83,8 +83,8 @@ class Result
                          "republicans", "republican party", "democrats", "democratic party"]
 
     results.each do |result|
-      result.matched_text.keep_if {|match| match =~ /^[A-Z0-9]/ }
-      next unless result.matched_text.any?
+      matches = result.matched_text.keep_if {|match| match =~ /^[A-Z0-9]/ }
+      next unless matches.any?
       campfin = result.entity_data.campaign_finance rescue {}
       unless names_to_suppress.include?(result.entity_data.name.downcase) ||
              (campfin.contributor_type_breakdown.nil? && campfin.recipient_breakdown.nil?)
@@ -93,6 +93,7 @@ class Result
                              :tdata_id => result.entity_data.id,
                              :tdata_slug => result.entity_data.slug,
                              :tdata_count => 1,
+                             :matched_names => matches
                              })
 
         if (local_breakdown = campfin.contributor_local_breakdown)
