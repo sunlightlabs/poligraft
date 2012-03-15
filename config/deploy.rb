@@ -83,7 +83,9 @@ namespace :unicorn do
   end
   desc "reload unicorn"
   task :reload, :roles => :app, :except => { :no_release => true } do
-    run "kill -s USR2 `cat #{unicorn_pid}`"
+    unicorn.stop
+    unicorn.start
+    # run "kill -s USR2 `cat #{unicorn_pid}`"
   end
 end
 
