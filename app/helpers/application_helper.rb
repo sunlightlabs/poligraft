@@ -1,9 +1,20 @@
 module ApplicationHelper
 
+  def highlight_entities(text, phrases)
+    if text.blank? || phrases.blank?
+      text
+    else
+      match = phrases.map {|p| Regexp.escape(p) }.join('|')
+      text.gsub(/(#{match})(?![^<]*?>)/i) do |match|
+        "<span class='highlight' data-entity='#{match.parameterize}'>#{match}</span>"
+      end
+    end.html_safe
+  end
+
   def formatted_content(result)
-    highlight(result.source_content.html_safe,
-              (result.entities.map {|e| e.matched_names if e.tdata_id }.flatten.compact rescue []),
-              :highlighter => '<span class="highlight" data-entity="\1.parameterize">\1</span>')
+    text = result.source_content.html_safe
+    phrases = result.entities.map {|e| e.matched_names if e.tdata_id }.flatten.compact rescue []
+    highlight_entities(text, phrases)
   end
 
   def influence_explorer_url(entity)

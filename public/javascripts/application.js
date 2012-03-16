@@ -1,27 +1,27 @@
 $(function() {
-  
+
   if (typeof slug !== "undefined" && slug !== null ) {
-    
+
     $("input#share_url").click(function() {$(this).select()});
-    
+
     $("span.highlight").click(triggerHighlights);
-    
+
     if (entityCount == 0) {
       $("div#extracted_entities").hide();
     }
-    
+
     var doneStatus = "Contributors Identified";
     var ranEntitiesExtracted = false;
     var ranEntitiesLinked = false;
     var ranContributorsIdentified = false;
-    
+
     if (location.hash == "#done" && resultStatus != doneStatus) {
       $.getJSON(slug + '.json', function(result) {
         result.status = "Entities Extracted";
         if (ranEntitiesExtracted == false) {
           ranEntitiesExtracted = entitiesExtracted(result);
         }
-        result.status = "Entities Linked";      
+        result.status = "Entities Linked";
         if (ranEntitiesExtracted == true && ranEntitiesLinked == false) {
           ranEntitiesLinked = entitiesLinked(result);
         }
@@ -30,17 +30,17 @@ $(function() {
           ranContributorsIdentified = contributorsIdentified(result);
         }
       });
-      
+
     } else if (resultStatus != doneStatus) {
       $("div#processingBar").fadeIn("slow");
       var maxPolls = 60;
       var counter = 0;
-      var intervalId = setInterval(function() { 
+      var intervalId = setInterval(function() {
         $.getJSON(slug + '.json', function(result) {
 
           if (ranEntitiesExtracted == false) {
             ranEntitiesExtracted = entitiesExtracted(result);
-          }        
+          }
           if (ranEntitiesExtracted == true && ranEntitiesLinked == false) {
             ranEntitiesLinked = entitiesLinked(result);
           }
@@ -52,11 +52,11 @@ $(function() {
           if (counter == maxPolls || result.status == doneStatus) {
             $("div#processingBar").slideUp();
             location.hash = 'done';
-            
+
             if (_(result.entities).isEmpty()) {
               $("div#processingBar").after('<p id="nothing_found">Sorry, no results found.</p>');
             }
-            
+
             clearInterval(intervalId);
           }
           counter++;
@@ -64,7 +64,7 @@ $(function() {
       }, 2000);
     }
   }
-  
+
 });
 
 var triggerHighlights = function() {
@@ -77,10 +77,10 @@ var triggerHighlights = function() {
 var entitiesExtracted = function(result, processedStatus) {
   var showEntities = false
   if ((result.status == "Entities Extracted" || result.status == "Entities Linked" || result.status == "Contributors Identified") && !_(result.entities).isEmpty()) {
-    
+
     // populate the entities table
     _(result.entities).each(function(e) {
-      $("div#extracted_entities ul").append('<li>' + e.name  + '</li>').fadeIn();
+      $("div#extracted_entities ul").append('<li>' + e.tdata_name  + '</li>').fadeIn();
       showEntities = true;
     });
     if (showEntities) {
@@ -97,17 +97,17 @@ var entitiesLinked = function(result, processedStatus) {
 
     // highlight the source text
     $("div#source_content").highlight(_(result.entities).map(
-                                        function(e) { 
-                                          if (e.tdata_id) { return e.name; } 
+                                        function(e) {
+                                          if (e.tdata_id) { return e.matched_names; }
                                           else { return ""; }
                                          }));
     $("span.highlight").attr("data-entity", function() { return $(this).text(); });
-    
+
     // link to Influence Explorer
     _(result.entities).each(function(e) {
 
       if (e.tdata_id) {
-        
+
         if (e.tdata_count > 0 && _.isEmpty(e.top_industries)) {
           var entityEntry = "<li>" + influence_explorer_link(e, true) + breakdown_chart(e) + more_link(e) + "</li>";
         } else if (e.tdata_count > 0 && e.top_industries.length > 0) {
@@ -115,12 +115,12 @@ var entitiesLinked = function(result, processedStatus) {
         } else {
           var entityEntry = "<li>" + influence_explorer_link(e, true) + "</li>";
         }
-                
-        $("div#extracted_entities ul li:contains('" + e.name  + "')").replaceWith(entityEntry);
+
+        $("div#extracted_entities ul li:contains('" + e.tdata_name  + "')").replaceWith(entityEntry);
       } else {
-        $("div#extracted_entities ul li:contains('" + e.name  + "')").fadeOut();
+        $("div#extracted_entities ul li:contains('" + e.tdata_name  + "')").fadeOut();
       }
-      
+
     });
     return true;
   } else {
@@ -131,12 +131,12 @@ var entitiesLinked = function(result, processedStatus) {
 var contributorsIdentified = function(result, processedStatus) {
   var showReport = false;
   if (result.status == "Contributors Identified" && !_(result.entities).isEmpty()) {
-    
+
     // list all contributor/recipient relationships
     _(result.entities).each(function(e) {
       if (e.contributors) {
         _(e.contributors).each(function(contributor) {
-          $("div#contribution_report ul").append('<li>' + influence_explorer_link(contributor, false) + 
+          $("div#contribution_report ul").append('<li>' + influence_explorer_link(contributor, false) +
                                                  ' has aggregated $' +  commafy(contributor.amount) +
                                                  ' to ' + influence_explorer_link(e, false) + '</li>');
           showReport = true;
@@ -160,8 +160,8 @@ var influence_explorer_link = function(entity, addSpan) {
   if (!_.isUndefined(entity.extracted_name)) {
     entityName = entity.extracted_name;
   }
-  var link = '<a href="http://influenceexplorer.com/' + entity.tdata_type + 
-         '/' + entity.tdata_slug + '/' + entity.tdata_id + '" data-entity="' +  
+  var link = '<a href="http://influenceexplorer.com/' + entity.tdata_type +
+         '/' + entity.tdata_slug + '/' + entity.tdata_id + '" data-entity="' +
          entityName + '">' + entity.tdata_name +'</a>';
   if (addSpan) {
     link = '<span class="influenceName">' + link + '</span>';
@@ -171,13 +171,13 @@ var influence_explorer_link = function(entity, addSpan) {
 
 var more_link = function(entity) {
 
-  return '<a class="ie_link" href="http://influenceexplorer.com/' + entity.tdata_type + 
+  return '<a class="ie_link" href="http://influenceexplorer.com/' + entity.tdata_type +
          '/' + entity.tdata_slug + '/' + entity.tdata_id + '">Learn More &raquo;</a>'
 }
 
 var breakdown_chart = function(entity) {
   var url = "http://chart.apis.google.com/chart?cht=p&chf=bg,s,F3F4EE&chp=1.57";
-    
+
   if (entity.tdata_type == "politician") {
     url += "&chs=140x50";
     url += "&chco=ABDEBF|169552";
@@ -193,10 +193,10 @@ var breakdown_chart = function(entity) {
 }
 
 var top_industries = function(entity) {
-  
+
   var industries = '<div class="industries"><span class="industriesHeader">Top Contributing Industries</span><ul>';
 
-  for (i in entity.top_industries) { 
+  for (i in entity.top_industries) {
     industries += '<li>' + entity.top_industries[i]
     if (i < entity.top_industries.length - 1) {
       industries += ", ";
