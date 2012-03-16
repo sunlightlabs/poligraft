@@ -4,7 +4,7 @@ $(function() {
 
     $("input#share_url").click(function() {$(this).select()});
 
-    $("span.highlight").click(triggerHighlights);
+    $("#source_content").delegate("span.highlight", "click", triggerHighlights);
 
     if (entityCount == 0) {
       $("div#extracted_entities").hide();
@@ -101,7 +101,7 @@ var entitiesLinked = function(result, processedStatus) {
                                           if (e.tdata_id) { return e.matched_names; }
                                           else { return ""; }
                                          }));
-    $("span.highlight").attr("data-entity", function() { return $(this).text(); });
+    $("span.highlight").attr("data-entity", function() { return _.slugify($(this).text()); });
 
     // link to Influence Explorer
     _(result.entities).each(function(e) {
@@ -146,7 +146,6 @@ var contributorsIdentified = function(result, processedStatus) {
     if (showReport) {
       $("div#contribution_report").fadeIn();
     }
-    $("span.highlight").click(triggerHighlights);
 
     return true;
   } else {
@@ -156,9 +155,9 @@ var contributorsIdentified = function(result, processedStatus) {
 
 var influence_explorer_link = function(entity, addSpan) {
 
-  var entityName = entity.name;
-  if (!_.isUndefined(entity.extracted_name)) {
-    entityName = entity.extracted_name;
+  var entityName = entity.tdata_slug;
+  if (!_.isUndefined(entity.matched_names)) {
+    entityName = _.slugify(entity.matched_names[0]);
   }
   var link = '<a href="http://influenceexplorer.com/' + entity.tdata_type +
          '/' + entity.tdata_slug + '/' + entity.tdata_id + '" data-entity="' +
