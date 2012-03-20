@@ -1,0 +1,13 @@
+<% unless superlatives.empty? -%>
+<div class="industries">
+  <span class="industriesHeader"><%= title %>:</span>
+  <ul>
+    <% superlatives.each_index do |index| %>
+    <li>
+      <%= superlatives[index] %><%= ", " if index < superlatives.length - 1  %>
+    </li>
+    <% end -%>
+  </ul>
+  <div class="clear"></div>
+</div>
+<% end -%>

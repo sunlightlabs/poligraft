@@ -10,6 +10,8 @@ class Entity
   key :contributor_breakdown, Hash
   key :recipient_breakdown, Hash
   key :top_industries, Array
+  key :lobbying_clients, Array
+  key :lobbying_issues, Array
 
   many :contributors
 end

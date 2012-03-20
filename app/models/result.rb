@@ -83,16 +83,27 @@ class Result
                          "republicans", "republican party", "democrats", "democratic party"]
 
     results.each do |result|
+      # only keep proper noun matches
       matches = result.matched_text.keep_if {|match| match =~ /^[A-Z0-9]/ }
       next unless matches.any?
+
+      puts result.entity_data.name
+      puts matches
+      puts '---'
+
       campfin = result.entity_data.campaign_finance rescue {}
-      unless names_to_suppress.include?(result.entity_data.name.downcase) ||
-             (campfin.contributor_type_breakdown.nil? && campfin.recipient_breakdown.nil?)
+      lobbying = result.entity_data.lobbying rescue {}
+      amt_given = campfin.recipient_breakdown.dem + campfin.recipient_breakdown.rep rescue 0.0
+      amt_received = campfin.contributor_type_breakdown.pac + campfin.contributor_type_breakdown.individual rescue 0.0
+      amt_received += campfin.contributor_local_breakdown.in_state + campfin.contributor_local_breakdown.out_of_state rescue 0.0
+      total_amt = amt_given + amt_received
+
+      unless names_to_suppress.include?(result.entity_data.name.downcase)
         entity = Entity.new({:tdata_name => result.entity_data.name,
                              :tdata_type => result.entity_data.type,
                              :tdata_id => result.entity_data.id,
                              :tdata_slug => result.entity_data.slug,
-                             :tdata_count => 1,
+                             :tdata_count => total_amt,
                              :matched_names => matches
                              })
 
@@ -100,27 +111,35 @@ class Result
           breakdown = Hashie::Mash.new({:in_state_amount => local_breakdown.in_state, :out_of_state_amount => local_breakdown.out_of_state})
           add_breakdown(breakdown, entity, :first => 'in_state', :second => 'out_of_state', :type => 'contributor')
         end
+
         if (contributor_type_breakdown = campfin.contributor_type_breakdown)
           breakdown = Hashie::Mash.new({:pac_amount => contributor_type_breakdown.pac, :individual_amount => contributor_type_breakdown.individual})
           add_breakdown(breakdown, entity, :first => 'individual', :second => 'pac', :type => 'contributor')
         end
-        begin
-          campfin.top_industries.each do |industry|
-            if entity.top_industries.length < 5 &&
-               industry.name != 'Other' &&
-               industry.name !~ /Unknown$/i &&
-               industry.name != 'Administrative Use' &&
-               entity.top_industries.exclude?(industry.name)
-              entity.top_industries << industry[:name]
-            end
-          end
-        rescue
-          nil
-        end
+
         if (recipient_breakdown = campfin.recipient_breakdown)
           breakdown = Hashie::Mash.new({:dem_amount => recipient_breakdown.dem, :rep_amount => recipient_breakdown.rep})
           add_breakdown(breakdown, entity, :first => 'dem', :second => 'rep', :type => 'recipient')
         end
+
+        lobbying.clients.each do |client|
+          entity.lobbying_clients << client.name
+        end if lobbying.clients.present?
+
+        lobbying.top_issues.each do |issue|
+          entity.lobbying_issues << issue.name
+        end if lobbying.top_issues.present?
+
+        campfin.top_industries.each do |industry|
+          if entity.top_industries.length < 5 &&
+             industry.name != 'Other' &&
+             industry.name !~ /(unknown|listed or discovered)$/i &&
+             industry.name != 'Administrative Use' &&
+             entity.top_industries.exclude?(industry.name)
+            entity.top_industries << industry.name
+          end
+        end if campfin.top_industries.present?
+
         self.entities << entity
       end
     end
@@ -141,7 +160,7 @@ class Result
                 Rails.logger.info "Error in find_contributors: #{error}"
               elsif summary.amount.to_i > 0
                 recipient.contributors << Contributor.new(:tdata_name => summary.contributor_name,
-                                                          :extracted_name => contributor.tdata_name,
+                                                          :matched_names => contributor.matched_names,
                                                           :amount => summary.amount,
                                                           :tdata_id => contributor.tdata_id,
                                                           :tdata_type => contributor.tdata_type,

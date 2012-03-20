@@ -62,7 +62,7 @@ class MainController < ApplicationController
     @result = Result.first(:slug => params[:slug])
     if @result
       response_code = @result.processed ? 200 : 202
-      render :layout => false
+      render :layout => false, :status => response_code
     else
       render :file => "#{RAILS_ROOT}/public/404.html", :layout => false, :status => 404
     end

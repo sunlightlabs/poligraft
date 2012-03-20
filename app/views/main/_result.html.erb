@@ -15,7 +15,7 @@
     <% if recipient.contributors -%>
     <% recipient.contributors.each do |contributor| -%>
     <li>
-      <%= link_to contributor.tdata_name, influence_explorer_url(contributor), "data-entity" => contributor.extracted_name %> has aggregated $<%= number_with_delimiter contributor.amount %> to <%= link_to recipient.name, influence_explorer_url(recipient), "data-entity" => recipient.name %>
+      <%= link_to contributor.tdata_name, influence_explorer_url(contributor), "data-entity" => contributor.matched_names.first.parameterize, "data-matches" => contributor.matched_names.to_json %> has aggregated $<%= number_with_delimiter contributor.amount %> to <%= link_to recipient.tdata_name, influence_explorer_url(recipient), "data-entity" => recipient.matched_names.first.parameterize, "data-matches" => recipient.matched_names.to_json %>
     </li>
     <% end -%>
     <% end -%>
@@ -38,29 +38,19 @@
     <% elsif entity.tdata_id && entity.matched_names.any? -%>
       <li>
         <span class="influenceName">
-          <%= link_to entity.tdata_name, influence_explorer_url(entity), "data-entity" => entity.matched_names.first.parameterize %>
+          <%= link_to entity.tdata_name, influence_explorer_url(entity), "data-entity" => entity.matched_names.first.parameterize, "data-matches" => entity.matched_names.to_json %>
         </span>
 
         <% if entity.tdata_count > 0 -%>
-        <%= image_tag piechart_url(entity), :alt => "Chart for #{entity.tdata_name}" %>
-        <div class="clear"></div>
-          <% unless entity.top_industries.empty? -%>
-          <div class="industries">
-            <span class="industriesHeader">Top Contributing Industries:</span>
-            <ul>
-              <% entity.top_industries.each_index do |index| %>
-              <li>
-                <%= entity.top_industries[index] %><%= ", " if index < entity.top_industries.length - 1  %>
-              </li>
-              <% end -%>
-            </ul>
-            <div class="clear"></div>
-          </div>
-          <% end -%>
-
-          <%= link_to "Learn More &raquo;".html_safe, influence_explorer_url(entity), :class => "ie_link" %>
-
+          <%= image_tag piechart_url(entity), :alt => "Chart for #{entity.tdata_name}" %>
+          <div class="clear"></div>
         <% end -%>
+
+        <%= superlatives_for('top_industries', 'Top Contributing Industries', entity) %>
+        <%= superlatives_for('lobbying_clients', 'Known Lobbying Clients', entity) %>
+        <%= superlatives_for('lobbying_issues', 'Key Lobbying Issues', entity) %>
+
+        <%= link_to "Learn More &raquo;".html_safe, influence_explorer_url(entity), :class => "ie_link" %>
       </li>
     <% end -%>
   <% end -%>
@@ -71,3 +61,7 @@
   <img alt="checkbox image" src="/images/icon_check.png"/>
   <p>Help us improve Poligraft. <%= link_to "Leave feedback", feedback_path(:slug => @result.slug) %> if something seems amiss or confusing.</p>
 </div>
+
+<script type="text/javascript">
+  var resultStatus = "<%= @result.status %>";
+</script>
