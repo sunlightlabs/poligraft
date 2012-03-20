@@ -15,14 +15,34 @@ class MainController < ApplicationController
     end
 
     captcha = params[:a_comment_body]
-    if captcha.blank? && !captcha.nil? && (@result = Result.create!( :source_url => params[:url],
-                                                                     :source_text => params[:text],
-                                                                     :suppress_text => params[:suppresstext]))
-      if params[:textonly] == true
-        @result.processed = true
-        @result.save
-      else
-        @result.process_entities
+    begin
+      raise unless captcha.blank? && (!captcha.nil? || params[:json] == "1")
+
+      # try to fetch for basic form cases so we don't end up with duplicate content
+      unless (params[:suppresstext].present? || params[:textonly].present?)
+        if params[:text].present?
+          @result = Result.first(:source_text => params[:text], :suppress_text => false)
+        elsif params[:url].present?
+          @result = Result.first(:source_url => params[:url], :suppress_text => false)
+        end
+      end
+
+      # It's problematic to allow both url & text to be filled out
+      @result ||= Result.create!(:source_url => params[:url],
+                                 :suppress_text => params[:suppresstext]) if params[:text].blank?
+
+      @result ||= Result.create!(:source_text => params[:text],
+                                :suppress_text => params[:suppresstext]) if params[:url].blank?
+
+      raise unless @result
+
+      unless @result.processed?
+        if params[:textonly] == true
+          @result.processed = true
+          @result.save
+        else
+          @result.process_entities
+        end
       end
 
       if params[:json] == "1"
@@ -32,7 +52,7 @@ class MainController < ApplicationController
         redirect_to "/" + @result.slug
       end
 
-    else
+    rescue
       flash[:error] = "Sorry, couldn't process that input."
       redirect_to :root
     end
