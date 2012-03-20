@@ -87,10 +87,6 @@ class Result
       matches = result.matched_text.keep_if {|match| match =~ /^[A-Z0-9]/ }
       next unless matches.any?
 
-      puts result.entity_data.name
-      puts matches
-      puts '---'
-
       campfin = result.entity_data.campaign_finance rescue {}
       lobbying = result.entity_data.lobbying rescue {}
       amt_given = campfin.recipient_breakdown.dem + campfin.recipient_breakdown.rep rescue 0.0
