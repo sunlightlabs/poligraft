@@ -64,6 +64,10 @@ class Result
     self.status = "Text Plucked"
   end
 
+  def needs_reprocessing?
+    self.entities.first.tdata_slug.nil?
+  end
+
   def process_entities
     TransparencyData.api_key = KEYS["sunlight"]
     TransparencyData.api_domain = KEYS["ie"] if KEYS["ie"]

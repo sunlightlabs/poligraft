@@ -61,6 +61,10 @@ class MainController < ApplicationController
   def result
     @result = Result.first(:slug => params[:slug])
     if @result
+      if @result.needs_reprocessing?
+        @result.update_attributes({ :processed => false, :entities => [] })
+        @result.process_entities
+      end
       response_code = @result.processed ? 200 : 202
 
       respond_to do |format|
