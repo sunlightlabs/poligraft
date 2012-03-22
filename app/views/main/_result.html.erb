@@ -58,7 +58,7 @@
 </div>
 
 <div id="feedback">
-  <img alt="checkbox image" src="/images/icon_check.png"/>
+  <img alt="checkbox image" src="//<%= request.host_with_port %>/images/icon_check.png" />
   <p>Help us improve Poligraft. <%= link_to "Leave feedback", feedback_path(:slug => @result.slug) %> if something seems amiss or confusing.</p>
 </div>
 

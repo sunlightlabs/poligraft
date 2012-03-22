@@ -1,0 +1,26 @@
+<%- content_for :html do -%>
+<%=j render :partial => "result" %>
+<%- end -%>
+(function($, _, undefined){
+  var scripts = document.getElementsByTagName('script'),
+      ref = scripts[0],
+      self = scripts[scripts.length-1],
+      getScript = function(url){
+        var scr = document.createElement('SCRIPT');
+        scr.src = url;
+        ref.parentNode.insertBefore(scr, ref);
+      },
+      loadHandler = function(){
+        getScript('//poligraft.com/javascripts/jquery.highlight.js');
+        getScript('//poligraft.com/javascripts/application.js');
+        if (typeof window._onload === 'function') _onload();
+      };
+  // get dependencies
+  $ || getScript('//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js');
+  _ || getScript('//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.1/underscore-min.js');
+  var div = document.createElement('DIV');
+  div.innerHTML = "<%= yield(:html).gsub("\n", ' ') %>";
+  self.parentNode.insertBefore(div, self);
+  window._onload = window.onload;
+  window.onload = loadHandler;
+})(window.jQuery, window._);
