@@ -62,7 +62,13 @@ class MainController < ApplicationController
     @result = Result.first(:slug => params[:slug])
     if @result
       if @result.needs_reprocessing?
-        @result.update_attributes({ :processed => false, :entities => [], :status => 'Text Plucked' })
+        @result.processed = false
+        @result.entities = []
+        @result.ensure_hash
+        @result.ensure_slug
+        @result.ensure_source_title_text
+        @result.set_status
+        @result.save
         @result.process_entities
       end
       response_code = @result.processed ? 200 : 202
