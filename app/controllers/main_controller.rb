@@ -63,6 +63,7 @@ class MainController < ApplicationController
     if @result
       if @result.needs_reprocessing?
         @result.processed = false
+        @result.source_content = ''
         @result.entities = []
         @result.ensure_hash
         @result.ensure_slug
