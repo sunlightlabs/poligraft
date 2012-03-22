@@ -65,7 +65,7 @@ class Result
   end
 
   def needs_reprocessing?
-    self.entities.length && self.entities.first.tdata_slug.nil?
+    self.entities.any? && self.entities.first.tdata_slug.nil?
   end
 
   def process_entities
