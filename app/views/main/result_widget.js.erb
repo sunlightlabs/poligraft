@@ -11,8 +11,8 @@
         ref.parentNode.insertBefore(scr, ref);
       },
       loadHandler = function(){
-        getScript('//poligraft.com/javascripts/jquery.highlight.js');
-        getScript('//poligraft.com/javascripts/application.js');
+        getScript('//<%= request.host_with_port %>/javascripts/jquery.highlight.js');
+        getScript('//<%= request.host_with_port %>/javascripts/application.js');
         if (typeof window._onload === 'function') _onload();
       };
   // get dependencies
