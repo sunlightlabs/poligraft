@@ -62,6 +62,8 @@
   <p>Help us improve Poligraft. <%= link_to "Leave feedback", feedback_path(:slug => @result.slug) %> if something seems amiss or confusing.</p>
 </div>
 
-<script type="text/javascript">
-  var resultStatus = "<%= @result.status %>";
+<script type="text/javascript" charset="utf-8">
+  var slug = '<%= @result.slug %>';
+  var entityCount = <%= @result.entities.length %>;
+  var resultStatus = '<%= @result.status %>';
 </script>
