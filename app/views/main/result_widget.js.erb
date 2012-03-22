@@ -3,6 +3,7 @@
 <%- end -%>
 (function($, _, undefined){
   var scripts = document.getElementsByTagName('script'),
+      onloadRan = false,
       ref = scripts[0],
       self = scripts[scripts.length-1],
       getScript = function(url){
@@ -11,11 +12,13 @@
         ref.parentNode.insertBefore(scr, ref);
       },
       loadHandler = function(){
-        getScript('//<%= request.host_with_port %>/javascripts/jquery.highlight.js');
+        if (onloadRan) return;
+        $.fn.highlight || getScript('//<%= request.host_with_port %>/javascripts/jquery.highlight.js');
         getScript('//<%= request.host_with_port %>/javascripts/application.js');
         if (typeof window._onload === 'function') _onload();
+        onloadRan = true;
       };
-  // get dependencies
+  // get initial dependencies
   $ || getScript('//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js');
   _ || getScript('//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.1/underscore-min.js');
   var div = document.createElement('DIV');
