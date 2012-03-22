@@ -13,7 +13,7 @@
       },
       loadHandler = function(){
         if (onloadRan) return;
-        $.fn.highlight || getScript('//<%= request.host_with_port %>/javascripts/jquery.highlight.js');
+        jQuery.fn.highlight || getScript('//<%= request.host_with_port %>/javascripts/jquery.highlight.js');
         getScript('//<%= request.host_with_port %>/javascripts/application.js');
         if (typeof window._onload === 'function') _onload();
         onloadRan = true;
