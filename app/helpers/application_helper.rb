@@ -22,7 +22,7 @@ module ApplicationHelper
   end
 
   def piechart_url(entity)
-    url = "http://chart.apis.google.com/chart?cht=p&chf=bg,s,F3F4EE&chp=1.57&chs=140x50"
+    url = "http://chart.apis.google.com/chart?cht=p&chf=bg,s,25252500&chp=1.57&chs=140x50"
 
     if entity.contributor_breakdown && (entity.contributor_breakdown['pac'] || entity.contributor_breakdown['individual'])
       url += "&chco=ABDEBF|169552"
