@@ -1,18 +1,24 @@
+window.POLIGRAFT || (POLIGRAFT = {});
 (function($, undefined){
+  var app = window.POLIGRAFT;
+  app.highlight || (app.highlight = '#source_content');
   $(function(){
-    if (window.slug){
+    if (app.slug){
 
       var doneStatus = "Contributors Identified",
           timeout = null,
+          tries = 0,
           pollWidget = function(){
-            if (resultStatus == doneStatus) return;
+            if (app.resultStatus == doneStatus) return;
             if (timeout) clearTimeout(timeout);
-            $('#report').load(slug + '/widget', function(html, status) {
-              if (resultStatus != doneStatus) {
-                if (resultStatus == 'Entities Linked') initializeHighlights();
+            console.log(app.resultStatus, doneStatus);
+            $('#poligraftReport').load(app.slug + '/widget', function(html, status) {
+              if (app.resultStatus != doneStatus && tries < 20) {
+                if (app.resultStatus == 'Entities Linked') initializeHighlights();
+                tries ++;
                 timeout = setTimeout(pollWidget, 2000);
               } else {
-                $("#processingBar").slideUp();
+                $("#poligraftProcessingBar").slideUp();
                 initializeHighlights();
                 // location.hash = 'done';
               }
@@ -20,34 +26,40 @@
           },
           initializeHighlights = function() {
             // only highlight once
-            if($("#source_content span.highlight").length) return false;
+            if($("span.highlight").length) return false;
 
             var entities = [];
-            $('#extracted_entities [data-matches]').each(function(){
+            $('#poligraft_extracted_entities [data-matches]').each(function(){
               entities.push(JSON.parse($(this).attr('data-matches')));
             });
-            $("#source_content").highlight(_.flatten(entities));
-            $("#source_content span.highlight").attr("data-entity", function() { return _.slugify($(this).text()); });
+            $(app.highlight).highlight(_.flatten(entities));
+            $(app.highlight + " span.highlight")
+              .attr("data-entity", function() { return _.slugify($(this).text()); });
           },
           triggerHighlights = function() {
             var mySpan = $(this);
-            $("#rtColumn a[data-entity*='" + $(this).attr('data-entity') + "']").each(function() {
-              mySpan.effect("transfer", { to: $(this) }, 1000);
-            });
+            $('#poligraft_contribution_report, #poligraft_extracted_entities')
+              .find("a[data-entity*='" + $(this).attr('data-entity') + "']")
+              .each(function() {
+                mySpan.effect("transfer", { to: $(this) }, 1000);
+              });
           };
 
-      $("input#share_url").click(function() {$(this).select()});
+      $("input#poligraftShareUrl").click(function() {$(this).select()});
 
-      $("#source_content").delegate("span.highlight", "click", triggerHighlights);
+      $(app.highlight).delegate("span.highlight", "click", triggerHighlights);
 
-      if (entityCount == 0) {
-        $("div#extracted_entities").hide();
+      if (app.entityCount == 0) {
+        $("div#poligraftExtractedEntities").hide();
       }
 
-      if(window.resultStatus != doneStatus){
+      if(app.resultStatus != doneStatus){
+        console.log('pollin');
         pollWidget();
-        $('#processingBar').fadeIn('slow');
+        $('#poligraftProcessingBar').fadeIn('slow');
       }
+
+      initializeHighlights();
 
     }
   });

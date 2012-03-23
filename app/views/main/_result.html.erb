@@ -1,16 +1,16 @@
 <% if (@result.entities.nil? || @result.entities.empty?) && @result.processed %>
-<p id="nothing_found">Sorry, no results found.</p>
+<p id="poligraft_nothing_found">Sorry, no results found.</p>
 <% end -%>
 
 <% if @result.entities.nil? || @result.entities.empty? || @result.contribution_count == 0 -%>
-<div class="module" id="contribution_report" style="display:none;">
+<div class="poligraftModule" id="poligraft_contribution_report" style="display:none;">
 <% else -%>
-<div class="module" id="contribution_report">
+<div class="poligraftModule" id="poligraft_contribution_report">
 <% end -%>
   <h4>Aggregated Contributions</h4>
-  <p class="explanation">Represents total campaign contributions from an organization's employees and/or its PAC.</p>
+  <p class="poligraftExplanation">Represents total campaign contributions from an organization's employees and/or its PAC.</p>
 
-  <ul class="reportData">
+  <ul class="poligraftReportData">
   <% @result.entities.each do |recipient| -%>
     <% if recipient.contributors -%>
     <% recipient.contributors.each do |contributor| -%>
@@ -24,20 +24,20 @@
 </div>
 
 <% if @result.entities.nil? || @result.entities.empty? -%>
-<div class="module" id="extracted_entities" style="display:none;">
+<div class="poligraftModule" id="poligraft_extracted_entities" style="display:none;">
 <% else -%>
-<div class="module" id="extracted_entities">
+<div class="poligraftModule" id="poligraft_extracted_entities">
 <% end -%>
   <h4>Points of Influence</h4>
-  <p class="explanation">Graphs for politicians represent received campaign contributions, while graphs for organizations represent aggregate campaign contributions made.</p>
+  <p class="poligraftExplanation">Graphs for politicians represent received campaign contributions, while graphs for organizations represent aggregate campaign contributions made.</p>
 
-  <ul class="reportData">
+  <ul class="poligraftReportData">
   <% @result.entities.each do |entity| -%>
     <% if entity.tdata_id.blank? && @result.status == "Entities Extracted" -%>
       <li><%= entity.tdata_name %></li>
     <% elsif entity.tdata_id && entity.matched_names.any? -%>
       <li>
-        <span class="influenceName">
+        <span class="poligraftInfluenceName">
           <%= link_to entity.tdata_name, influence_explorer_url(entity), "data-entity" => entity.matched_names.first.parameterize, "data-matches" => entity.matched_names.to_json %>
         </span>
 
@@ -50,20 +50,22 @@
         <%= superlatives_for('lobbying_clients', 'Known Lobbying Clients', entity) %>
         <%= superlatives_for('lobbying_issues', 'Key Lobbying Issues', entity) %>
 
-        <%= link_to "Learn More &raquo;".html_safe, influence_explorer_url(entity), :class => "ie_link" %>
+        <%= link_to "Learn More &raquo;".html_safe, influence_explorer_url(entity), :class => "poligraft_ie_link" %>
       </li>
     <% end -%>
   <% end -%>
   </ul>
 </div>
 
-<div id="feedback">
+<div id="poligraft_feedback">
   <img alt="checkbox image" src="//<%= request.host_with_port %>/images/icon_check.png" />
   <p>Help us improve Poligraft. <%= link_to "Leave feedback", feedback_path(:slug => @result.slug) %> if something seems amiss or confusing.</p>
 </div>
 
-<script type="text/javascript" charset="utf-8">
-  var slug = '<%= @result.slug %>';
-  var entityCount = <%= @result.entities.length %>;
-  var resultStatus = '<%= @result.status %>';
+
+<script>
+  window.POLIGRAFT || (POLIGRAFT = {});
+  POLIGRAFT.slug = '<%= @result.slug %>';
+  POLIGRAFT.entityCount = <%= @result.entities.length %>;
+  POLIGRAFT.resultStatus = '<%= @result.status %>';
 </script>

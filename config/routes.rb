@@ -6,5 +6,5 @@ Poligraft::Application.routes.draw do
   match 'feedback' => "main#feedback", :as => 'feedback'
   match 'thanks' => "main#thanks", :as => 'thanks'
   match ':slug(.:format)' => "main#result", :as => 'result'
-  match ':slug/widget.js' => "main#result_widget", :as => 'result_widget', :via => [:get], :defaults => {:format => 'js'}
+  match ':slug/widget(.:format)' => "main#result_widget", :as => 'result_widget', :via => [:get]
 end
