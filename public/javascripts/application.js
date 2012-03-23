@@ -11,7 +11,6 @@ window.POLIGRAFT || (POLIGRAFT = {});
           pollWidget = function(){
             if (app.resultStatus == doneStatus) return;
             if (timeout) clearTimeout(timeout);
-            console.log(app.resultStatus, doneStatus);
             $('#poligraftReport').load(app.slug + '/widget', function(html, status) {
               if (app.resultStatus != doneStatus && tries < 20) {
                 if (app.resultStatus == 'Entities Linked') initializeHighlights();
@@ -54,7 +53,6 @@ window.POLIGRAFT || (POLIGRAFT = {});
       }
 
       if(app.resultStatus != doneStatus){
-        console.log('pollin');
         pollWidget();
         $('#poligraftProcessingBar').fadeIn('slow');
       }
