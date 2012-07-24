@@ -1,5 +1,5 @@
 /*
- * YUI Resect CSS version: 2.2.2 
+ * YUI Resect CSS version: 2.2.2
  * Copyright (c) 2007, Yahoo! Inc. All rights reserved.
  * Licensed under the BSD License: http://developer.yahoo.net/yui/license.txt
  */
@@ -108,7 +108,7 @@ div.industries li { margin-bottom: 0px; padding-bottom: 0px; background: none; f
 #footer ul#sponsors { margin-top: 40px;}
 #footer ul#sponsors li a { text-indent: -9999em; display: block; margin-right: 40px; }
 #footer li { float: left;}
-#footer li a#foundationLogo { background: url(/images/logo_foundation.png) top left no-repeat; width: 98px; height: 45px; margin-right: 50px;}
+#footer li a#foundationLogo { background: url(/images/logo_sunlight.png) no-repeat left top; width: 130px; height: 45px; margin-right: 50px;}
 a#followMoney { background: url(/images/logo_followtheMoney.png) top left no-repeat; width: 72px; height: 56px; }
 a#openSecrets { background: url(/images/logo_openSecrets.png) top left no-repeat; width: 140px; height: 49px; }
 p#privacyPolicy { font-size: 90%; margin-top: 10px; line-height: 14px; width: 600px; float: left;}
