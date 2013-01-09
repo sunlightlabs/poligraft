@@ -1,4 +1,4 @@
-$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
+# $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 require "rvm/capistrano"
 set :rvm_ruby_string, '1.9.2'
 set :rvm_type, :user
@@ -10,7 +10,7 @@ set :application, user
 set :deploy_to, "/projects/poligraft/www"
 
 if environment == 'production'
-  set :domain, "ec2-107-20-76-29.compute-1.amazonaws.com"
+  set :domain, "ec2-184-73-138-180.compute-1.amazonaws.com"
   set :num_workers, "4"
 else
   set :domain, "staging.poligraft.org"

@@ -2,7 +2,6 @@ source 'http://rubygems.org'
 
 gem 'rails', '~> 3.0.19'
 gem 'unicorn', '~> 3.4'
-gem 'capistrano', '~> 2.5'
 gem 'nokogiri', '~> 1.5'
 gem 'calais', '~> 0.0.11'
 gem 'mongo_mapper', '~> 0.9'
