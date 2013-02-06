@@ -49,6 +49,7 @@ div#shareResults { background: url(/images/share.png) top right no-repeat; width
 div#shareResults h3 { display: inline; color: #fff; text-transform: none; margin-right: 15px; font-size: 120%; float: left; margin-top: 5px;}
 input#share_url { width: 215px; color: #686461; -moz-border-radius: 3px; -webkit-border-radius: 3px; border: 1px solid #c9c8c2; padding: 5px; float: left; margin-right: 10px;}
 div.share-buttons { float: left; }
+.share-buttons td { padding: 1px 10px 0 0; }
 a#twitter, a#facebook { text-indent: -9999em; display: block; float: left; width: 24px; height: 24px; margin-top: 3px;}
 a#twitter { background: url(/images/Twitter-icon.png) top right no-repeat;}
 a#facebook { background: url(/images/FaceBook-icon.png) top right no-repeat; margin-right: 5px;}
