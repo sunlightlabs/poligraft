@@ -5,7 +5,7 @@
   <div id="shareContent">
     <h3>Share these Results</h3>
     <%= text_field_tag 'url', result_url(@result.slug), :id => 'share_url', :readonly => 'readonly', :size => 30 %>
-    <div class="share-buttons" data-gigya="auto" data-services="twitter, facebook" data-options="size=24"></div>
+    <div class="share-buttons" data-socialite="auto" data-services="twitter, facebook" data-options="size=24"></div>
     <!-- <a id="facebook" title="Share on Facebook" href="http://www.facebook.com/share.php?u=<%= result_url(@result.slug) %>">Facebook</a>
     <a id="twitter" title="Share on Twitter" href="http://twitter.com/?status=<%= result_url(@result.slug)%>">Twitter</a> -->
   </div>
