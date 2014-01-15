@@ -1,29 +1,24 @@
-#
-# Algorithm heavily inspired by arc90's Readability: 
+# Algorithm heavily inspired by arc90's Readability:
 #
 # http://lab.arc90.com/experiments/readability/
 # http://code.google.com/p/arc90labs-readability/source/browse/trunk/js/readability.js
 #
 class ContentPlucker
-  
+
   def self.pluck_title_from(url)
-    url = CGI::unescape(url)
     begin
-      doc = Nokogiri::HTML.parse(open(url), url, "UTF-8")
-    rescue
-      return "Cannot load URL"
+      doc = Nokogiri::HTML.parse(_get_request_for(url), url, "UTF-8")
+    # rescue
+      # return "Cannot load URL"
     end
     doc.search('title').inner_html
   end
-  
+
   def self.pluck_from(url)
-    
-    # get the raw HTML
-    url = CGI::unescape(url)
     begin
-      doc = Nokogiri::HTML.parse(open(url), url, "UTF-8")
-    rescue OpenURI::HTTPError
-      return "<h2>Cannot load URL</h2><p>Poligraft is unable to load that URL.</p><p>Please copy and paste the text into the <a href='/'>text area on the front page</a>."
+      doc = Nokogiri::HTML.parse(_get_request_for(url), url, "UTF-8")
+    # rescue
+      # return "<h2>Cannot load URL</h2><p>Poligraft is unable to load that URL.</p><p>Please copy and paste the text into the <a href='/'>text area on the front page</a>."
     end
     # set up attribution
     favicon = ''
@@ -42,7 +37,7 @@ class ContentPlucker
         begin
           n.replace(n.inner_html)
         rescue NoMethodError
-          
+
         end
       end
     end
@@ -53,9 +48,9 @@ class ContentPlucker
          div.remove
       end
     end
-    
+
     # convert <div>s that should be <p>s into <div>s
-    doc.search('div').each do |div|    
+    doc.search('div').each do |div|
       brs = 0
       div.children.each do |child|
         brs += 1 if child.name == 'br'
@@ -90,20 +85,20 @@ class ContentPlucker
     # get the parent node with the highest point total
     winner = parents.sort{ |a,b| a[1] <=> b[1] }.last[0]
     winner_points = parents.sort{ |a,b| a[1] <=> b[1] }.last[1]
-        
-    # return the plucked HTML content   
+
+    # return the plucked HTML content
     winner_text = ""
     winner.search('.//p').each do |n|
       unless n.get_attribute('class') =~ /\A(summary|caption|posted|comment)\z/
-        
+
         n.search('div').each do |div|
           div.remove
         end
-        
+
         winner_text = winner_text + "<p>#{n.inner_html}</p>"
       end
     end
-    
+
     if winner_text == ""
       winner_text = winner.inner_html
     end
@@ -160,8 +155,14 @@ class ContentPlucker
     points
 
   end
-  
+
   def self.pluck_domain(url)
     url.split('/')[2]
+  end
+
+  def self._get_request_for(url)
+    url = CGI::unescape(url)
+    headers = {'User-Agent' => 'Googlebot-News'}
+    HTTParty.get(url, :headers => headers).body
   end
 end

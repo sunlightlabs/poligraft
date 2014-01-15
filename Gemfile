@@ -6,6 +6,7 @@ gem 'nokogiri', '~> 1.5'
 gem 'calais', '~> 0.0.11'
 gem 'mongo_mapper', '~> 0.9'
 gem 'bson_ext', '~> 1.2'
+gem 'httparty'
 
 gem 'delayed_job', '~> 2.1'
 gem 'delayed_job_mongo_mapper', git: 'https://github.com/earbits/delayed_job_mongo_mapper.git'
